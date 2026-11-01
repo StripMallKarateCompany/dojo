@@ -1,7 +1,7 @@
 # Decisions
 
-The dated record. `AGENTS.md` carries the rules these produced; the workq wiki page "Dojo" tells the
-longer story.
+The dated record. `AGENTS.md` and `.agents/smk-context.md` carry the rules these produced; the workq
+wiki page "Dojo" tells the longer story.
 
 ## 2026-10-25
 
@@ -99,3 +99,12 @@ longer story.
   JetStream stream on that subject keeps them if the server has one. The prototype's cluster ID
   and port 4223 are gone.
 - **pest moves to 2.9 and cc to its current release** now that ring 0.13 left with actix-web 0.7.
+
+## 2026-11-01
+
+- **A test run counts the binaries that started.** While the tree linked OpenSSL 1.0.2 from an old
+  nixpkgs, every test binary that loaded libcrypto died at load with exit 127
+  (`libdl.so.2: undefined symbol: _dl_catch_error`), so seven test binaries silently never ran for
+  the first months of this fork. A loader error is not a failed test: `support/vm/builder verify`
+  counts the binaries that ran against the ones cargo built before calling a run green, and it is
+  the run a pull request reports.
