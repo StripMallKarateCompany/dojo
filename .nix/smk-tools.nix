@@ -66,6 +66,8 @@ let
     caddy
     clang-tools
     deadnix
+    fennel-ls
+    fnlfmt
     gdtoolkit_4
     hclfmt
     htmlhint

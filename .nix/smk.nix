@@ -48,7 +48,10 @@ in
       # smk-tools.nix. rust-analyzer is the editor's.
       rustc
       cargo
-      rustfmt
+      # rustfmt from the same source built for the nightly channel, the only one that honours the unstable options a
+      # rustfmt.toml may set; the stable one warns, ignores them and formats in its default style, which smk format
+      # refuses. A configuration with none formats the same under either. Hydra builds it (bindgen needs it).
+      (rustfmt.override { asNightly = true; })
       clippy
       rust-analyzer
       # smk end
