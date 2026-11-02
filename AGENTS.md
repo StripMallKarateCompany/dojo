@@ -7,7 +7,8 @@ change it.
 
 Dojo builds software into signed packages and runs them under a Supervisor. The Launcher
 (`doj-launch`) is PID 1, and a dojo is a ring of machines whose Supervisors gossip. Rust, pinned by
-`rust-toolchain`; scaffolded by smk proj from smkproj.toml; re-render with smk proj.
+`rust-toolchain`. An smk project (`smkproj.toml`): `smk proj` renders the dev shell and the checks,
+and the Makefile, build scripts and `support/` are the tree's own.
 
 The tree descends from the 0.79.1 release of an Apache-2.0 project (`NOTICE`, `LICENSE`). Nothing
 from that project's later releases is taken, whatever it fixes: re-implement. Its old name appears
@@ -26,8 +27,9 @@ the builder VM: `support/vm/builder verify` is the run a pull request reports, a
 Work in a tree (`trees add <name>`), commit on its `worktree/<name>` branch and open the pull request
 with `smk pr create`. The host is GitHub (`StripMallKarateCompany/dojo`); `main` requires no status
 checks and no CI runs there, so the merge is left to the owner, as the pr skill says for such a base.
-Pushed history is never rewritten (no rebase, squash or amend, no author changes) and pull requests
-land as merge commits. Live-state changes outside a merge need explicit authorization.
+Pushed history is never rewritten (no rebase, squash or amend, no author changes), pull requests
+land as merge commits, and commits carry no AI attribution or co-author lines. Live-state changes
+outside a merge need explicit authorization.
 
 ## Where the rest lives
 
