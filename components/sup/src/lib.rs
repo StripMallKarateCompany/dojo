@@ -39,34 +39,17 @@
 //! * [The Dojo Command Line Reference](command)
 //! * [The Dojo Supervisor Sidecar; http interface to promises](sidecar)
 
-#[cfg(target_os = "linux")]
-extern crate caps;
-extern crate clap;
-extern crate cpu_time;
-#[macro_use]
-extern crate lazy_static;
 #[macro_use]
 extern crate log;
 extern crate notify;
-extern crate num_cpus;
 #[cfg(unix)]
 #[macro_use]
 extern crate prometheus;
-extern crate prost;
-extern crate protobuf;
-extern crate rand;
-extern crate regex;
-extern crate rustls;
-extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 #[allow(unused_imports)]
 #[macro_use]
 extern crate serde_json;
-extern crate time as time_crate;
-
-#[cfg(test)]
-extern crate json;
 
 #[macro_export]
 /// Creates a new SupError, embedding the current file name, line number, column, and module path.

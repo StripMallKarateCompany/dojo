@@ -88,21 +88,21 @@ use std::{self,
                  PathBuf},
           result,
           sync::{Arc,
+                 LazyLock,
                  RwLock},
           time::{Duration,
-                 Instant}};
-use time::Timespec;
+                 Instant,
+                 SystemTime}};
 
 static LOGKEY: &'static str = "SR";
 
 pub const GOSSIP_FILE_PERMISSIONS: u32 = 0o640;
 
-lazy_static! {
-    static ref HOOK_DURATION: HistogramVec =
-        register_histogram_vec!("doj_sup_hook_duration_seconds",
-                                "The time it takes for a hook to run",
-                                &["hook"]).unwrap();
-}
+static HOOK_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_hook_duration_seconds",
+                            "The time it takes for a hook to run",
+                            &["hook"]).unwrap()
+});
 
 /// When evaluating whether a particular service group can satisfy a
 /// bind of the Service, there are several states it can be
@@ -336,7 +336,7 @@ impl Service {
         }
     }
 
-    pub fn last_state_change(&self) -> Timespec { self.supervisor.state_entered }
+    pub fn last_state_change(&self) -> SystemTime { self.supervisor.state_entered }
 
     /// Performs updates and executes hooks.
     ///

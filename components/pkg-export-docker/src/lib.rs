@@ -16,8 +16,6 @@ use dojo_common as common;
 use dojo_core as hcore;
 
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate log;
 
 #[macro_use]

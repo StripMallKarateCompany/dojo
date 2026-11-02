@@ -43,10 +43,10 @@ use std::{convert::TryFrom,
           fmt,
           fs,
           path::PathBuf,
-          result};
-use time::{self,
-           Duration as TimeDuration,
-           Timespec};
+          result,
+          time::{Duration,
+                 SystemTime,
+                 UNIX_EPOCH}};
 use toml;
 
 static LOGKEY: &'static str = "CMD";
@@ -450,7 +450,7 @@ impl From<ServiceStatus> for protocol::types::ServiceStatus {
 #[derive(Deserialize)]
 struct ProcessStatus {
     #[serde(deserialize_with = "deserialize_time", rename = "state_entered")]
-    elapsed: TimeDuration,
+    elapsed: Duration,
     pid:     Option<u32>,
     state:   ProcessState,
 }
@@ -460,10 +460,12 @@ impl fmt::Display for ProcessStatus {
         match self.pid {
             Some(pid) => {
                 write!(f,
-                       "state:{}, time:{}, pid:{}",
-                       self.state, self.elapsed, pid)
+                       "state:{}, time:{}s, pid:{}",
+                       self.state,
+                       self.elapsed.as_secs(),
+                       pid)
             }
-            None => write!(f, "state:{}, time:{}", self.state, self.elapsed),
+            None => write!(f, "state:{}, time:{}s", self.state, self.elapsed.as_secs()),
         }
     }
 }
@@ -471,7 +473,7 @@ impl fmt::Display for ProcessStatus {
 impl From<ProcessStatus> for protocol::types::ProcessStatus {
     fn from(other: ProcessStatus) -> Self {
         let mut proto = protocol::types::ProcessStatus::default();
-        proto.elapsed = Some(other.elapsed.num_seconds());
+        proto.elapsed = Some(i64::try_from(other.elapsed.as_secs()).unwrap_or(i64::MAX));
         proto.state = other.state.into();
         if let Some(pid) = other.pid {
             proto.pid = Some(pid);
@@ -480,26 +482,27 @@ impl From<ProcessStatus> for protocol::types::ProcessStatus {
     }
 }
 
-fn deserialize_time<'de, D>(d: D) -> result::Result<TimeDuration, D::Error>
+fn deserialize_time<'de, D>(d: D) -> result::Result<Duration, D::Error>
     where D: serde::Deserializer<'de>
 {
-    struct FromTimespec;
+    struct FromEpochSeconds;
 
-    impl<'de> serde::de::Visitor<'de> for FromTimespec {
-        type Value = TimeDuration;
+    impl<'de> serde::de::Visitor<'de> for FromEpochSeconds {
+        type Value = Duration;
 
         fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
             formatter.write_str("a i64 integer")
         }
 
-        fn visit_u64<R>(self, value: u64) -> result::Result<TimeDuration, R>
+        fn visit_u64<R>(self, value: u64) -> result::Result<Duration, R>
             where R: serde::de::Error
         {
-            let tspec = Timespec { sec:  (value as i64),
-                                   nsec: 0, };
-            Ok(time::get_time() - tspec)
+            // How long ago the state was entered, given in seconds since the Unix epoch.
+            let entered = UNIX_EPOCH + Duration::from_secs(value);
+            Ok(SystemTime::now().duration_since(entered)
+                                .unwrap_or_default())
         }
     }
 
-    d.deserialize_u64(FromTimespec)
+    d.deserialize_u64(FromEpochSeconds)
 }

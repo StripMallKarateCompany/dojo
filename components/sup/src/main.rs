@@ -12,25 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate clap;
-extern crate env_logger;
 #[macro_use]
 extern crate dojo_sup as sup;
-#[cfg(unix)]
-extern crate jemalloc_ctl;
-#[cfg(unix)]
-extern crate jemallocator;
-extern crate libc;
 #[macro_use]
 extern crate log;
-#[cfg(test)]
-#[macro_use]
-extern crate lazy_static;
-extern crate protobuf;
-extern crate rustls;
-extern crate tempfile;
-extern crate time;
-extern crate url;
 
 use crate::sup::{cli::cli,
                  command,
@@ -85,7 +70,7 @@ static LOGKEY: &'static str = "MN";
 
 #[cfg(unix)]
 #[global_allocator]
-static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+static ALLOC: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 
 fn main() {
     env_logger::init();
@@ -265,21 +250,20 @@ fn mgrcfg_from_sup_run_matches(m: &ArgMatches,
                                           |v| v.parse(),
             )?
                         },
-                        ctl_listen:
-                            m.get_one::<String>("LISTEN_CTL")
-                             .map(String::as_str)
-                             .map_or_else(
-                                          || {
-                                              let default =
+                        ctl_listen: m.get_one::<String>("LISTEN_CTL")
+                                     .map(String::as_str)
+                                     .map_or_else(
+                                                  || {
+                                                      let default =
                                                   dojo_common::types::ListenCtlAddr::default();
-                                              error!(
+                                                      error!(
                     "Value for LISTEN_CTL has not been set. Using default: {}",
                     default
                 );
-                                              Ok(default)
-                                          },
-                                          |v| v.parse(),
-            )?,
+                                                      Ok(default)
+                                                  },
+                                                  |v| v.parse(),
+        )?,
                         http_listen: m.get_one::<String>("LISTEN_HTTP")
                                       .map(String::as_str)
                                       .map_or_else(

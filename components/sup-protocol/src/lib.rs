@@ -42,8 +42,6 @@
 
 use dojo_core as core;
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate log;
 
 #[macro_use]
@@ -62,35 +60,34 @@ pub mod types;
 use crate::{core::env as henv,
             net::{ErrCode,
                   NetResult}};
-use rand::RngCore;
+use base64::{engine::general_purpose::STANDARD as BASE64,
+             Engine};
+use rand::{rngs::SysRng,
+           TryRng};
 use std::{fs::File,
           io::Read,
           net::SocketAddr,
           path::{Path,
-                 PathBuf}};
+                 PathBuf},
+          sync::LazyLock};
 
 // Name of file containing the CtlGateway secret key.
 const CTL_SECRET_FILENAME: &str = "CTL_SECRET";
 /// Length of characters in CtlGateway secret key.
 const CTL_SECRET_LEN: usize = 64;
 
-lazy_static! {
-    /// The root path containing all runtime service directories and files
-    pub static ref STATE_PATH_PREFIX: PathBuf = {
-        Path::new(&*core::fs::FS_ROOT_PATH).join("doj/sup")
-    };
+/// The root path containing all runtime service directories and files
+pub static STATE_PATH_PREFIX: LazyLock<PathBuf> =
+    LazyLock::new(|| Path::new(&*core::fs::FS_ROOT_PATH).join("doj/sup"));
 
-    pub static ref DEFAULT_BLDR_URL: String = {
-        core::url::default_bldr_url()
-    };
-}
+pub static DEFAULT_BLDR_URL: LazyLock<String> = LazyLock::new(core::url::default_bldr_url);
 
 /// Generate a new secret key used for authenticating clients to the `CtlGateway`.
 pub fn generate_secret_key(out: &mut String) {
-    let mut rng = rand::rngs::OsRng::new().unwrap();
     let mut result = vec![0u8; CTL_SECRET_LEN];
-    rng.fill_bytes(&mut result);
-    *out = base64::encode(&result);
+    SysRng.try_fill_bytes(&mut result)
+          .expect("the operating system's random source failed");
+    *out = BASE64.encode(&result);
 }
 
 /// Read the secret key used to authenticate connections to the `CtlGateway` from disk and write

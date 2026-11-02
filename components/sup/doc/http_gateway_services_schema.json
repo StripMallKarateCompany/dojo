@@ -1,6 +1,35 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "fuzzy_package_identifier": {
+      "additionalProperties": false,
+      "description": "A Dojo package identifier whose version and release may be unspecified, split apart into its constituent components",
+      "properties": {
+        "name": {
+          "description": "The name of the Dojo package",
+          "type": "string"
+        },
+        "origin": {
+          "description": "The origin of the Dojo package",
+          "type": "string"
+        },
+        "release": {
+          "description": "The release of the Dojo package, if specified",
+          "type": ["string", "null"]
+        },
+        "version": {
+          "description": "The version of the Dojo package, if specified",
+          "type": ["string", "null"]
+        }
+      },
+      "required": [
+        "origin",
+        "name",
+        "version",
+        "release"
+      ],
+      "type": "object"
+    },
     "hook": {
       "description": "A hook",
       "properties": {
@@ -510,7 +539,7 @@
       },
       "spec_ident": {
         "$deprecated": "Since 0.66.0; please use 'spec_identifier' instead",
-        "$ref": "#/definitions/package_identifier",
+        "$ref": "#/definitions/fuzzy_package_identifier",
         "description": "The package identifier for this service spec"
       },
       "spec_identifier": {

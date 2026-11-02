@@ -27,8 +27,8 @@ use crate::{core::os::{self,
             protocol::{self,
                        ShutdownMethod}};
 use libc;
-use time::{Duration,
-           SteadyTime};
+use std::time::{Duration,
+                Instant};
 
 use crate::{error::{Error,
                     Result},
@@ -61,12 +61,12 @@ impl Process {
         if signal(pid_to_kill, Signal::TERM).is_err() {
             return ShutdownMethod::AlreadyExited;
         }
-        let stop_time = SteadyTime::now() + Duration::seconds(8);
+        let stop_time = Instant::now() + Duration::from_secs(8);
         loop {
             if let Ok(Some(_status)) = self.try_wait() {
                 return ShutdownMethod::GracefulTermination;
             }
-            if SteadyTime::now() < stop_time {
+            if Instant::now() < stop_time {
                 continue;
             }
             // JW TODO: Determine if the error represents a case where the process was already

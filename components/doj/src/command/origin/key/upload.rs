@@ -14,24 +14,22 @@
 
 use std::path::Path;
 
+use super::get_name_with_rev;
 use crate::{api_client::{self,
                          Client},
-            common::{command::package::install::{RETRIES,
-                                                 RETRY_WAIT},
+            common::{command::package::install::{with_retries,
+                                                 RETRIES},
                      ui::{Status,
                           UIWriter,
                           UI}},
+            error::{Error,
+                    Result},
             hcore::crypto::{keys::parse_name_with_rev,
                             PUBLIC_SIG_KEY_VERSION,
-                            SECRET_SIG_KEY_VERSION}};
-use dojo_api_client::StatusCode;
-use retry::retry;
-
-use super::get_name_with_rev;
-use crate::{error::{Error,
-                    Result},
+                            SECRET_SIG_KEY_VERSION},
             PRODUCT,
             VERSION};
+use dojo_api_client::StatusCode;
 
 pub fn start(ui: &mut UI,
              bldr_url: &str,
@@ -60,7 +58,7 @@ pub fn start(ui: &mut UI,
             Ok(())
         };
 
-        if retry(RETRIES, RETRY_WAIT, upload_fn, |res| res.is_ok()).is_err() {
+        if !with_retries(upload_fn) {
             return Err(Error::from(api_client::Error::UploadFailed(format!(
                 "We tried {} times but could not upload {}/{} public origin key. Giving up.",
                 RETRIES, &name, &rev
@@ -91,7 +89,7 @@ pub fn start(ui: &mut UI,
             }
         };
 
-        if retry(RETRIES, RETRY_WAIT, upload_fn, |res| res.is_ok()).is_err() {
+        if !with_retries(upload_fn) {
             return Err(Error::from(api_client::Error::UploadFailed(format!(
                 "We tried {} times but could not upload {}/{} secret origin key. Giving up.",
                 RETRIES, &name, &rev

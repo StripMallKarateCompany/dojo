@@ -57,7 +57,7 @@ pub enum Error {
     DojoCommon(common::Error),
     DojoCore(hcore::Error),
     // Boxed due to clippy::large_enum_variant
-    HandlebarsRenderError(Box<handlebars::TemplateRenderError>),
+    HandlebarsRenderError(Box<handlebars::RenderError>),
     InvalidEnvironmentName(String),
     IO(io::Error),
     JobGroupPromoteOrDemote(api_client::Error, bool /* promote */),
@@ -273,10 +273,8 @@ impl From<hcore::Error> for Error {
     fn from(err: hcore::Error) -> Error { Error::DojoCore(err) }
 }
 
-impl From<handlebars::TemplateRenderError> for Error {
-    fn from(err: handlebars::TemplateRenderError) -> Error {
-        Error::HandlebarsRenderError(Box::new(err))
-    }
+impl From<handlebars::RenderError> for Error {
+    fn from(err: handlebars::RenderError) -> Error { Error::HandlebarsRenderError(Box::new(err)) }
 }
 
 impl From<io::Error> for Error {

@@ -20,7 +20,8 @@ use std::{sync::mpsc::{sync_channel,
                        SyncSender,
                        TryRecvError},
           thread,
-          time::Duration};
+          time::{Duration,
+                 Instant}};
 
 use crate::{env,
             util};
@@ -29,11 +30,9 @@ use dojo_common::{command::package::install::InstallSource,
 use dojo_core::{package::{PackageIdent,
                           PackageInstall},
                 ChannelIdent};
-use time::{Duration as TimeDuration,
-           SteadyTime};
 
 pub const SUP_PKG_IDENT: &str = "karate/doj-sup";
-const DEFAULT_FREQUENCY: i64 = 60_000;
+const DEFAULT_FREQUENCY: u64 = 60_000;
 const FREQUENCY_ENVVAR: &str = "DOJ_SUP_UPDATE_MS";
 
 pub struct SelfUpdater {
@@ -76,7 +75,7 @@ impl SelfUpdater {
         // and thus a valid InstallSource
         let install_source: InstallSource = SUP_PKG_IDENT.parse().unwrap();
         loop {
-            let next_check = SteadyTime::now() + TimeDuration::milliseconds(update_frequency());
+            let next_check = Instant::now() + Duration::from_millis(update_frequency());
 
             match util::pkg::install(// We don't want anything in here to print
                                      &mut UI::with_sinks(),
@@ -99,10 +98,7 @@ impl SelfUpdater {
                 }
             }
 
-            let time_to_wait = (next_check - SteadyTime::now()).num_milliseconds();
-            if time_to_wait > 0 {
-                thread::sleep(Duration::from_millis(time_to_wait as u64));
-            }
+            thread::sleep(next_check.saturating_duration_since(Instant::now()));
         }
     }
 
@@ -121,9 +117,9 @@ impl SelfUpdater {
     }
 }
 
-fn update_frequency() -> i64 {
+fn update_frequency() -> u64 {
     match env::var(FREQUENCY_ENVVAR) {
-        Ok(val) => val.parse::<i64>().unwrap_or(DEFAULT_FREQUENCY),
+        Ok(val) => val.parse::<u64>().unwrap_or(DEFAULT_FREQUENCY),
         Err(_) => DEFAULT_FREQUENCY,
     }
 }

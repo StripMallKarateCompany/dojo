@@ -29,24 +29,19 @@
 mod types;
 
 use crate::error::Result;
-use state::Container;
 use std::{fmt::Debug,
-          sync::Once};
+          sync::{Once,
+                 OnceLock}};
 use tokio::{runtime::Handle,
             sync::mpsc::{self,
                          UnboundedSender}};
 pub use types::*;
 
 static INIT: Once = Once::new();
-lazy_static! {
-    // TODO (CM): When const fn support lands in stable, we can ditch
-    // this lazy_static call.
-
-    /// Reference to the event stream.
-    static ref EVENT_STREAM: Container = Container::new();
-    /// Core information that is shared between all events.
-    static ref EVENT_CORE: Container = Container::new();
-}
+/// Reference to the event stream.
+static EVENT_STREAM: OnceLock<EventStream> = OnceLock::new();
+/// Core information that is shared between all events.
+static EVENT_CORE: OnceLock<EventCore> = OnceLock::new();
 
 /// Connects to a NATS server and starts a task on `runtime` for
 /// sending it events. Stashes the handle to the stream, as well as the
@@ -56,8 +51,9 @@ pub fn init_stream(conn_info: EventConnectionInfo, event_core: EventCore, runtim
     INIT.call_once(|| {
             let event_stream =
                 init_nats_stream(conn_info, runtime).expect("Could not connect to NATS");
-            EVENT_STREAM.set(event_stream);
-            EVENT_CORE.set(event_core);
+            // Once guards these, so neither is already set.
+            let _ = EVENT_STREAM.set(event_stream);
+            let _ = EVENT_CORE.set(event_core);
         });
 }
 
@@ -81,8 +77,8 @@ pub fn publish(event: &impl Event) {
     // send it over to the other thread, or much more complicated
     // thread-safe types!). It also makes the publication thread logic
     // a bit simpler; it just takes bytes and sends them out.
-    if let Some(e) = EVENT_STREAM.try_get::<EventStream>() {
-        e.send(event.render(EVENT_CORE.get::<EventCore>()));
+    if let (Some(e), Some(core)) = (EVENT_STREAM.get(), EVENT_CORE.get()) {
+        e.send(event.render(core));
     }
 }
 

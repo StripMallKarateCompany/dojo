@@ -41,7 +41,8 @@ use prost;
 use std::{error,
           fmt,
           io,
-          sync::Arc,
+          sync::{Arc,
+                 LazyLock},
           time::Duration};
 use tokio::{net::{TcpListener,
                   TcpStream},
@@ -49,15 +50,16 @@ use tokio::{net::{TcpListener,
             time};
 use tokio_util::codec::Framed;
 
-lazy_static! {
-    static ref RPC_CALLS: IntCounterVec = register_int_counter_vec!("doj_sup_rpc_call_total",
-                                                                    "Total number of RPC calls",
-                                                                    &["name"]).unwrap();
-    static ref RPC_CALL_DURATION: HistogramVec =
-        register_histogram_vec!("doj_sup_rpc_call_request_duration_seconds",
-                                "The latency for RPC calls",
-                                &["name"]).unwrap();
-}
+static RPC_CALLS: LazyLock<IntCounterVec> = LazyLock::new(|| {
+    register_int_counter_vec!("doj_sup_rpc_call_total",
+                              "Total number of RPC calls",
+                              &["name"]).unwrap()
+});
+static RPC_CALL_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_rpc_call_request_duration_seconds",
+                            "The latency for RPC calls",
+                            &["name"]).unwrap()
+});
 
 /// A `TcpStream` framed with `SrvCodec`. This is the socket connection that the CtlGateway
 /// server speaks.

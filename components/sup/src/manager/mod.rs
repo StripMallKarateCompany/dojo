@@ -114,13 +114,13 @@ use std::{self,
           sync::{atomic::{AtomicBool,
                           Ordering},
                  Arc,
+                 LazyLock,
                  Mutex,
                  RwLock},
-          thread};
-use time::{self,
-           Duration as TimeDuration,
-           SteadyTime,
-           Timespec};
+          thread,
+          time::{Duration,
+                 Instant,
+                 SystemTime}};
 use tokio::{runtime::{Builder as RuntimeBuilder,
                       Runtime},
             sync::{mpsc,
@@ -132,23 +132,25 @@ pub const PROC_LOCK_FILE: &str = "LOCK";
 
 static LOGKEY: &'static str = "MR";
 
-lazy_static! {
-    static ref RUN_LOOP_DURATION: HistogramVec =
-        register_histogram_vec!("doj_sup_run_loop_duration_seconds",
-                                "The time it takes for one tick of a run loop",
-                                &["loop"]).unwrap();
-    static ref FILE_DESCRIPTORS: IntGauge = register_int_gauge!(
-        "doj_sup_open_file_descriptors_total",
-        "A count of the total number of open file descriptors. Unix only"
-    ).unwrap();
-    static ref MEMORY_STATS: IntGaugeVec =
-        register_int_gauge_vec!("doj_sup_memory_allocations_bytes",
-                                "Memory allocation statistics",
-                                &["category"]).unwrap();
-    static ref CPU_TIME: IntGauge = register_int_gauge!("doj_sup_cpu_time_nanoseconds",
-                                                        "CPU time of the supervisor process in \
-                                                         nanoseconds").unwrap();
-}
+static RUN_LOOP_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_run_loop_duration_seconds",
+                            "The time it takes for one tick of a run loop",
+                            &["loop"]).unwrap()
+});
+static FILE_DESCRIPTORS: LazyLock<IntGauge> = LazyLock::new(|| {
+    register_int_gauge!("doj_sup_open_file_descriptors_total",
+                        "A count of the total number of open file descriptors. Unix only").unwrap()
+});
+static MEMORY_STATS: LazyLock<IntGaugeVec> = LazyLock::new(|| {
+    register_int_gauge_vec!("doj_sup_memory_allocations_bytes",
+                            "Memory allocation statistics",
+                            &["category"]).unwrap()
+});
+static CPU_TIME: LazyLock<IntGauge> = LazyLock::new(|| {
+    register_int_gauge!("doj_sup_cpu_time_nanoseconds",
+                        "CPU time of the supervisor process in \
+                                                         nanoseconds").unwrap()
+});
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[allow(clippy::large_enum_variant)]
@@ -357,7 +359,7 @@ pub struct Manager {
     spec_dir:            SpecDir,
     organization:        Option<String>,
     self_updater:        Option<SelfUpdater>,
-    service_states:      HashMap<PackageIdent, Timespec>,
+    service_states:      HashMap<PackageIdent, SystemTime>,
     sys:                 Arc<Sys>,
     http_disable:        bool,
 
@@ -687,7 +689,7 @@ impl Manager {
     pub fn run(mut self, svc: Option<dojo_sup_protocol::ctl::SvcLoad>) -> Result<()> {
         let main_hist = RUN_LOOP_DURATION.with_label_values(&["sup"]);
         let service_hist = RUN_LOOP_DURATION.with_label_values(&["service"]);
-        let mut next_cpu_measurement = SteadyTime::now();
+        let mut next_cpu_measurement = Instant::now();
         let mut cpu_start = ProcessTime::now();
 
         let (ctl_tx, ctl_rx) = mpsc::unbounded_channel();
@@ -784,7 +786,7 @@ impl Manager {
                 }
             }
 
-            let next_check = time::get_time() + TimeDuration::milliseconds(1000);
+            let next_check = Instant::now() + Duration::from_secs(1);
             if self.launcher.is_stopping() {
                 break ShutdownMode::Normal;
             }
@@ -869,14 +871,10 @@ impl Manager {
 
             // This is really only needed until everything is running
             // in futures.
-            let now = time::get_time();
-            if now < next_check {
-                let time_to_wait = next_check - now;
-                thread::sleep(time_to_wait.to_std().unwrap());
-            }
+            thread::sleep(next_check.saturating_duration_since(Instant::now()));
 
             // Measure CPU time every second
-            if SteadyTime::now() >= next_cpu_measurement {
+            if Instant::now() >= next_cpu_measurement {
                 let cpu_duration = cpu_start.elapsed();
                 let cpu_nanos =
                     cpu_duration.as_secs()
@@ -884,7 +882,7 @@ impl Manager {
                                 .and_then(|ns| ns.checked_add(cpu_duration.subsec_nanos().into()))
                                 .expect("overflow in cpu_duration");
                 CPU_TIME.set(cpu_nanos.to_i64());
-                next_cpu_measurement = SteadyTime::now() + TimeDuration::seconds(1);
+                next_cpu_measurement = Instant::now() + Duration::from_secs(1);
                 cpu_start = ProcessTime::now();
             }
         }; // end main loop
@@ -1026,7 +1024,7 @@ impl Manager {
                           .iter()
                           .filter(|s| !active_services.contains(&s.ident))
         {
-            service_states.insert(loaded.ident.clone(), Timespec::new(0, 0));
+            service_states.insert(loaded.ident.clone(), SystemTime::UNIX_EPOCH);
         }
 
         if service_states != self.service_states {
@@ -1626,19 +1624,20 @@ fn track_memory_stats() {
     // We'd like to track some memory stats, but these stats are cached and only refreshed
     // when the epoch is advanced. We manually advance it here to ensure our stats are
     // fresh.
-    jemalloc_ctl::epoch().unwrap();
+    tikv_jemalloc_ctl::epoch::advance().unwrap();
     MEMORY_STATS.with_label_values(&["active"])
-                .set(jemalloc_ctl::stats::active().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::active::read().unwrap().to_i64());
     MEMORY_STATS.with_label_values(&["allocated"])
-                .set(jemalloc_ctl::stats::allocated().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::allocated::read().unwrap()
+                                                                .to_i64());
     MEMORY_STATS.with_label_values(&["mapped"])
-                .set(jemalloc_ctl::stats::mapped().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::mapped::read().unwrap().to_i64());
     MEMORY_STATS.with_label_values(&["metadata"])
-                .set(jemalloc_ctl::stats::metadata().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::metadata::read().unwrap().to_i64());
     MEMORY_STATS.with_label_values(&["resident"])
-                .set(jemalloc_ctl::stats::resident().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::resident::read().unwrap().to_i64());
     MEMORY_STATS.with_label_values(&["retained"])
-                .set(jemalloc_ctl::stats::retained().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::retained::read().unwrap().to_i64());
 }
 
 /// Run control commands from the ctl gateway until shutdown. Commands block (a `doj svc load`

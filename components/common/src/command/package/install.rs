@@ -81,6 +81,17 @@ use crate::{error::{Error,
 pub const RETRIES: u64 = 5;
 pub const RETRY_WAIT: u64 = 3000;
 
+/// Runs `op` until it succeeds, at most `RETRIES` times and `RETRY_WAIT` milliseconds apart.
+/// Returns whether an attempt succeeded.
+pub fn with_retries<T, E>(mut op: impl FnMut() -> std::result::Result<T, E>) -> bool {
+    (0..RETRIES).any(|attempt| {
+                    if attempt > 0 {
+                        thread::sleep(Duration::from_millis(RETRY_WAIT));
+                    }
+                    op().is_ok()
+                })
+}
+
 /// Represents a locally-available `.hart` file for package
 /// installation purposes only.
 ///
@@ -681,13 +692,7 @@ impl<'a> InstallTask<'a> {
                    ident);
         } else if self.is_offline() {
             return Err(Error::OfflineArtifactNotFound(ident.as_ref().clone()));
-        } else if !(0..RETRIES).any(|attempt| {
-                                   if attempt > 0 {
-                                       thread::sleep(Duration::from_millis(RETRY_WAIT));
-                                   }
-                                   self.fetch_artifact(ui, (ident, target), token).is_ok()
-                               })
-        {
+        } else if !with_retries(|| self.fetch_artifact(ui, (ident, target), token)) {
             return Err(Error::DownloadFailed(format!("We tried {} times but \
                                                       could not download {}. \
                                                       Giving up.",
