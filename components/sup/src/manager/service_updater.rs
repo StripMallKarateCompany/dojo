@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::sync::LazyLock;
 use crate::{census::CensusRing,
             manager::{periodic::Periodic,
                       service::{Service,
@@ -35,10 +34,11 @@ use std::{cmp::{Ordering,
           num::ParseIntError,
           result,
           str::FromStr,
-          sync::mpsc::{channel,
-                       Receiver,
-                       Sender,
-                       TryRecvError},
+          sync::{mpsc::{channel,
+                        Receiver,
+                        Sender,
+                        TryRecvError},
+                 LazyLock},
           thread,
           time::{Duration,
                  Instant}};

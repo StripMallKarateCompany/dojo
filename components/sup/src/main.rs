@@ -250,21 +250,20 @@ fn mgrcfg_from_sup_run_matches(m: &ArgMatches,
                                           |v| v.parse(),
             )?
                         },
-                        ctl_listen:
-                            m.get_one::<String>("LISTEN_CTL")
-                             .map(String::as_str)
-                             .map_or_else(
-                                          || {
-                                              let default =
+                        ctl_listen: m.get_one::<String>("LISTEN_CTL")
+                                     .map(String::as_str)
+                                     .map_or_else(
+                                                  || {
+                                                      let default =
                                                   dojo_common::types::ListenCtlAddr::default();
-                                              error!(
+                                                      error!(
                     "Value for LISTEN_CTL has not been set. Using default: {}",
                     default
                 );
-                                              Ok(default)
-                                          },
-                                          |v| v.parse(),
-            )?,
+                                                      Ok(default)
+                                                  },
+                                                  |v| v.parse(),
+        )?,
                         http_listen: m.get_one::<String>("LISTEN_HTTP")
                                       .map(String::as_str)
                                       .map_or_else(

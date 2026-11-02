@@ -30,7 +30,6 @@ pub mod spec;
 mod supervisor;
 mod terminator;
 
-use std::sync::LazyLock;
 use self::{context::RenderContext,
            hooks::HookTable,
            supervisor::Supervisor};
@@ -89,6 +88,7 @@ use std::{self,
                  PathBuf},
           result,
           sync::{Arc,
+                 LazyLock,
                  RwLock},
           time::{Duration,
                  Instant,
@@ -98,9 +98,11 @@ static LOGKEY: &'static str = "SR";
 
 pub const GOSSIP_FILE_PERMISSIONS: u32 = 0o640;
 
-static HOOK_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| register_histogram_vec!("doj_sup_hook_duration_seconds",
-                                "The time it takes for a hook to run",
-                                &["hook"]).unwrap());
+static HOOK_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_hook_duration_seconds",
+                            "The time it takes for a hook to run",
+                            &["hook"]).unwrap()
+});
 
 /// When evaluating whether a particular service group can satisfy a
 /// bind of the Service, there are several states it can be

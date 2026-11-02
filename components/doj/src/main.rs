@@ -100,12 +100,12 @@ const DOJO_ORG_ENVVAR: &str = "DOJ_ORG";
 const DOJO_USER_ENVVAR: &str = "DOJ_USER";
 
 const STATUS_HEADER: [&str; 7] = ["package",
-                                       "type",
-                                       "desired",
-                                       "state",
-                                       "elapsed (s)",
-                                       "pid",
-                                       "group"];
+                                  "type",
+                                  "desired",
+                                  "state",
+                                  "elapsed (s)",
+                                  "pid",
+                                  "group"];
 
 fn main() {
     env_logger::init();

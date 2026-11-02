@@ -499,7 +499,8 @@ fn deserialize_time<'de, D>(d: D) -> result::Result<Duration, D::Error>
         {
             // How long ago the state was entered, given in seconds since the Unix epoch.
             let entered = UNIX_EPOCH + Duration::from_secs(value);
-            Ok(SystemTime::now().duration_since(entered).unwrap_or_default())
+            Ok(SystemTime::now().duration_since(entered)
+                                .unwrap_or_default())
         }
     }
 

@@ -14,7 +14,6 @@
 
 //! Encapsulate running the `doj-sup` executable for tests.
 
-use std::sync::LazyLock;
 use std::{collections::HashSet,
           env,
           net::TcpListener,
@@ -24,7 +23,8 @@ use std::{collections::HashSet,
                     Command,
                     Stdio},
           string::ToString,
-          sync::Mutex,
+          sync::{LazyLock,
+                 Mutex},
           thread,
           time::Duration};
 
@@ -36,9 +36,7 @@ use super::test_butterfly;
 /// Keep track of all TCP ports currently being used by TestSup
 /// instances. Allows us to run tests in parallel without fear of
 /// port conflicts between them.
-static CLAIMED_PORTS: LazyLock<Mutex<HashSet<u16>>> = LazyLock::new(|| {
-        Mutex::new(HashSet::new())
-    });
+static CLAIMED_PORTS: LazyLock<Mutex<HashSet<u16>>> = LazyLock::new(|| Mutex::new(HashSet::new()));
 
 pub struct TestSup {
     pub doj_root:         PathBuf,

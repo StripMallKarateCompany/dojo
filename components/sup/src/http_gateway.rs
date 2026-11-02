@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::sync::LazyLock;
 use crate::{error::{Result,
                     SupError},
             manager::{self,
@@ -63,6 +62,7 @@ use std::{fmt,
           result,
           str::FromStr,
           sync::{Arc,
+                 LazyLock,
                  RwLock},
           time::Duration};
 use tokio::net::TcpListener;
@@ -73,12 +73,16 @@ const APIDOCS: &str = include_str!(concat!(env!("OUT_DIR"), "/api.html"));
 /// Default listening port for the HTTPGateway listener.
 pub const DEFAULT_PORT: u16 = 9631;
 
-static HTTP_GATEWAY_REQUESTS: LazyLock<CounterVec> = LazyLock::new(|| register_counter_vec!("doj_sup_http_gateway_requests_total",
-                              "Total number of HTTP gateway requests",
-                              &["path"]).unwrap());
-static HTTP_GATEWAY_REQUEST_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| register_histogram_vec!("doj_sup_http_gateway_request_duration_seconds",
-                                "The latency for HTTP gateway requests",
-                                &["path"]).unwrap());
+static HTTP_GATEWAY_REQUESTS: LazyLock<CounterVec> = LazyLock::new(|| {
+    register_counter_vec!("doj_sup_http_gateway_requests_total",
+                          "Total number of HTTP gateway requests",
+                          &["path"]).unwrap()
+});
+static HTTP_GATEWAY_REQUEST_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_http_gateway_request_duration_seconds",
+                            "The latency for HTTP gateway requests",
+                            &["path"]).unwrap()
+});
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub struct ListenAddr(SocketAddr);

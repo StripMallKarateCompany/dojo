@@ -14,6 +14,7 @@
 
 use std::path::Path;
 
+use super::get_name_with_rev;
 use crate::{api_client::{self,
                          Client},
             common::{command::package::install::{with_retries,
@@ -21,15 +22,14 @@ use crate::{api_client::{self,
                      ui::{Status,
                           UIWriter,
                           UI}},
+            error::{Error,
+                    Result},
             hcore::crypto::{keys::parse_name_with_rev,
                             PUBLIC_SIG_KEY_VERSION,
-                            SECRET_SIG_KEY_VERSION}};
-use dojo_api_client::StatusCode;
-use super::get_name_with_rev;
-use crate::{error::{Error,
-                    Result},
+                            SECRET_SIG_KEY_VERSION},
             PRODUCT,
             VERSION};
+use dojo_api_client::StatusCode;
 
 pub fn start(ui: &mut UI,
              bldr_url: &str,

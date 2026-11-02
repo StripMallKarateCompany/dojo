@@ -274,9 +274,7 @@ impl From<hcore::Error> for Error {
 }
 
 impl From<handlebars::RenderError> for Error {
-    fn from(err: handlebars::RenderError) -> Error {
-        Error::HandlebarsRenderError(Box::new(err))
-    }
+    fn from(err: handlebars::RenderError) -> Error { Error::HandlebarsRenderError(Box::new(err)) }
 }
 
 impl From<io::Error> for Error {

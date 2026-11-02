@@ -73,7 +73,8 @@ pub fn validate_string(input: &str, schema: &str) -> Validation {
         serde_json::from_str(&raw_schema).expect("Could not parse schema as JSON");
     // Unknown keywords are ignored, which allows the `$comment` keyword, as well as our own
     // `$deprecated` and `$since` keywords.
-    let validator = jsonschema::validator_for(&parsed_schema).expect("Could not compile the schema");
+    let validator =
+        jsonschema::validator_for(&parsed_schema).expect("Could not compile the schema");
 
     let input_json: serde_json::Value =
         serde_json::from_str(input).expect("Could not parse input as JSON");

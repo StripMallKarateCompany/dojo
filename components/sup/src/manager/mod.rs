@@ -26,7 +26,6 @@ mod spec_watcher;
 mod sys;
 mod user_config_watcher;
 
-use std::sync::LazyLock;
 use self::{peer_watcher::PeerWatcher,
            self_updater::{SelfUpdater,
                           SUP_PKG_IDENT},
@@ -115,6 +114,7 @@ use std::{self,
           sync::{atomic::{AtomicBool,
                           Ordering},
                  Arc,
+                 LazyLock,
                  Mutex,
                  RwLock},
           thread,
@@ -132,19 +132,25 @@ pub const PROC_LOCK_FILE: &str = "LOCK";
 
 static LOGKEY: &'static str = "MR";
 
-static RUN_LOOP_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| register_histogram_vec!("doj_sup_run_loop_duration_seconds",
-                                "The time it takes for one tick of a run loop",
-                                &["loop"]).unwrap());
-static FILE_DESCRIPTORS: LazyLock<IntGauge> = LazyLock::new(|| register_int_gauge!(
-        "doj_sup_open_file_descriptors_total",
-        "A count of the total number of open file descriptors. Unix only"
-    ).unwrap());
-static MEMORY_STATS: LazyLock<IntGaugeVec> = LazyLock::new(|| register_int_gauge_vec!("doj_sup_memory_allocations_bytes",
-                                "Memory allocation statistics",
-                                &["category"]).unwrap());
-static CPU_TIME: LazyLock<IntGauge> = LazyLock::new(|| register_int_gauge!("doj_sup_cpu_time_nanoseconds",
-                                                        "CPU time of the supervisor process in \
-                                                         nanoseconds").unwrap());
+static RUN_LOOP_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_run_loop_duration_seconds",
+                            "The time it takes for one tick of a run loop",
+                            &["loop"]).unwrap()
+});
+static FILE_DESCRIPTORS: LazyLock<IntGauge> = LazyLock::new(|| {
+    register_int_gauge!("doj_sup_open_file_descriptors_total",
+                        "A count of the total number of open file descriptors. Unix only").unwrap()
+});
+static MEMORY_STATS: LazyLock<IntGaugeVec> = LazyLock::new(|| {
+    register_int_gauge_vec!("doj_sup_memory_allocations_bytes",
+                            "Memory allocation statistics",
+                            &["category"]).unwrap()
+});
+static CPU_TIME: LazyLock<IntGauge> = LazyLock::new(|| {
+    register_int_gauge!("doj_sup_cpu_time_nanoseconds",
+                        "CPU time of the supervisor process in \
+                                                         nanoseconds").unwrap()
+});
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[allow(clippy::large_enum_variant)]
@@ -1622,7 +1628,8 @@ fn track_memory_stats() {
     MEMORY_STATS.with_label_values(&["active"])
                 .set(tikv_jemalloc_ctl::stats::active::read().unwrap().to_i64());
     MEMORY_STATS.with_label_values(&["allocated"])
-                .set(tikv_jemalloc_ctl::stats::allocated::read().unwrap().to_i64());
+                .set(tikv_jemalloc_ctl::stats::allocated::read().unwrap()
+                                                                .to_i64());
     MEMORY_STATS.with_label_values(&["mapped"])
                 .set(tikv_jemalloc_ctl::stats::mapped::read().unwrap().to_i64());
     MEMORY_STATS.with_label_values(&["metadata"])

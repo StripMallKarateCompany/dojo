@@ -22,7 +22,6 @@
 //! channel, [`CtlSender`], to [`CtlReceiver`]. A new mpsc pair is created for each transactional
 //! request where the sending half is given to a [`ctl_gateway.CtlRequest`].
 
-use std::sync::LazyLock;
 use super::{CtlRequest,
             REQ_TIMEOUT};
 use crate::manager::{commands,
@@ -42,7 +41,8 @@ use prost;
 use std::{error,
           fmt,
           io,
-          sync::Arc,
+          sync::{Arc,
+                 LazyLock},
           time::Duration};
 use tokio::{net::{TcpListener,
                   TcpStream},
@@ -50,12 +50,16 @@ use tokio::{net::{TcpListener,
             time};
 use tokio_util::codec::Framed;
 
-static RPC_CALLS: LazyLock<IntCounterVec> = LazyLock::new(|| register_int_counter_vec!("doj_sup_rpc_call_total",
-                                                                    "Total number of RPC calls",
-                                                                    &["name"]).unwrap());
-static RPC_CALL_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| register_histogram_vec!("doj_sup_rpc_call_request_duration_seconds",
-                                "The latency for RPC calls",
-                                &["name"]).unwrap());
+static RPC_CALLS: LazyLock<IntCounterVec> = LazyLock::new(|| {
+    register_int_counter_vec!("doj_sup_rpc_call_total",
+                              "Total number of RPC calls",
+                              &["name"]).unwrap()
+});
+static RPC_CALL_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| {
+    register_histogram_vec!("doj_sup_rpc_call_request_duration_seconds",
+                            "The latency for RPC calls",
+                            &["name"]).unwrap()
+});
 
 /// A `TcpStream` framed with `SrvCodec`. This is the socket connection that the CtlGateway
 /// server speaks.
