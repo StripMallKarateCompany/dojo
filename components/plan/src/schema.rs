@@ -577,9 +577,8 @@ fn entries(table: &Table, what: &str) -> Result<Vec<(String, Value)>, Error> {
         match key {
             Value::String(key) => {
                 let key =
-                    key.to_str().map_err(|_| {
-                                     Error::Invalid(format!("{what} has a key that is not UTF-8"))
-                                 })?;
+                    key.to_str()
+                       .map_err(|_| Error::Invalid(format!("{what} has a key that is not UTF-8")))?;
                 out.push((key.to_string(), value));
             }
             other => {

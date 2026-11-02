@@ -443,7 +443,8 @@ impl Package<'_> {
     /// `doj` signs with the builder's `PATH`, as the packager's tools run.
     fn doj_env(&self) -> Vec<(String, String)> {
         let mut env = self.builder_path();
-        env.push(("DOJ_CACHE_KEY_PATH".to_string(), self.options.keys.to_string_lossy().into_owned()));
+        env.push(("DOJ_CACHE_KEY_PATH".to_string(),
+                  self.options.keys.to_string_lossy().into_owned()));
         env
     }
 

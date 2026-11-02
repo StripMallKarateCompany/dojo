@@ -87,18 +87,18 @@ const SCAFFOLDING_FILE: &str = "lib/scaffolding.fnl";
 #[derive(Clone, Debug)]
 pub struct Options {
     /// The target to build for.
-    pub target:   String,
+    pub target:            String,
     /// Dojo's root: packages install under `pkgs` and sources download to
     /// `cache/src`.
-    pub root:     PathBuf,
+    pub root:              PathBuf,
     /// The release, a UTC timestamp like `20261025143000`.
-    pub release:  String,
+    pub release:           String,
     /// The directory holding `plan.fnl`.
-    pub plan_dir: PathBuf,
+    pub plan_dir:          PathBuf,
     /// The source directory of a plan without `source`.
-    pub context:  PathBuf,
+    pub context:           PathBuf,
     /// Whether to run the `check` phase.
-    pub check:    bool,
+    pub check:             bool,
     /// Whether a Linux package that names files outside the root (a dynamic
     /// linker, a RUNPATH entry, a script's interpreter) fails the build.
     pub refuse_host_paths: bool,
@@ -106,24 +106,24 @@ pub struct Options {
     /// `PATH` holds only their directories, and of the builder's environment
     /// only a few variables pass (see `env::isolated`). Packaging still uses
     /// the builder's own tools.
-    pub isolate: bool,
+    pub isolate:           bool,
     /// A package every build takes as its last build dependency, the base
     /// tools (a shell, sed, grep, awk) plans use without declaring them; an
     /// isolated build has no others. The backline's own plan builds without
     /// it.
-    pub backline: Option<String>,
+    pub backline:          Option<String>,
     /// Parallel jobs, `b.jobs`.
-    pub jobs:     usize,
+    pub jobs:              usize,
     /// The environment the build starts from.
-    pub env:      Vec<(String, String)>,
+    pub env:               Vec<(String, String)>,
     /// Where origin signing keys are: `DOJ_CACHE_KEY_PATH`, else
     /// `cache/keys` under the root.
-    pub keys:     PathBuf,
+    pub keys:              PathBuf,
     /// Where the artifact and build report are copied: `DOJ_OUTPUT_PATH`,
     /// else `results` in the current directory.
-    pub output:   PathBuf,
+    pub output:            PathBuf,
     /// The `doj` program that signs packages: `DOJ_BIN`, else `doj`.
-    pub doj:      OsString,
+    pub doj:               OsString,
 }
 
 impl Options {
@@ -510,9 +510,9 @@ impl State {
             let mut fixed = format!("#!{new}{args}").into_bytes();
             fixed.extend_from_slice(&rest[end..]);
             write_replacing(&path, &fixed).map_err(|e| {
-                                               format!("b:fix_interpreter: cannot write {}: {e}",
-                                                       path.display())
-                                           })?;
+                                              format!("b:fix_interpreter: cannot write {}: {e}",
+                                                      path.display())
+                                          })?;
             self.log(&format!("Interpreter of {} is {new}", path.display()));
         }
         Ok(())
@@ -885,7 +885,8 @@ fn call_level(state: &Rc<State>, b: &Table, phase: &'static str, from: usize) ->
 /// dependencies do: theirs includes their build-time environment, which
 /// only the packages that build with them get.
 fn inherited(deps: &Resolved) -> (Inherited, Inherited) {
-    (Inherited::from_deps(deps.deps.iter().map(|dep| dep.path.as_path()), &["RUNTIME_ENVIRONMENT"]),
+    (Inherited::from_deps(deps.deps.iter().map(|dep| dep.path.as_path()),
+                          &["RUNTIME_ENVIRONMENT"]),
      Inherited::from_deps(deps.build_deps.iter().map(|dep| dep.path.as_path()),
                           &["RUNTIME_ENVIRONMENT", "BUILDTIME_ENVIRONMENT"]))
 }
