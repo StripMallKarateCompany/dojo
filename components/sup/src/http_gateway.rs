@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::sync::LazyLock;
 use crate::{error::{Result,
                     SupError},
             manager::{self,
@@ -72,16 +73,12 @@ const APIDOCS: &str = include_str!(concat!(env!("OUT_DIR"), "/api.html"));
 /// Default listening port for the HTTPGateway listener.
 pub const DEFAULT_PORT: u16 = 9631;
 
-lazy_static! {
-    static ref HTTP_GATEWAY_REQUESTS: CounterVec =
-        register_counter_vec!("doj_sup_http_gateway_requests_total",
+static HTTP_GATEWAY_REQUESTS: LazyLock<CounterVec> = LazyLock::new(|| register_counter_vec!("doj_sup_http_gateway_requests_total",
                               "Total number of HTTP gateway requests",
-                              &["path"]).unwrap();
-    static ref HTTP_GATEWAY_REQUEST_DURATION: HistogramVec =
-        register_histogram_vec!("doj_sup_http_gateway_request_duration_seconds",
+                              &["path"]).unwrap());
+static HTTP_GATEWAY_REQUEST_DURATION: LazyLock<HistogramVec> = LazyLock::new(|| register_histogram_vec!("doj_sup_http_gateway_request_duration_seconds",
                                 "The latency for HTTP gateway requests",
-                                &["path"]).unwrap();
-}
+                                &["path"]).unwrap());
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub struct ListenAddr(SocketAddr);
@@ -514,10 +511,8 @@ mod tests {
 
     #[test]
     fn butterfly_server_proxy_is_valid() {
-        lazy_static! {
-            static ref SWIM_PORT: Mutex<u16> = Mutex::new(6666);
-            static ref GOSSIP_PORT: Mutex<u16> = Mutex::new(7777);
-        }
+        static SWIM_PORT: LazyLock<Mutex<u16>> = LazyLock::new(|| Mutex::new(6666));
+        static GOSSIP_PORT: LazyLock<Mutex<u16>> = LazyLock::new(|| Mutex::new(7777));
 
         #[derive(Debug)]
         struct ZeroSuitability;

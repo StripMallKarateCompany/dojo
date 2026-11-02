@@ -12,25 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate clap;
-extern crate env_logger;
 #[macro_use]
 extern crate dojo_sup as sup;
-#[cfg(unix)]
-extern crate jemalloc_ctl;
-#[cfg(unix)]
-extern crate jemallocator;
-extern crate libc;
 #[macro_use]
 extern crate log;
-#[cfg(test)]
-#[macro_use]
-extern crate lazy_static;
-extern crate protobuf;
-extern crate rustls;
-extern crate tempfile;
-extern crate time;
-extern crate url;
 
 use crate::sup::{cli::cli,
                  command,
@@ -85,7 +70,7 @@ static LOGKEY: &'static str = "MN";
 
 #[cfg(unix)]
 #[global_allocator]
-static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+static ALLOC: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 
 fn main() {
     env_logger::init();

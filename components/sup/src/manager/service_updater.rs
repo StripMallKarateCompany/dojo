@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::sync::LazyLock;
 use crate::{census::CensusRing,
             manager::{periodic::Periodic,
                       service::{Service,
@@ -39,17 +40,14 @@ use std::{cmp::{Ordering,
                        Sender,
                        TryRecvError},
           thread,
-          time};
-use time_crate::{Duration,
-                 SteadyTime};
+          time::{Duration,
+                 Instant}};
 
 static LOGKEY: &'static str = "SU";
 // TODO (CM): Yes, the variable value should be "period" and not
 // "frequency"... we need to fix that.
 const PERIOD_BYPASS_CHECK_ENVVAR: &str = "DOJ_UPDATE_STRATEGY_FREQUENCY_BYPASS_CHECK";
-lazy_static! {
-    static ref MIN_ALLOWED_PERIOD: Duration = Duration::seconds(60);
-}
+static MIN_ALLOWED_PERIOD: LazyLock<Duration> = LazyLock::new(|| Duration::from_secs(60));
 
 type UpdaterStateList = HashMap<ServiceGroup, UpdaterState>;
 
@@ -371,7 +369,7 @@ impl FromStr for ServiceUpdatePeriod {
     fn from_str(s: &str) -> result::Result<Self, Self::Err> {
         // Parsing as a u32 gives us an effective range of 49+ days
         let raw = s.parse::<u32>()?;
-        Ok(Duration::milliseconds(i64::from(raw)).into())
+        Ok(Duration::from_millis(u64::from(raw)).into())
     }
 }
 
@@ -478,7 +476,7 @@ impl Worker {
         // scenario, where `ident` is always a fully-qualified identifier
         outputln!("Updating from {} to {}", self.current, ident);
         let install_source = (ident, PackageTarget::active_target()).into();
-        let mut next_time = SteadyTime::now();
+        let mut next_time = Instant::now();
 
         loop {
             match kill_rx.try_recv() {
@@ -493,7 +491,7 @@ impl Worker {
                 }
             }
 
-            if SteadyTime::now() >= next_time {
+            if Instant::now() >= next_time {
                 match util::pkg::install(// We don't want anything in here to print
                                          &mut UI::with_sinks(),
                                          &self.builder_url,
@@ -511,7 +509,7 @@ impl Worker {
                 next_time = self.next_period_start();
             }
 
-            thread::sleep(time::Duration::from_secs(1));
+            thread::sleep(Duration::from_secs(1));
         }
     }
 
@@ -519,7 +517,7 @@ impl Worker {
     /// when found.
     fn run_poll(&mut self, sender: &Sender<PackageInstall>, kill_rx: &Receiver<()>) {
         let install_source = (self.spec_ident.clone(), PackageTarget::active_target()).into();
-        let mut next_time = SteadyTime::now();
+        let mut next_time = Instant::now();
 
         loop {
             match kill_rx.try_recv() {
@@ -534,7 +532,7 @@ impl Worker {
                 }
             }
 
-            if SteadyTime::now() >= next_time {
+            if Instant::now() >= next_time {
                 match util::pkg::install(// We don't want anything in here to print
                                          &mut UI::with_sinks(),
                                          &self.builder_url,
@@ -561,7 +559,7 @@ impl Worker {
                 next_time = self.next_period_start();
             }
 
-            thread::sleep(time::Duration::from_secs(1));
+            thread::sleep(Duration::from_secs(1));
         }
     }
 }
@@ -603,7 +601,7 @@ mod tests {
         period.set("123");
         bypass.set(""); // empty string isn't allowed
 
-        assert_ne!(worker.update_period(), Duration::milliseconds(123));
+        assert_ne!(worker.update_period(), Duration::from_millis(123));
         assert_eq!(ServiceUpdatePeriod::default(), worker.update_period());
     }
 
@@ -627,7 +625,7 @@ mod tests {
 
         period.set("120000");
         bypass.unset();
-        let expected_period: ServiceUpdatePeriod = Duration::milliseconds(120_000).into();
+        let expected_period: ServiceUpdatePeriod = Duration::from_millis(120_000).into();
         assert!(expected_period >= *MIN_ALLOWED_PERIOD);
         assert_eq!(expected_period, worker.update_period());
     }
@@ -640,7 +638,7 @@ mod tests {
 
         period.set("1"); // This is TOO low
         bypass.unset();
-        assert!(Duration::milliseconds(1) < *MIN_ALLOWED_PERIOD);
+        assert!(Duration::from_millis(1) < *MIN_ALLOWED_PERIOD);
         assert_eq!(ServiceUpdatePeriod::default(), worker.update_period());
     }
 
@@ -663,7 +661,7 @@ mod tests {
 
         period.set("5000");
         bypass.set("1");
-        let expected_period: ServiceUpdatePeriod = Duration::milliseconds(5000).into();
+        let expected_period: ServiceUpdatePeriod = Duration::from_millis(5000).into();
         assert!(expected_period < *MIN_ALLOWED_PERIOD);
         assert_eq!(expected_period, worker.update_period());
     }

@@ -26,9 +26,8 @@ use libc::{self,
            pid_t};
 use std::{ops::Neg,
           thread,
-          time::Duration as StdDuration};
-use time::{Duration,
-           SteadyTime};
+          time::{Duration,
+                 Instant}};
 
 /// Kill a service process.
 pub fn kill(pid: Pid) -> ShutdownMethod {
@@ -70,15 +69,15 @@ impl Process {
             return ShutdownMethod::AlreadyExited;
         }
 
-        let stop_time = SteadyTime::now() + Duration::seconds(8);
+        let stop_time = Instant::now() + Duration::from_secs(8);
         loop {
             if !is_alive(pid_to_kill) {
                 return ShutdownMethod::GracefulTermination;
             }
-            if SteadyTime::now() >= stop_time {
+            if Instant::now() >= stop_time {
                 break;
             }
-            thread::sleep(StdDuration::from_millis(5));
+            thread::sleep(Duration::from_millis(5));
         }
 
         match signal(pid_to_kill, Signal::KILL) {

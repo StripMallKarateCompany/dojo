@@ -14,6 +14,7 @@
 
 //! Encapsulate running the `doj-sup` executable for tests.
 
+use std::sync::LazyLock;
 use std::{collections::HashSet,
           env,
           net::TcpListener,
@@ -28,20 +29,16 @@ use std::{collections::HashSet,
           time::Duration};
 
 use crate::hcore::url::BLDR_URL_ENVVAR;
-use rand::{self,
-           distributions::{Distribution,
-                           Uniform}};
+use rand::RngExt;
 
 use super::test_butterfly;
 
-lazy_static! {
-    /// Keep track of all TCP ports currently being used by TestSup
-    /// instances. Allows us to run tests in parallel without fear of
-    /// port conflicts between them.
-    static ref CLAIMED_PORTS: Mutex<HashSet<u16>> = {
+/// Keep track of all TCP ports currently being used by TestSup
+/// instances. Allows us to run tests in parallel without fear of
+/// port conflicts between them.
+static CLAIMED_PORTS: LazyLock<Mutex<HashSet<u16>>> = LazyLock::new(|| {
         Mutex::new(HashSet::new())
-    };
-}
+    });
 
 pub struct TestSup {
     pub doj_root:         PathBuf,
@@ -104,9 +101,7 @@ fn unclaimed_port(tries: u16) -> u16 {
 /// Return a random unprivileged, unregistered TCP port number.
 fn random_port() -> u16 {
     // IANA port registrations go to 49151
-    let between = Uniform::new_inclusive(49152, ::std::u16::MAX);
-    let mut rng = rand::thread_rng();
-    between.sample(&mut rng)
+    rand::rng().random_range(49152..=u16::MAX)
 }
 
 /// Find an executable relative to the current integration testing

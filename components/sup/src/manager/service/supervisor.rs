@@ -41,8 +41,9 @@ use std::{fs::File,
                Write},
           path::{Path,
                  PathBuf},
-          result};
-use time::Timespec;
+          result,
+          time::{SystemTime,
+                 UNIX_EPOCH}};
 
 static LOGKEY: &'static str = "SV";
 
@@ -50,7 +51,7 @@ static LOGKEY: &'static str = "SV";
 pub struct Supervisor {
     pub preamble:      String,
     pub state:         ProcessState,
-    pub state_entered: Timespec,
+    pub state_entered: SystemTime,
     pid:               Option<Pid>,
     pid_file:          PathBuf,
 }
@@ -59,7 +60,7 @@ impl Supervisor {
     pub fn new(service_group: &ServiceGroup) -> Supervisor {
         Supervisor { preamble:      service_group.to_string(),
                      state:         ProcessState::Down,
-                     state_entered: time::get_time(),
+                     state_entered: SystemTime::now(),
                      pid:           None,
                      pid_file:      fs::svc_pid_file(service_group.service()), }
     }
@@ -156,10 +157,10 @@ impl Supervisor {
     }
 
     pub fn status(&self) -> (bool, String) {
-        let status = format!("{}: {} for {}",
+        let status = format!("{}: {} for {}s",
                              self.preamble,
                              self.state,
-                             time::get_time() - self.state_entered);
+                             self.state_entered.elapsed().unwrap_or_default().as_secs());
         let healthy = match self.state {
             ProcessState::Up => true,
             ProcessState::Down => false,
@@ -247,7 +248,7 @@ impl Supervisor {
             return;
         }
         self.state = state;
-        self.state_entered = time::get_time();
+        self.state_entered = SystemTime::now();
     }
 }
 
@@ -258,7 +259,11 @@ impl Serialize for Supervisor {
         let mut strukt = serializer.serialize_struct("supervisor", 5)?;
         strukt.serialize_field("pid", &self.pid)?;
         strukt.serialize_field("state", &self.state)?;
-        strukt.serialize_field("state_entered", &self.state_entered.sec)?;
+        // Seconds since the Unix epoch, as clients read it.
+        let state_entered = self.state_entered
+                                .duration_since(UNIX_EPOCH)
+                                .map_or(0, |since| since.as_secs());
+        strukt.serialize_field("state_entered", &state_entered)?;
         strukt.end()
     }
 }

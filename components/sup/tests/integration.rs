@@ -16,16 +16,14 @@
 /// behavior of the Supervisor
 extern crate dojo_core as hcore;
 
-#[macro_use]
-extern crate lazy_static;
+use std::sync::LazyLock;
 
 mod utils;
 
 // The fixture location is derived from the name of this test
 // suite. By convention, it is the same as the file name.
-lazy_static! {
-    static ref FIXTURE_ROOT: utils::FixtureRoot = utils::FixtureRoot::new("integration");
-}
+static FIXTURE_ROOT: LazyLock<utils::FixtureRoot> =
+    LazyLock::new(|| utils::FixtureRoot::new("integration"));
 
 #[test]
 #[cfg_attr(feature = "ignore_integration_tests", ignore)]
