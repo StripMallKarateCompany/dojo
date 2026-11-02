@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::{fs::File,
+use std::{fs::{self,
+               File},
           io::Read,
-          path::PathBuf};
+          path::{Path,
+                 PathBuf}};
 
 use serde_json;
 
@@ -63,22 +65,49 @@ JSON:
 ///
 /// In general, you should prefer using `assert_valid` directly.
 pub fn validate_string(input: &str, schema: &str) -> Validation {
-    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("doc")
-                                                        .join(schema);
-    let mut schema_file = File::open(path).expect("could not open schema file");
-    let mut raw_schema = String::new();
-    schema_file.read_to_string(&mut raw_schema)
-               .expect("could not read schema file");
-    let parsed_schema: serde_json::Value =
-        serde_json::from_str(&raw_schema).expect("Could not parse schema as JSON");
+    let doc_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("doc");
+    // The schemas refer to each other by file name, so each is registered under one base URI
+    // and the schema compiled from there. The domain is reserved and never resolves, and
+    // offline validation fails on any reference the registry does not hold.
+    let mut registry = jsonschema::Registry::new();
+    for entry in fs::read_dir(&doc_dir).expect("could not list the schema directory") {
+        let path = entry.expect("could not read the schema directory").path();
+        if path.extension().is_some_and(|ext| ext == "json") {
+            let name = path.file_name()
+                           .and_then(|name| name.to_str())
+                           .expect("schema file names are UTF-8");
+            registry = registry.add(format!("{}{}", SCHEMA_BASE_URI, name), read_schema(&path))
+                               .expect("could not register the schema");
+        }
+    }
+    let registry = registry.prepare()
+                           .expect("could not resolve the schemas' references");
+    let parsed_schema = read_schema(&doc_dir.join(schema));
     // Unknown keywords are ignored, which allows the `$comment` keyword, as well as our own
     // `$deprecated` and `$since` keywords.
-    let validator =
-        jsonschema::validator_for(&parsed_schema).expect("Could not compile the schema");
+    let validator = jsonschema::options().offline()
+                                         .with_base_uri(format!("{}{}", SCHEMA_BASE_URI, schema))
+                                         .with_registry(&registry)
+                                         .build(&parsed_schema)
+                                         .expect("Could not compile the schema");
 
     let input_json: serde_json::Value =
         serde_json::from_str(input).expect("Could not parse input as JSON");
     Validation { errors: validator.iter_errors(&input_json)
                                   .map(|e| format!("{} at {}", e, e.instance_path()))
                                   .collect(), }
+}
+
+/// Where the schemas in `doc` are registered for resolving references between them.
+const SCHEMA_BASE_URI: &str = "https://schemas.dojo.invalid/sup/";
+
+fn read_schema(path: &Path) -> serde_json::Value {
+    let mut raw_schema = String::new();
+    File::open(path).and_then(|mut file| file.read_to_string(&mut raw_schema))
+                    .unwrap_or_else(|e| panic!("could not read schema {}: {}", path.display(), e));
+    serde_json::from_str(&raw_schema).unwrap_or_else(|e| {
+                                         panic!("could not parse schema {} as JSON: {}",
+                                                path.display(),
+                                                e)
+                                     })
 }
