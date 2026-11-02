@@ -35,8 +35,9 @@ Project facts the smk skills read, by the skill that needs them. AGENTS.md owns 
   want a real, writable `/doj` with packages installed. `support/vm/expected-failures` names them; a
   change that makes one pass removes it.
 - The Dojo VM proves arm64. x86_64 builds and tests run on smk-1, the Linux machine on the local
-  network, with the same `support/vm/guest` scripts, in a throwaway checkout that is deleted
-  afterwards.
+  network, with the same `support/vm/guest` scripts. smk-1 is shared: work in a throwaway checkout
+  with a throwaway `GIT_CONFIG_GLOBAL`, run builds and tests under `nice -n 15`, delete what you
+  created, and confirm none of your processes remain.
 
 ## Qa
 
