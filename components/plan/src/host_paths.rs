@@ -50,7 +50,13 @@ pub fn refuse(prefix: &Path, root: &Path) -> Result<(), String> {
     Err(message)
 }
 
-fn plural(n: usize) -> String { if n == 1 { "1 file does".into() } else { format!("{n} files") } }
+fn plural(n: usize) -> String {
+    if n == 1 {
+        "1 file does".into()
+    } else {
+        format!("{n} files")
+    }
+}
 
 fn walk(prefix: &Path, dir: &Path, root: &str, findings: &mut Vec<String>) -> Result<(), String> {
     let entries = fs::read_dir(dir).map_err(|e| format!("cannot read {}: {e}", dir.display()))?;
@@ -62,7 +68,10 @@ fn walk(prefix: &Path, dir: &Path, root: &str, findings: &mut Vec<String>) -> Re
         if kind.is_dir() {
             walk(prefix, &path, root, findings)?;
         } else if kind.is_file() {
-            let shown = path.strip_prefix(prefix).unwrap_or(&path).display().to_string();
+            let shown = path.strip_prefix(prefix)
+                            .unwrap_or(&path)
+                            .display()
+                            .to_string();
             let executable = entry.metadata()
                                   .map_err(|e| format!("cannot read {}: {e}", path.display()))
                                   .map(|meta| is_executable(&meta))?;
@@ -93,10 +102,10 @@ fn host_paths(path: &Path,
     let outside = |named: &str| !named.starts_with(root);
     let mut head = [0_u8; 4];
     let read = fs::File::open(path).and_then(|mut f| {
-                                      use std::io::Read as _;
-                                      f.read(&mut head)
-                                  })
-                                  .map_err(|e| format!("cannot read {}: {e}", path.display()))?;
+                                       use std::io::Read as _;
+                                       f.read(&mut head)
+                                   })
+                                   .map_err(|e| format!("cannot read {}: {e}", path.display()))?;
     if read == 4 && head == *b"\x7fELF" {
         let bytes = fs::read(path).map_err(|e| format!("cannot read {}: {e}", path.display()))?;
         let Some(elf) = Elf::parse(&bytes) else {
@@ -199,12 +208,13 @@ impl Elf {
                 at += 16;
             }
             if let Some(table) = strtab.and_then(file_offset) {
-                search_path = runpath.or(rpath)
-                                     .and_then(|name| {
+                search_path =
+                    runpath.or(rpath).and_then(|name| {
                                          string_at(usize::try_from(table.checked_add(name)?).ok()?)
                                      });
             }
         }
-        Some(Elf { interpreter, search_path })
+        Some(Elf { interpreter,
+                   search_path })
     }
 }

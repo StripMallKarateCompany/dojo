@@ -159,8 +159,7 @@ fn owner_writable(dir: &Path) -> Result<(), String> {
             .map_err(|e| format!("cannot make {} writable: {e}", dir.display()))?;
     }
     if meta.is_dir() {
-        let entries =
-            fs::read_dir(dir).map_err(|e| format!("cannot read {}: {e}", dir.display()))?;
+        let entries = fs::read_dir(dir).map_err(|e| format!("cannot read {}: {e}", dir.display()))?;
         for entry in entries {
             let entry = entry.map_err(|e| format!("cannot read {}: {e}", dir.display()))?;
             owner_writable(&entry.path())?;

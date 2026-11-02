@@ -33,13 +33,13 @@ const USAGE: &str = "usage: doj-plan-build show <plan-dir> [--target <target>]
                             [--backline <ident>]";
 
 struct Args {
-    command: String,
-    dir:     String,
-    target:  Option<String>,
-    check:   bool,
+    command:           String,
+    dir:               String,
+    target:            Option<String>,
+    check:             bool,
     refuse_host_paths: bool,
-    isolate: bool,
-    backline: Option<String>,
+    isolate:           bool,
+    backline:          Option<String>,
 }
 
 fn parse(args: &[String]) -> Option<Args> {
@@ -47,13 +47,13 @@ fn parse(args: &[String]) -> Option<Args> {
     if command != "show" && command != "build" {
         return None;
     }
-    let mut parsed = Args { command: command.clone(),
-                            dir:     String::new(),
-                            target:  None,
-                            check:   false,
+    let mut parsed = Args { command:           command.clone(),
+                            dir:               String::new(),
+                            target:            None,
+                            check:             false,
                             refuse_host_paths: false,
-                            isolate: false,
-                            backline: None, };
+                            isolate:           false,
+                            backline:          None, };
     let mut rest = rest.iter();
     while let Some(arg) = rest.next() {
         match arg.as_str() {
@@ -116,11 +116,7 @@ fn show(plan: &Plan, target: Option<&str>) -> ExitCode {
     ExitCode::SUCCESS
 }
 
-fn build(plan: &Plan,
-         located: &Located,
-         target: Option<&str>,
-         args: &Args)
-         -> ExitCode {
+fn build(plan: &Plan, located: &Located, target: Option<&str>, args: &Args) -> ExitCode {
     let Some(host) = host_target() else {
         eprintln!("doj-plan-build: this host is not one of Dojo's targets ({})",
                   TARGETS.join(", "));

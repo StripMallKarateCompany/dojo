@@ -16,9 +16,9 @@ Project facts the smk skills read, by the skill that needs them. AGENTS.md owns 
   default VM, which may be another session's.
 - Every `builder` command but `ssh` copies the tree over the `dojo` directory in the VM's home, so a
   file the VM generated is gone at the next command unless one copied it back. `builder run` returns a changed
-  `Cargo.lock`, and `builder fmt` returns the files rustfmt rewrote. `.rustfmt.toml` needs the
-  nightly rustfmt `support/vm/guest/env.sh` provides, so format with `builder fmt` rather than by
-  hand.
+  `Cargo.lock`, and `builder fmt` returns the files rustfmt rewrote. `.rustfmt.toml` needs a
+  nightly rustfmt: `support/vm/guest/rustfmt.nix` builds the dev shell's from `.nix/flake.lock`,
+  so `smk format` on the Mac and `builder fmt` format alike.
 - `rust-toolchain` pins the Rust the tree builds with; `support/vm/guest/env.sh` supplies the C
   libraries through Nix. Read both before changing a dependency; the lock is built `--locked`.
 - The `support/vm/guest` scripts run on any Linux with Nix, not only in the builder VM.

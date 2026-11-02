@@ -19,10 +19,10 @@ libpath=$(nix build --impure --no-link --print-out-paths "${np}#openssl.out" \
   "${np}#zlib.out" | sed 's|$|/lib|' | paste -sd:)
 # prost-build's bundled protoc is a generic Linux binary, which NixOS can't run.
 protoc=$(nix build --impure --no-link --print-out-paths "${np}#protobuf" | head -1)/bin/protoc
-# The nightly rustfmt the tree is formatted with: .rustfmt.toml uses unstable
-# options. test.sh runs its cargo-fmt.
+# The nightly rustfmt the tree is formatted with, the dev shell's (rustfmt.nix).
+# test.sh and builder fmt run its cargo-fmt.
 rustfmt_nightly=$(nix build --impure --no-link --print-out-paths \
-  --expr "(builtins.getFlake \"${np}\").legacyPackages.aarch64-linux.rustfmt.override { asNightly = true; }")
+  -f "$(dirname "${BASH_SOURCE[0]}")/rustfmt.nix")
 export rustfmt_nightly
 
 run() {

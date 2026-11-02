@@ -28,10 +28,7 @@ Label = "dojo"
 Workspace = "smk"
 [Format]
 Exclude = [
-  # Rust is formatted and tested in the builder VM (support/vm/builder fmt, test, verify) with the tree's
-  # nightly rustfmt. smk lint cannot check it yet: the workspace builds on this Mac, but clippy finds some
-  # 1,500 problems in the inherited code. It joins when those are worked off (SMK-423).
-  "**/*.rs", "vendor/**", "components/plan/vendor/**",
+  "vendor/**", "components/plan/vendor/**",
   # Languages smk has no formatter for.
   "**/*.fnl", "**/*.proto", "**/*.bats",
   # Test fixtures and package metadata: data, much of it exact bytes a test compares.
@@ -48,6 +45,9 @@ Exclude = [
   "rust-toolchain", "components/plan/rust-toolchain", "VERSION", "Vagrantfile",
   "support/vm/expected-failures", "support/vm/applets", "tools/bldr_toml_create/**",
 ]
+# smk format and typecheck take the Rust, but smk lint does not yet: clippy finds some 2,760 problems in the
+# inherited code. It joins when those are worked off (DOJ-31).
+SkipLint = ["**/*.rs"]
 [License]
 Kind = "Apache-2.0"
 Holder = "Strip Mall Karate Company"

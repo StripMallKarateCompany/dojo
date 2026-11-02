@@ -46,7 +46,9 @@ mod tests {
     fn help_puts_the_maintainer_on_its_own_line() {
         let help = super::cli().render_help().to_string();
         let mut lines = help.lines();
-        assert!(lines.next().unwrap().ends_with(super::export_tar::VERSION.trim()));
+        assert!(lines.next()
+                     .unwrap()
+                     .ends_with(super::export_tar::VERSION.trim()));
         assert_eq!(lines.next(), Some("Maintainer: Strip Mall Karate Company"));
     }
 
