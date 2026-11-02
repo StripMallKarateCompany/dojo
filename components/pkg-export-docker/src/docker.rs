@@ -16,7 +16,8 @@ use std::{fs,
           path::{Path,
                  PathBuf},
           process::Command,
-          str::FromStr};
+          str::FromStr,
+          sync::LazyLock};
 
 use crate::{common::{templating::TemplateRenderer,
                      ui::{Status,
@@ -39,13 +40,11 @@ const DOCKERFILE: &str = include_str!("../defaults/Dockerfile.hbs");
 /// The build report template.
 const BUILD_REPORT: &str = include_str!("../defaults/last_docker_export.env.hbs");
 
-lazy_static! {
-    /// Absolute path to the Docker program
-    static ref DOCKER_PROGRAM: PathBuf = hfs::resolve_cmd_in_pkg(
-        "docker",
-        include_str!(concat!(env!("OUT_DIR"), "/DOCKER_PKG_IDENT")),
-    );
-}
+/// Absolute path to the Docker program
+static DOCKER_PROGRAM: LazyLock<PathBuf> = LazyLock::new(|| {
+    hfs::resolve_cmd_in_pkg("docker",
+                            include_str!(concat!(env!("OUT_DIR"), "/DOCKER_PKG_IDENT")))
+});
 
 /// A builder used to create a Docker image.
 pub struct DockerBuilder<'a> {

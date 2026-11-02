@@ -103,21 +103,21 @@ pub fn start(ui: &mut UI,
 
     // We want to render the configured variables.
     if with_all || scaffold.is_none() {
-        let rendered_plan = handlebars.template_render(FULL_PLAN_TEMPLATE, &data)?;
+        let rendered_plan = handlebars.render_template(FULL_PLAN_TEMPLATE, &data)?;
         create_with_template(ui, &format!("{}/plan.sh", root), &rendered_plan)?;
     } else {
-        let rendered_plan = handlebars.template_render(DEFAULT_PLAN_TEMPLATE, &data)?;
+        let rendered_plan = handlebars.render_template(DEFAULT_PLAN_TEMPLATE, &data)?;
         create_with_template(ui, &format!("{}/plan.sh", root), &rendered_plan)?;
     }
     ui.para("`plan.sh` is the foundation of your new dojo. It contains metadata, dependencies, \
              and tasks.")?;
-    let rendered_default_toml = handlebars.template_render(DEFAULT_TOML_TEMPLATE, &data)?;
+    let rendered_default_toml = handlebars.render_template(DEFAULT_TOML_TEMPLATE, &data)?;
     create_with_template(ui,
                          &format!("{}/default.toml", root),
                          &rendered_default_toml)?;
     ui.para("`default.toml` contains default values for `cfg` prefixed variables.")?;
 
-    let rendered_readme_md = handlebars.template_render(README_TEMPLATE, &data)?;
+    let rendered_readme_md = handlebars.render_template(README_TEMPLATE, &data)?;
     create_with_template(ui, &format!("{}/README.md", root), &rendered_readme_md)?;
     ui.para("`README.md` contains a basic README document which you should update.")?;
 

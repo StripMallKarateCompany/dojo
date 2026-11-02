@@ -15,8 +15,6 @@
 #![recursion_limit = "128"]
 
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate log;
 
 use crate::{common::{cli::{cache_key_path_from_matches,
@@ -101,17 +99,13 @@ const DOJO_ORG_ENVVAR: &str = "DOJ_ORG";
 /// Makes the --user CLI param optional when this env var is set
 const DOJO_USER_ENVVAR: &str = "DOJ_USER";
 
-lazy_static! {
-    static ref STATUS_HEADER: Vec<&'static str> = {
-        vec!["package",
-             "type",
-             "desired",
-             "state",
-             "elapsed (s)",
-             "pid",
-             "group",]
-    };
-}
+const STATUS_HEADER: [&str; 7] = ["package",
+                                       "type",
+                                       "desired",
+                                       "state",
+                                       "elapsed (s)",
+                                       "pid",
+                                       "group"];
 
 fn main() {
     env_logger::init();

@@ -34,13 +34,11 @@ use std::path::{Path,
 
 // External Libraries
 use dojo_api_client::StatusCode;
-use retry::retry;
-
 // Local Dependencies
 use crate::{api_client::{self,
                          Client},
-            common::{command::package::install::{RETRIES,
-                                                 RETRY_WAIT},
+            common::{command::package::install::{with_retries,
+                                                 RETRIES},
                      ui::{Status,
                           UIWriter,
                           UI}},
@@ -107,14 +105,13 @@ pub fn start(ui: &mut UI,
                                                &candidate_path,
                                                key_path)
                         };
-                        match retry(RETRIES, RETRY_WAIT, upload, Result::is_ok) {
-                            Ok(_) => trace!("attempt_upload_dep succeeded"),
-                            Err(_) => {
-                                return Err(Error::from(api_client::Error::UploadFailed(format!(
-                                    "We tried {} times but could not upload {}. Giving up.",
-                                    RETRIES, &dep
-                                ))));
-                            }
+                        if with_retries(upload) {
+                            trace!("attempt_upload_dep succeeded");
+                        } else {
+                            return Err(Error::from(api_client::Error::UploadFailed(format!(
+                                "We tried {} times but could not upload {}. Giving up.",
+                                RETRIES, &dep
+                            ))));
                         }
                     }
                     Err(e) => return Err(Error::from(e)),
@@ -130,14 +127,13 @@ pub fn start(ui: &mut UI,
                                   force_upload,
                                   &mut archive)
             };
-            match retry(RETRIES, RETRY_WAIT, upload, Result::is_ok) {
-                Ok(_) => trace!("upload_into_depot succeeded"),
-                Err(_) => {
-                    return Err(Error::from(api_client::Error::UploadFailed(format!(
-                        "We tried {} times but could not upload {}. Giving up.",
-                        RETRIES, &ident
-                    ))));
-                }
+            if with_retries(upload) {
+                trace!("upload_into_depot succeeded");
+            } else {
+                return Err(Error::from(api_client::Error::UploadFailed(format!(
+                    "We tried {} times but could not upload {}. Giving up.",
+                    RETRIES, &ident
+                ))));
             }
             ui.end(format!("Upload of {} complete.", &ident))?;
             Ok(())

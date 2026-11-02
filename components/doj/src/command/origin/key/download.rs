@@ -16,8 +16,8 @@ use std::path::Path;
 
 use crate::{api_client::Client,
             common::{self,
-                     command::package::install::{RETRIES,
-                                                 RETRY_WAIT},
+                     command::package::install::{with_retries,
+                                                 RETRIES},
                      ui::{Status,
                           UIWriter,
                           UI}},
@@ -27,8 +27,6 @@ use crate::{error::{Error,
                     Result},
             PRODUCT,
             VERSION};
-
-use retry::retry;
 
 #[allow(clippy::too_many_arguments)]
 pub fn start(ui: &mut UI,
@@ -140,7 +138,7 @@ pub fn download_public_encryption_key(ui: &mut UI,
         Ok(())
     };
 
-    if retry(RETRIES, RETRY_WAIT, download_fn, |res| res.is_ok()).is_err() {
+    if !with_retries(download_fn) {
         return Err(Error::from(common::error::Error::DownloadFailed(format!(
             "We tried {} times but could not download the latest public encryption key. Giving up.",
             RETRIES,
@@ -164,7 +162,7 @@ fn download_secret_key(ui: &mut UI,
         Ok(())
     };
 
-    if retry(RETRIES, RETRY_WAIT, download_fn, |res| res.is_ok()).is_err() {
+    if !with_retries(download_fn) {
         return Err(Error::from(common::error::Error::DownloadFailed(format!(
             "We tried {} times but could not download the latest secret origin key. Giving up.",
             RETRIES,
@@ -191,7 +189,7 @@ fn download_key(ui: &mut UI,
                 Ok(())
             };
 
-            if retry(RETRIES, RETRY_WAIT, download_fn, |res| res.is_ok()).is_err() {
+            if !with_retries(download_fn) {
                 return Err(Error::from(common::error::Error::DownloadFailed(format!(
                     "We tried {} times but could not download {}/{} origin key. Giving up.",
                     RETRIES, &name, &rev

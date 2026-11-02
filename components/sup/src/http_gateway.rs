@@ -465,7 +465,8 @@ mod tests {
                     Ipv4Addr,
                     SocketAddr},
               path::PathBuf,
-              sync::Mutex};
+              sync::{LazyLock,
+                     Mutex}};
 
     fn validate_sample_file_against_schema(name: &str, schema: &str) {
         let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests")
