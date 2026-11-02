@@ -39,6 +39,9 @@ indent_style = "Visual"
 match_arm_blocks = true
 match_block_trailing_comma = false
 imports_granularity = "Crate"
+# Vendored code keeps its upstream layout; cargo fmt would otherwise take
+# ipc-channel with the workspace it is a member of.
+ignore = ["vendor"]
 normalize_comments = true
 normalize_doc_attributes = true
 overflow_delimited_expr = false

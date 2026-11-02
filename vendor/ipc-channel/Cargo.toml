@@ -26,5 +26,11 @@ mio = "0.6.1"
 
 futures = { version = "0.1", optional = true }
 
+# The bench uses #![feature(test)], which only a nightly compiler builds; without this,
+# cargo check --all-targets fails on the tree's stable Rust.
+[[bench]]
+name = "bench"
+required-features = ["unstable"]
+
 [dev-dependencies]
 crossbeam = "0.2"

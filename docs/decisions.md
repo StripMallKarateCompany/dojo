@@ -108,3 +108,14 @@ wiki page "Dojo" tells the longer story.
   the first months of this fork. A loader error is not a failed test: `support/vm/builder verify`
   counts the binaries that ran against the ones cargo built before calling a run green, and it is
   the run a pull request reports.
+
+## 2026-11-02
+
+- **The Rust is in `smk format` and `smk typecheck`, not yet `smk lint`.** The builder VM, smk-1
+  and the dev shell format with one nightly rustfmt, built from the nixpkgs `.nix/flake.lock`
+  pins (`support/vm/guest/rustfmt.nix`), so a lock update moves them together; the VM's own
+  nixos-26.05 pin had given it rustfmt 1.95 against the dev shell's 1.99. Clippy finds some 2,760
+  problems in the inherited code, so `**/*.rs` stays under `Format.SkipLint` until DOJ-31 works
+  them off. Vendored ipc-channel stays a workspace member, so `builder verify` still tests the
+  tree's patches to it, but `.rustfmt.toml` ignores `vendor` and its nightly-only bench needs the
+  crate's `unstable` feature.
