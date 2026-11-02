@@ -1,5 +1,5 @@
 # Tests that fail on main in the builder VM, and why they are not regressions:
-# see AGENTS.md, "Testing". The Supervisor fixtures carry TARGET x86_64-linux;
+# see .agents/smk-context.md, "Test-engineer". The Supervisor fixtures carry TARGET x86_64-linux;
 # compile_hook_table and the Supervisor integration tests install
 # karate/busybox-static from Builder, which does not exist yet; dojo_common's
 # templating tests want a real, writable /doj with packages installed.

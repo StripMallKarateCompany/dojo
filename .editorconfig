@@ -39,3 +39,8 @@ indent_size = 4
 
 # Each language's own rules follow, one block per language in smkproj.toml's Languages.
 # smk: each language's lines follow
+
+# Everything above is smk's, rewritten on every render. The lines below the next one are this repository's,
+# and every render keeps them. Start them with a [glob] section header, or they join the section above; a
+# later section wins, so a setting there overrides smk's for the files its glob matches.
+# smk: this repository's own lines follow

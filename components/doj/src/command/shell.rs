@@ -79,11 +79,20 @@ struct TargetDeclaration {
 impl Declaration {
     fn load(dir: &Path) -> Result<Declaration> {
         let path = dir.join(DECLARATION);
-        let text = fs::read_to_string(&path).map_err(|e| {
-                                                Error::ShellError(format!("cannot read {}: {}",
-                                                                          path.display(),
-                                                                          e))
-                                            })?;
+        let text = match fs::read_to_string(&path) {
+            Ok(text) => text,
+            Err(ref e) if e.kind() == io::ErrorKind::NotFound => {
+                return Err(Error::ShellError(format!("no {} in {}: the directory declares no \
+                                                      Dojo shell",
+                                                     DECLARATION,
+                                                     dir.display())))
+            }
+            Err(e) => {
+                return Err(Error::ShellError(format!("cannot read {}: {}",
+                                                     path.display(),
+                                                     e)))
+            }
+        };
         let declaration: Declaration = toml::from_str(&text).map_err(|e| {
                                            Error::ShellError(format!("{}: {}", path.display(), e))
                                        })?;
@@ -261,13 +270,15 @@ impl<'a> Store<'a> {
         Ok(latest)
     }
 
-    /// The releases `ident` depends on, all of them, from its archive or its install.
+    /// The releases `ident` depends on, all of them, from its install, or from its archive
+    /// when it is not installed. The install's list is a file; the archive's takes inflating
+    /// the whole archive, which for a toolchain is seconds on every `env`.
     fn tdeps(&self, ident: &PackageIdent) -> Result<Vec<PackageIdent>> {
-        if let Some(path) = self.cached(ident)? {
-            return Ok(PackageArchive::new(path).tdeps()?);
-        }
         if let Some(install) = self.installed(ident) {
             return Ok(install.tdeps()?);
+        }
+        if let Some(path) = self.cached(ident)? {
+            return Ok(PackageArchive::new(path).tdeps()?);
         }
         Err(Error::ShellError(format!("{} is neither installed nor in {}",
                                       ident,
@@ -581,6 +592,16 @@ mod tests {
     }
 
     #[test]
+    fn a_directory_with_no_declaration_says_it_declares_no_shell() {
+        let world = World::new();
+        let error = Declaration::load(world.project.path()).unwrap_err()
+                                                           .to_string();
+        assert_eq!(format!("no shell.toml in {}: the directory declares no Dojo shell",
+                           world.project.path().display()),
+                   error);
+    }
+
+    #[test]
     fn a_declaration_refuses_unknown_keys_and_targets() {
         let world = World::new();
         world.declare("channel = \"stable\"\npackages = []\n");
@@ -732,5 +753,26 @@ mod tests {
         assert!(error.contains("but shell.lock records"), "{}", error);
         assert!(PackageInstall::load(&PackageIdent::from_str("acme/tool").unwrap(),
                                      Some(world.root.path())).is_err());
+    }
+
+    #[test]
+    fn env_reads_an_installed_packages_dependencies_without_opening_its_archive() {
+        let world = World::new();
+        let dep = world.archive("acme/dep/1.0.0/20260101000000", &[], "");
+        let tool = world.archive("acme/tool/1.0.0/20260101000000",
+                                 &["acme/dep/1.0.0/20260101000000"],
+                                 "");
+        world.declare("packages = [\"acme/tool\"]\n");
+        world.lock(false).unwrap();
+        world.install(&dep);
+        world.install(&tool);
+        // An archive env cannot read: it is still in the cache, and env has no reason to open it.
+        fs::write(&tool, b"not an archive").unwrap();
+
+        let text = world.env().unwrap();
+
+        assert!(text.contains("/doj/pkgs/acme/dep/1.0.0/20260101000000/bin"),
+                "{}",
+                text);
     }
 }
