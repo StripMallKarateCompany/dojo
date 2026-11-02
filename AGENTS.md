@@ -28,8 +28,8 @@ Work in a tree (`trees add <name>`), commit on its `worktree/<name>` branch and 
 with `smk pr create`. The host is GitHub (`StripMallKarateCompany/dojo`); `main` requires no status
 checks and no CI runs there, so the merge is left to the owner, as the pr skill says for such a base.
 Pushed history is never rewritten (no rebase, squash or amend, no author changes), pull requests
-land as merge commits, and commits carry no AI attribution or co-author lines. Live-state changes
-outside a merge need explicit authorization.
+land as merge commits, and commit bodies say why and carry no AI attribution or co-author lines.
+Live-state changes outside a merge need explicit authorization.
 
 ## Where the rest lives
 
