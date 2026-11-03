@@ -392,7 +392,7 @@ impl SwimNet {
             } else if self.check_rounds(&rounds_in) {
                 for (i, some_health) in network_health.iter().enumerate() {
                     match some_health {
-                        Some(ref health) => {
+                        Some(health) => {
                             println!("{}: {:?}", i, health);
                             trace_it!(TEST: &self.members[i], format!("Health failed {} {} as {}", self.members[to_check].name(), self.members[to_check].member_id(), health));
                         }

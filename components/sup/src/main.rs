@@ -697,7 +697,8 @@ mod test {
             let lock = lock_var();
             lock.set(key_cache.path());
 
-            env::set_var("DOJ_CACHE_KEY_PATH", key_cache.path());
+            // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+            unsafe { env::set_var("DOJ_CACHE_KEY_PATH", key_cache.path()) };
             let cmd_vec = vec![
                                "doj-sup",
                                "run",

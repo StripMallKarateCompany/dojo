@@ -503,7 +503,8 @@ mod test {
     #[test]
     fn render_package_install() {
         let root = TempDir::new().expect("create temp dir").keep();
-        env::set_var(fs::FS_ROOT_ENVVAR, &root);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var(fs::FS_ROOT_ENVVAR, &root) };
         let pg_id = PackageIdent::new("testing", "test", Some("1.0.0"), Some("20170712000000"));
 
         let pkg_install =
@@ -529,7 +530,8 @@ mod test {
         assert_eq!(file_content(fs::svc_hooks_path(&pkg_install.ident().name).join("install")),
                    "install message is Hello");
 
-        env::remove_var(fs::FS_ROOT_ENVVAR);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::remove_var(fs::FS_ROOT_ENVVAR) };
         std::fs::remove_dir_all(root).expect("removing temp root");
     }
 }

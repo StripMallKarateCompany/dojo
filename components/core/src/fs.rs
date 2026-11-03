@@ -755,7 +755,8 @@ mod test_find_command {
         let mut path_bufs = vec![first_path, second_path];
         path_bufs.append(&mut os_paths);
         let new_path = env::join_paths(path_bufs).unwrap();
-        env::set_var("PATH", &new_path);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var("PATH", &new_path) };
     }
 
     mod with_path_set {

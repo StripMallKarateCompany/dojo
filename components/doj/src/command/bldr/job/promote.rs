@@ -254,7 +254,8 @@ mod test {
                                                    "Properly formated timestamp".to_string(),
                                                project_name: "Test Project".to_string(),
                                                target:       "x86_64-linux".to_string(), };
-        env::set_var("EDITOR", "cat");
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var("EDITOR", "cat") };
 
         let ident_list =
             get_ident_list(&mut ui, &group_status, Some("karate"), true).expect("Error fetching \

@@ -267,7 +267,9 @@ fn unset_proxy_env_vars() {
     for var in &["http_proxy", "https_proxy"] {
         if henv::var(var).is_ok() {
             debug!("Unsetting process environment variable '{}'", var);
-            env::remove_var(var);
+            // SAFETY: doj has one thread here: `start` joins the clap parser's before a subcommand
+            // runs.
+            unsafe { env::remove_var(var) };
         }
     }
 }

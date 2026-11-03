@@ -31,7 +31,7 @@ static CAUGHT_SIGNALS: LazyLock<Mutex<VecDeque<SignalCode>>> =
     LazyLock::new(|| Mutex::new(VecDeque::new()));
 
 // Functions from POSIX libc.
-extern "C" {
+unsafe extern "C" {
     fn signal(sig: SignalCode,
               cb: unsafe extern "C" fn(SignalCode))
               -> unsafe extern "C" fn(SignalCode);

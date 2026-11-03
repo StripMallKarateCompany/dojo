@@ -7,10 +7,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ipc::{self, IpcReceiverSet, IpcSender, IpcSharedMemory};
+use crate::ipc::{self, IpcReceiverSet, IpcSender, IpcSharedMemory};
 #[cfg(not(any(feature = "force-inprocess", target_os = "android", target_os = "ios")))]
-use ipc::IpcReceiver;
-use router::ROUTER;
+use crate::ipc::IpcReceiver;
+use crate::router::ROUTER;
 use libc;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::cell::RefCell;
@@ -25,14 +25,14 @@ use std::sync::mpsc::{self, Sender};
 use std::thread;
 
 #[cfg(not(any(feature = "force-inprocess", target_os = "android", target_os = "ios")))]
-use ipc::IpcOneShotServer;
+use crate::ipc::IpcOneShotServer;
 
 #[cfg(not(any(feature = "force-inprocess", target_os = "android", target_os = "ios")))]
 use std::io::Error;
 
 #[cfg(not(any(feature = "force-inprocess", target_os = "android", target_os = "ios")))]
 // I'm not actually sure invoking this is indeed unsafe -- but better safe than sorry...
-pub unsafe fn fork<F: FnOnce()>(child_func: F) -> libc::pid_t {
+pub unsafe fn fork<F: FnOnce()>(child_func: F) -> libc::pid_t { unsafe {
     match libc::fork() {
         -1 => panic!("Fork failed: {}", Error::last_os_error()),
         0 => {
@@ -41,7 +41,7 @@ pub unsafe fn fork<F: FnOnce()>(child_func: F) -> libc::pid_t {
         },
         pid => pid,
     }
-}
+}}
 
 pub trait Wait {
     fn wait(self);
@@ -482,7 +482,7 @@ impl<'de> Deserialize<'de> for HasWeirdSerializer {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
         where D: Deserializer<'de>
     {
-        Ok(HasWeirdSerializer(try!(Deserialize::deserialize(deserializer))))
+        Ok(HasWeirdSerializer(r#try!(Deserialize::deserialize(deserializer))))
     }
 }
 

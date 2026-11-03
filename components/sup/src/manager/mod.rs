@@ -979,7 +979,8 @@ impl Manager {
     // our specfile reconciliation logic to catch the fact that
     // the service needs to be restarted. At that point, this function
     // can be renamed; right now, it says exactly what it's doing.
-    fn stop_services_with_updates(&mut self) -> Vec<impl Future<Output = ()> + Send + 'static> {
+    fn stop_services_with_updates(&mut self)
+                                  -> Vec<impl Future<Output = ()> + Send + 'static + use<>> {
         self.take_services_with_updates()
             .into_iter()
             .map(|service| self.stop(service))
@@ -1120,7 +1121,7 @@ impl Manager {
     /// to have been removed from the internal list of active services
     /// already (see, e.g., take_services_with_updates and
     /// remove_service_from_state).
-    fn stop(&self, service: Service) -> impl Future<Output = ()> + Send + 'static {
+    fn stop(&self, service: Service) -> impl Future<Output = ()> + Send + 'static + use<> {
         Self::service_stop_future(service,
                                   Arc::clone(&self.user_config_watcher),
                                   Arc::clone(&self.updater),
@@ -1248,7 +1249,7 @@ impl Manager {
     /// shutdowns and restarts are turned into futures.
     fn operations_into_futures<O>(&mut self,
                                   ops: O)
-                                  -> Vec<impl Future<Output = ()> + Send + 'static>
+                                  -> Vec<impl Future<Output = ()> + Send + 'static + use<O>>
         where O: IntoIterator<Item = ServiceOperation>
     {
         ops.into_iter()

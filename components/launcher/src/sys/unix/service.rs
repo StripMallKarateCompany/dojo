@@ -104,7 +104,8 @@ pub fn run(msg: protocol::Spawn) -> Result<Service> {
         return Err(Error::GroupNotFound(String::from("")));
     };
 
-    cmd.before_exec(owned_pgid);
+    // SAFETY: `owned_pgid` only calls setpgid, which POSIX lists as async-signal-safe.
+    unsafe { cmd.before_exec(owned_pgid) };
     cmd.stdin(Stdio::null())
        .stdout(Stdio::piped())
        .stderr(Stdio::piped())

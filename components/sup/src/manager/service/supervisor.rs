@@ -169,7 +169,7 @@ impl Supervisor {
     }
 
     /// Returns a future that stops a service asynchronously.
-    pub fn stop(&self) -> impl Future<Output = Result<()>> + Send + 'static {
+    pub fn stop(&self) -> impl Future<Output = Result<()>> + Send + 'static + use<> {
         // TODO (CM): we should really just keep the service
         // group around AS a service group
         let service_group = self.preamble.clone();

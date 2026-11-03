@@ -51,22 +51,22 @@ type MsgControlLen = socklen_t;
 
 // musl's msghdr has private padding and narrower length fields than glibc's, so it is built
 // from zeroes and each field set with the type the target's libc declares.
-unsafe fn new_msghdr(iov: *mut iovec, iovlen: usize, control: *mut c_void, controllen: usize) -> msghdr {
+unsafe fn new_msghdr(iov: *mut iovec, iovlen: usize, control: *mut c_void, controllen: usize) -> msghdr { unsafe {
     let mut msghdr: msghdr = mem::zeroed();
     msghdr.msg_iov = iov;
     msghdr.msg_iovlen = iovlen as _;
     msghdr.msg_control = control;
     msghdr.msg_controllen = controllen as _;
     msghdr
-}
+}}
 
-unsafe fn new_sockaddr_un(path: *const c_char) -> (sockaddr_un, usize) {
+unsafe fn new_sockaddr_un(path: *const c_char) -> (sockaddr_un, usize) { unsafe {
     let mut sockaddr: sockaddr_un = mem::zeroed();
     libc::strncpy(sockaddr.sun_path.as_mut_ptr(),
                   path, sockaddr.sun_path.len() - 1);
     sockaddr.sun_family = libc::AF_UNIX as sa_family_t;
     (sockaddr, mem::size_of::<sockaddr_un>())
-}
+}}
 
 lazy_static! {
     static ref SYSTEM_SENDBUF_SIZE: usize = {
@@ -358,7 +358,7 @@ impl OsIpcSender {
         //
         // The receiver end of the channel is sent with the first fragment
         // along any other file descriptors that are to be transferred in the message.
-        let (dedicated_tx, dedicated_rx) = try!(channel());
+        let (dedicated_tx, dedicated_rx) = r#try!(channel());
         // Extract FD handle without consuming the Receiver, so the FD doesn't get closed.
         fds.push(dedicated_rx.fd.get());
 
@@ -450,7 +450,7 @@ impl OsIpcReceiverSet {
         let fnv = BuildHasherDefault::<FnvHasher>::default();
         Ok(OsIpcReceiverSet {
             incrementor: Incrementor::new(),
-            poll: try!(Poll::new()),
+            poll: r#try!(Poll::new()),
             pollfds: HashMap::with_hasher(fnv),
             events: Events::with_capacity(10)
         })
@@ -465,7 +465,7 @@ impl OsIpcReceiverSet {
             id: last_index,
             fd: fd
         };
-        try!(self.poll.register(&io,
+        r#try!(self.poll.register(&io,
                                 fd_token,
                                 Ready::readable(),
                                 PollOpt::level()));
@@ -634,10 +634,10 @@ impl OsIpcOneShotServer {
             if client_fd < 0 {
                 return Err(UnixError::last())
             }
-            try!(make_socket_lingering(client_fd));
+            r#try!(make_socket_lingering(client_fd));
 
             let receiver = OsIpcReceiver::from_fd(client_fd);
-            let (data, channels, shared_memory_regions) = try!(receiver.recv());
+            let (data, channels, shared_memory_regions) = r#try!(receiver.recv());
             Ok((receiver, data, channels, shared_memory_regions))
         }
     }
@@ -691,7 +691,7 @@ impl BackingStore {
         self.fd
     }
 
-    pub unsafe fn map_file(&self, length: Option<size_t>) -> (*mut u8, size_t) {
+    pub unsafe fn map_file(&self, length: Option<size_t>) -> (*mut u8, size_t) { unsafe {
         let length = length.unwrap_or_else(|| {
             let mut st = mem::uninitialized();
             assert!(libc::fstat(self.fd, &mut st) == 0);
@@ -710,7 +710,7 @@ impl BackingStore {
         assert!(address != ptr::null_mut());
         assert!(address != MAP_FAILED);
         (address as *mut u8, length)
-    }
+    }}
 }
 
 impl Drop for BackingStore {
@@ -785,11 +785,11 @@ impl OsIpcSharedMemory {
         }
     }
 
-    unsafe fn from_fd(fd: c_int) -> OsIpcSharedMemory {
+    unsafe fn from_fd(fd: c_int) -> OsIpcSharedMemory { unsafe {
         let store = BackingStore::from_fd(fd);
         let (ptr, length) = store.map_file(None);
         OsIpcSharedMemory::from_raw_parts(ptr, length, store)
-    }
+    }}
 
     pub fn from_byte(byte: u8, length: usize) -> OsIpcSharedMemory {
         unsafe {
@@ -878,7 +878,7 @@ fn recv(fd: c_int, blocking_mode: BlockingMode)
         ];
         let mut cmsg = UnixCmsg::new(&mut iovec);
 
-        let bytes_read = try!(cmsg.recv(fd, blocking_mode));
+        let bytes_read = r#try!(cmsg.recv(fd, blocking_mode));
         main_data_buffer.set_len(bytes_read - mem::size_of_val(&total_size));
 
         let cmsg_fds = CMSG_DATA(cmsg.cmsg_buffer) as *const c_int;
@@ -987,17 +987,17 @@ impl Drop for UnixCmsg {
 }
 
 impl UnixCmsg {
-    unsafe fn new(iovec: &mut [iovec]) -> UnixCmsg {
+    unsafe fn new(iovec: &mut [iovec]) -> UnixCmsg { unsafe {
         let cmsg_length = CMSG_SPACE(MAX_FDS_IN_CMSG as usize * mem::size_of::<c_int>());
         let cmsg_buffer = libc::malloc(cmsg_length) as *mut cmsghdr;
         UnixCmsg {
             cmsg_buffer: cmsg_buffer,
             msghdr: new_msghdr(iovec.as_mut_ptr(), iovec.len(), cmsg_buffer as *mut c_void, cmsg_length),
         }
-    }
+    }}
 
     unsafe fn recv(&mut self, fd: c_int, blocking_mode: BlockingMode)
-                   -> Result<usize, UnixError> {
+                   -> Result<usize, UnixError> { unsafe {
         if let BlockingMode::Nonblocking = blocking_mode {
             if libc::fcntl(fd, libc::F_SETFL, libc::O_NONBLOCK) < 0 {
                 return Err(UnixError::last())
@@ -1019,11 +1019,11 @@ impl UnixCmsg {
             }
         }
         result
-    }
+    }}
 
-    unsafe fn cmsg_len(&self) -> size_t {
+    unsafe fn cmsg_len(&self) -> size_t { unsafe {
         (*(self.msghdr.msg_control as *const cmsghdr)).cmsg_len as size_t
-    }
+    }}
 }
 
 fn is_socket(fd: c_int) -> bool {
@@ -1049,10 +1049,10 @@ fn CMSG_LEN(length: size_t) -> size_t {
 }
 
 #[allow(non_snake_case)]
-unsafe fn CMSG_DATA(cmsg: *mut cmsghdr) -> *mut c_void {
+unsafe fn CMSG_DATA(cmsg: *mut cmsghdr) -> *mut c_void { unsafe {
     (cmsg as *mut libc::c_uchar).offset(CMSG_ALIGN(
             mem::size_of::<cmsghdr>()) as isize) as *mut c_void
-}
+}}
 
 #[allow(non_snake_case)]
 fn CMSG_ALIGN(length: size_t) -> size_t {
@@ -1069,7 +1069,7 @@ fn S_ISSOCK(mode: mode_t) -> bool {
     (mode & S_IFMT) == S_IFSOCK
 }
 
-extern {
+unsafe extern {
     fn mktemp(template: *mut c_char) -> *mut c_char;
 }
 

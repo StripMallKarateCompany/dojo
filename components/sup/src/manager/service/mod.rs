@@ -294,7 +294,7 @@ impl Service {
 
     /// Return a future that will shut down a service, performing any
     /// necessary cleanup, and run its post-stop hook, if any.
-    pub fn stop(&self) -> impl Future<Output = Result<()>> + Send + 'static {
+    pub fn stop(&self) -> impl Future<Output = Result<()>> + Send + 'static + use<> {
         let service_group = self.service_group.clone();
         let gs = Arc::clone(&self.gateway_state);
         let stop_supervisor = self.supervisor.stop();
