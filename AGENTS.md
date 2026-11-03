@@ -24,12 +24,15 @@ the builder VM: `support/vm/builder verify` is the run a pull request reports, a
 
 ## Landing
 
-Work in a tree (`trees add <name>`), commit on its `worktree/<name>` branch and open the pull request
-with `smk pr create`. The host is GitHub (`StripMallKarateCompany/dojo`); `main` requires no status
-checks and no CI runs there, so the merge is left to the owner, as the pr skill says for such a base.
-Pushed history is never rewritten (no rebase, squash or amend, no author changes), pull requests
-land as merge commits, and commit bodies say why and carry no AI attribution or co-author lines.
-Live-state changes outside a merge need explicit authorization.
+Work in a tree (`trees add <name>`), commit on its `worktree/<name>` branch, open the pull request
+with `smk pr create` and request its merge with `smk pr merge`, without asking. The host is GitHub
+(`StripMallKarateCompany/dojo`): buildq builds every push (`.buildq/pipeline.yml` runs `make ci`),
+`main` requires its `buildq` status, and automerge's GitHub App lands a writer's pull request once
+it passes (smk/automerge README "GitHub"), closing each `Fixes DOJ-n` item its body names.
+`.github/automerge.json` names the merge commit as the one style. Pushed history is never rewritten
+(no rebase, squash or amend, no author changes), pull requests land as merge commits, and commit
+bodies say why and carry no AI attribution or co-author lines. Live-state changes outside a merge
+need explicit authorization.
 
 ## Where the rest lives
 
