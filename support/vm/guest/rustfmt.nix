@@ -7,7 +7,7 @@
   system ? builtins.currentSystem,
 }:
 let
-  nodes = (builtins.fromJSON (builtins.readFile lock)).nodes;
+  inherit (builtins.fromJSON (builtins.readFile lock)) nodes;
   nixpkgs = builtins.fetchTree nodes.${nodes.root.inputs.nixpkgs}.locked;
   pkgs = import nixpkgs {
     inherit system;
