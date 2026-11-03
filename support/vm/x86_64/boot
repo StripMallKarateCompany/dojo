@@ -121,7 +121,7 @@ vm="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 firmware="${qemu}/share/qemu/edk2-x86_64-code.fd"
 qemu="${qemu}/bin/qemu-system-x86_64"
 
-work="$(mktemp -d -t dojo-vm-x86_64)"
+work="$(mktemp -d "${TMPDIR:-/tmp}/dojo-vm-x86_64.XXXXXX")"
 trap 'chmod -R u+w "${work}"; rm -rf "${work}"' EXIT
 
 args=(-machine q35 -accel tcg -cpu max -smp 2 -m 3072 -no-reboot)
