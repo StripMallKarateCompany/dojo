@@ -61,7 +61,10 @@ address (10.0.2.15) and default route with DHCP, which is how the Supervisor
 finds its own address, and the VM can reach out through the Mac but nothing
 reaches in.
 
-`--check` boots and checks that `eth0` has an address, that the Supervisor's
+On a PC init leases on the first NIC that answers, since without udev the
+kernel's probe order, not the cable, decides which port is `eth0`.
+
+`--check` boots and checks that the leased NIC has an address, that the Supervisor's
 HTTP gateway answers and it found its own address, that the Launcher restarts
 the Supervisor after SIGKILL and after `doj sup term`, and that SIGTERM to PID 1
 powers the VM off without a kernel panic. `--check-reboot` ends with SIGINT to

@@ -26,11 +26,26 @@ for word in $(cat /proc/cmdline); do
   esac
 done
 
-# eth0 is QEMU's user-mode network. Its DHCP lease brings a default route,
-# which the Supervisor needs to find its own address. udhcpc -n gives up after
-# its retries rather than wait forever, so a VM without a NIC still boots.
-ip link set eth0 up
-udhcpc -i eth0 -s /bin/lease -n -q || echo "dojo: no DHCP lease on eth0"
+# A DHCP lease brings a default route, which the Supervisor needs to find its
+# own address. With no udev the kernel names NICs in the order it probes them,
+# so on a PC eth0 can be a port with no cable: lease on the first interface that
+# answers. Under QEMU that is eth0, the user-mode network, and eth1 is the ring
+# link below. udhcpc -n gives up after its retries rather than wait forever, so
+# a machine without a lease still boots.
+leased=""
+for dev in /sys/class/net/*; do
+  name="${dev##*/}"
+  [ "${name}" != lo ] || continue
+  if [ -n "${ring}" ] && [ "${name}" = eth1 ]; then
+    continue
+  fi
+  ip link set "${name}" up
+  if udhcpc -i "${name}" -s /bin/lease -n -q; then
+    leased="${name}"
+    break
+  fi
+done
+[ -n "${leased}" ] || echo "dojo: no DHCP lease"
 
 # eth1 is the ring link: a static address on the second NIC boot attaches.
 if [ -n "${ring}" ]; then
