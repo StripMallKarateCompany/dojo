@@ -28,8 +28,8 @@ use prometheus::{IntCounterVec,
 
 use super::AckSender;
 use crate::{member::Health,
-            server::{outbound,
-                     Server},
+            server::{Server,
+                     outbound},
             swim::{Ack,
                    Ping,
                    PingReq,
@@ -199,10 +199,7 @@ impl Inbound {
                     }
                 };
                 trace!("Forwarding Ack from {}@{} to {}@{}",
-                       msg.from.id,
-                       addr,
-                       forward_to.id,
-                       forward_to.address,);
+                       msg.from.id, addr, forward_to.id, forward_to.address,);
                 (forward_to_addr, addr.ip().to_string())
             };
             msg.from.address = from_addr;

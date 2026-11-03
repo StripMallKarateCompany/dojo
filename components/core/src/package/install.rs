@@ -30,15 +30,15 @@ use serde::{Deserialize,
 use toml::{self,
            Value};
 
-use super::{list::package_list_for_ident,
-            metadata::{parse_key_value,
-                       read_metafile,
-                       Bind,
+use super::{Identifiable,
+            PackageIdent,
+            list::package_list_for_ident,
+            metadata::{Bind,
                        BindMapping,
                        MetaFile,
-                       PackageType},
-            Identifiable,
-            PackageIdent};
+                       PackageType,
+                       parse_key_value,
+                       read_metafile}};
 use crate::{error::{Error,
                     Result},
             fs};

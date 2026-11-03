@@ -26,14 +26,14 @@ use std::{convert::TryFrom,
           ops::{Deref,
                 DerefMut}};
 
-pub use crate::protocol::newscast::{election::Status as ElectionStatus,
-                                    Election as ProtoElection};
+pub use crate::protocol::newscast::{Election as ProtoElection,
+                                    election::Status as ElectionStatus};
 use crate::{error::{Error,
                     Result},
             protocol::{self,
+                       FromProto,
                        newscast::{self,
-                                  Rumor as ProtoRumor},
-                       FromProto},
+                                  Rumor as ProtoRumor}},
             rumor::{Rumor,
                     RumorPayload,
                     RumorType}};
@@ -271,11 +271,11 @@ impl Rumor for ElectionUpdate {
 
 #[cfg(test)]
 mod tests {
-    use crate::rumor::{election::{Election,
+    use crate::rumor::{Rumor,
+                       RumorStore,
+                       election::{Election,
                                   ElectionUpdate,
-                                  Term},
-                       Rumor,
-                       RumorStore};
+                                  Term}};
     use dojo_core::service::ServiceGroup;
 
     fn create_election_rumor_store() -> RumorStore<Election> { RumorStore::default() }

@@ -15,10 +15,10 @@
 //! Encapsulates logic required for updating the Dojo Supervisor
 //! itself.
 
-use std::{sync::mpsc::{sync_channel,
-                       Receiver,
+use std::{sync::mpsc::{Receiver,
                        SyncSender,
-                       TryRecvError},
+                       TryRecvError,
+                       sync_channel},
           thread,
           time::{Duration,
                  Instant}};
@@ -27,9 +27,9 @@ use crate::{env,
             util};
 use dojo_common::{command::package::install::InstallSource,
                   ui::UI};
-use dojo_core::{package::{PackageIdent,
-                          PackageInstall},
-                ChannelIdent};
+use dojo_core::{ChannelIdent,
+                package::{PackageIdent,
+                          PackageInstall}};
 
 pub const SUP_PKG_IDENT: &str = "karate/doj-sup";
 const DEFAULT_FREQUENCY: u64 = 60_000;

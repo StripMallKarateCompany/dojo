@@ -39,9 +39,9 @@ pub use crate::{build::BuildSpec,
                          DockerImage},
                 error::{Error,
                         Result}};
-use crate::{common::{ui::{UIWriter,
-                          UI},
-                     PROGRAM_NAME},
+use crate::{common::{PROGRAM_NAME,
+                     ui::{UI,
+                          UIWriter}},
             hcore::url as hurl};
 use aws_sdk_ecr::config::{BehaviorVersion,
                           Credentials as AwsCredentials,

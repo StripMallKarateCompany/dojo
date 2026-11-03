@@ -188,9 +188,7 @@ hook_value = "applied"
 #[test]
 #[cfg_attr(feature = "ignore_integration_tests", ignore)]
 fn applying_identical_configuration_results_in_no_changes_and_no_restart() {
-    let doj_root = utils::DojRoot::new(
-        "applying_identical_configuration_results_in_no_changes_and_no_restart",
-    );
+    let doj_root = utils::DojRoot::new("applying_identical_configuration_results_in_no_changes_and_no_restart");
 
     let origin_name = "sup-integration-test";
     let package_name = "no-changes-no-restart";

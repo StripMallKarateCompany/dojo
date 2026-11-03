@@ -14,9 +14,11 @@
 
 mod handlers;
 
-use crate::{core::{self,
-                   fs::{launcher_root_path,
-                        FS_ROOT_PATH},
+use crate::{SUP_CMD,
+            SUP_PACKAGE_IDENT,
+            core::{self,
+                   fs::{FS_ROOT_PATH,
+                        launcher_root_path},
                    os::{process::{self,
                                   Pid,
                                   Signal},
@@ -31,9 +33,7 @@ use crate::{core::{self,
                        ERR_NO_RETRY_EXCODE,
                        OK_NO_RETRY_EXCODE},
             server::handlers::Handler,
-            service::Service,
-            SUP_CMD,
-            SUP_PACKAGE_IDENT};
+            service::Service};
 use dojo_common::outputln;
 use ipc_channel::ipc::{IpcOneShotServer,
                        IpcReceiver,

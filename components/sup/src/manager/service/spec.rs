@@ -18,7 +18,8 @@ use super::{BindingMode,
 use crate::error::{Error,
                    Result,
                    SupError};
-use dojo_core::{fs::atomic_write,
+use dojo_core::{ChannelIdent,
+                fs::atomic_write,
                 package::{PackageIdent,
                           PackageInstall},
                 service::{ApplicationEnvironment,
@@ -26,8 +27,7 @@ use dojo_core::{fs::atomic_write,
                           ServiceBind},
                 url::DEFAULT_BLDR_URL,
                 util::{deserialize_using_from_str,
-                       serialize_using_to_string},
-                ChannelIdent};
+                       serialize_using_to_string}};
 use dojo_sup_protocol;
 use serde::{self,
             Deserialize};

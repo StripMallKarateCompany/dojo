@@ -15,8 +15,8 @@
 //! Runs a service lifecycle hook on the runtime's blocking threads, and wraps the whole
 //! execution in a future.
 
-use super::{hook_timer,
-            Pkg};
+use super::{Pkg,
+            hook_timer};
 use crate::error::Result;
 use dojo_common::templating::hooks::Hook;
 use dojo_core::service::ServiceGroup;

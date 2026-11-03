@@ -14,8 +14,8 @@
 
 use crate::{error::Result,
             hcore::{fs as hfs,
-                    package::{list,
-                              PackageIdent}}};
+                    package::{PackageIdent,
+                              list}}};
 
 use std::{path::Path,
           str::FromStr};

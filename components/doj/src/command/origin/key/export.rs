@@ -16,8 +16,8 @@ use std::{fs::File,
           io,
           path::Path};
 
-use crate::hcore::crypto::{keys::PairType,
-                           SigKeyPair};
+use crate::hcore::crypto::{SigKeyPair,
+                           keys::PairType};
 
 use crate::error::Result;
 

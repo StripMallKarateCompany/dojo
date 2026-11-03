@@ -20,14 +20,13 @@
 use crate::types::ListenCtlAddr;
 use clap::ArgMatches;
 use dojo_core::{env as henv,
-                fs::{cache_key_path,
-                     CACHE_KEY_PATH}};
+                fs::{CACHE_KEY_PATH,
+                     cache_key_path}};
 use std::{path::PathBuf,
           sync::LazyLock};
 
 /// The help layout of Dojo's programs: clap's own, with the author line clap 4 no longer shows.
-pub const HELP_TEMPLATE: &str =
-    "{before-help}{name} {version}\n{author-with-newline}{about-with-newline}\n\
+pub const HELP_TEMPLATE: &str = "{before-help}{name} {version}\n{author-with-newline}{about-with-newline}\n\
                                  {usage-heading} {usage}\n\n{all-args}{after-help}";
 
 pub const GOSSIP_DEFAULT_IP: &str = "0.0.0.0";

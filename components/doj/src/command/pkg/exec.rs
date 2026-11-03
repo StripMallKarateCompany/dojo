@@ -16,8 +16,8 @@ use std::{env,
           ffi::OsString,
           path::PathBuf};
 
-use crate::hcore::{fs::{find_command,
-                        FS_ROOT_PATH},
+use crate::hcore::{fs::{FS_ROOT_PATH,
+                        find_command},
                    os::process,
                    package::{PackageIdent,
                              PackageInstall}};

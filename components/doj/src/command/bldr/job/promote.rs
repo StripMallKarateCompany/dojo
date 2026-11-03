@@ -18,15 +18,15 @@ use std::str::FromStr;
 
 use crate::{api_client,
             common::ui::{Status,
+                         UI,
                          UIReader,
-                         UIWriter,
-                         UI},
+                         UIWriter},
             hcore::ChannelIdent};
 
-use crate::{error::{Error,
-                    Result},
-            PRODUCT,
-            VERSION};
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
+                    Result}};
 
 fn is_ident(s: &str) -> bool { PackageIdent::from_str(s).is_ok() }
 

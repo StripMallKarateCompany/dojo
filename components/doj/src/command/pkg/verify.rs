@@ -15,8 +15,8 @@
 use std::path::Path;
 
 use crate::{common::ui::{Status,
-                         UIWriter,
-                         UI},
+                         UI,
+                         UIWriter},
             hcore::crypto::artifact};
 
 use crate::error::Result;

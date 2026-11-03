@@ -18,14 +18,14 @@ use crate::error::{Error,
                    Result};
 use dojo_common::{package_graph::PackageGraph,
                   ui::{Status,
-                       UIWriter,
-                       UI}};
+                       UI,
+                       UIWriter}};
 use dojo_core::{error as herror,
                 fs as hfs,
-                package::{list::temp_package_directory,
-                          Identifiable,
+                package::{Identifiable,
                           PackageIdent,
-                          PackageInstall}};
+                          PackageInstall,
+                          list::temp_package_directory}};
 use std::{fs,
           path::Path,
           str::FromStr};

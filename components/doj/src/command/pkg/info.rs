@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{common::ui::{UIWriter,
-                         UI},
+use crate::{common::ui::{UI,
+                         UIWriter},
             error::Result,
             hcore::package::PackageArchive};
 use serde::Serialize;

@@ -17,23 +17,23 @@
 use crate::{ctl_gateway::CtlRequest,
             error::{Error,
                     Result},
-            manager::{service::{spec::{IntoServiceSpec,
-                                       ServiceSpec},
-                                DesiredState,
+            manager::{ManagerConfig,
+                      ManagerState,
+                      service::{DesiredState,
                                 Pkg,
-                                ProcessState},
-                      ManagerConfig,
-                      ManagerState},
+                                ProcessState,
+                                spec::{IntoServiceSpec,
+                                       ServiceSpec}}},
             util};
 use dojo_butterfly as butterfly;
 use dojo_common::{command::package::install::InstallSource,
                   outputln,
                   ui::UIWriter};
-use dojo_core::{package::{Identifiable,
+use dojo_core::{ChannelIdent,
+                package::{Identifiable,
                           PackageIdent,
                           PackageTarget},
-                service::ServiceGroup,
-                ChannelIdent};
+                service::ServiceGroup};
 use dojo_sup_protocol::{self as protocol,
                         net::{self,
                               ErrCode,
@@ -93,12 +93,12 @@ pub fn service_cfg_validate(_mgr: &ManagerState,
                             format!("Configuration format {} not available.",
                                     format)));
     }
-    let _new_cfg: toml::value::Table = toml::from_slice(&cfg).map_err(|e| {
-                                                                 net::err(
-            ErrCode::BadPayload,
-            format!("Unable to decode configuration as {}, {}", format, e),
-        )
-                                                             })?;
+    let _new_cfg: toml::value::Table =
+        toml::from_slice(&cfg).map_err(|e| {
+                                  net::err(ErrCode::BadPayload,
+                                           format!("Unable to decode configuration as {}, {}",
+                                                   format, e))
+                              })?;
     req.reply_complete(net::ok());
     Ok(())
     // JW TODO: Hold off on validation until we can validate services which aren't currently

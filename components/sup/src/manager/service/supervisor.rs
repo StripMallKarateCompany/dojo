@@ -17,8 +17,8 @@
 /// The Supervisor is responsible for running any services we are asked to start. It handles
 /// spawning the new process, watching for failure, and ensuring the service is either up or
 /// down. If the process dies, the Supervisor will restart it.
-use super::{terminator,
-            ProcessState};
+use super::{ProcessState,
+            terminator};
 use crate::error::{Error,
                    Result};
 use dojo_common::{outputln,
@@ -31,9 +31,9 @@ use dojo_core::{fs,
                               Pid},
                 service::ServiceGroup};
 use dojo_launcher_client::LauncherCli;
-use serde::{ser::SerializeStruct,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeStruct};
 use std::{fs::File,
           future::Future,
           io::{BufRead,

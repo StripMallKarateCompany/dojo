@@ -21,9 +21,9 @@ use std::{cmp::Ordering,
           result,
           str::FromStr};
 
-use serde::{ser::SerializeStruct,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeStruct};
 use toml;
 
 use dojo_core::{package::Identifiable,
@@ -32,8 +32,8 @@ use dojo_core::{package::Identifiable,
 use crate::{error::{Error,
                     Result},
             protocol::{self,
-                       newscast,
-                       FromProto},
+                       FromProto,
+                       newscast},
             rumor::{Rumor,
                     RumorPayload,
                     RumorType}};
@@ -199,8 +199,7 @@ impl Default for SysInfo {
 impl FromProto<newscast::SysInfo> for SysInfo {
     fn from_proto(proto: newscast::SysInfo) -> Result<Self> {
         Ok(SysInfo { ip:                proto.ip.ok_or(Error::ProtocolMismatch("ip"))?,
-                     hostname:          proto.hostname
-                                             .ok_or(Error::ProtocolMismatch("hostname"))?,
+                     hostname:          proto.hostname.ok_or(Error::ProtocolMismatch("hostname"))?,
                      gossip_ip:         proto.gossip_ip.unwrap_or_default(),
                      gossip_port:       proto.gossip_port.unwrap_or_default(),
                      http_gateway_ip:   proto.http_gateway_ip.unwrap_or_default(),
@@ -233,8 +232,8 @@ mod tests {
                     service::ServiceGroup};
 
     use super::Service;
-    use crate::rumor::{service::SysInfo,
-                       Rumor};
+    use crate::rumor::{Rumor,
+                       service::SysInfo};
 
     fn create_service(member_id: &str) -> Service {
         let pkg = PackageIdent::from_str("karate/neurosis/1.2.3/20161208121212").unwrap();

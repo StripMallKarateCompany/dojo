@@ -60,9 +60,9 @@ use dojo_common::templating::{config::Cfg,
 use dojo_core::{package::PackageIdent,
                 service::{ServiceBind,
                           ServiceGroup}};
-use serde::{ser::SerializeMap,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeMap};
 use std::{borrow::Cow,
           collections::HashMap,
           net::IpAddr,
@@ -569,8 +569,8 @@ mod tests {
     use tempfile::TempDir;
 
     use dojo_butterfly::rumor::service::SysInfo;
-    use dojo_common::templating::{config::PackageConfigPaths,
-                                  TemplateRenderer};
+    use dojo_common::templating::{TemplateRenderer,
+                                  config::PackageConfigPaths};
     use dojo_core::package::PackageIdent;
 
     use crate::{manager::service::Cfg,

@@ -25,9 +25,9 @@ use std::{fmt,
           path::Path,
           result};
 
-use handlebars::{no_escape,
-                 Handlebars,
-                 TemplateError};
+use handlebars::{Handlebars,
+                 TemplateError,
+                 no_escape};
 use serde::Serialize;
 use serde_json;
 
@@ -208,8 +208,8 @@ impl DerefMut for TemplateRenderer {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::{hcore::{fs::{pkg_root_path,
-                             FS_ROOT_PATH},
+    use crate::{hcore::{fs::{FS_ROOT_PATH,
+                             pkg_root_path},
                         package::PackageIdent},
                 templating::test_helpers::*};
     use serde_json;

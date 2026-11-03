@@ -14,8 +14,8 @@
 
 use crate::error::Result;
 use dojo_common::ui::UI;
-use dojo_core::{package::PackageIdent,
-                ChannelIdent};
+use dojo_core::{ChannelIdent,
+                package::PackageIdent};
 
 pub mod docker;
 pub mod tar;
@@ -52,11 +52,11 @@ mod inner {
               ffi::OsString};
 
     use crate::{common::ui::UI,
-                hcore::{env::Config,
+                hcore::{ChannelIdent,
+                        env::Config,
                         fs::find_command,
                         package::PackageIdent,
-                        url::BLDR_URL_ENVVAR,
-                        ChannelIdent}};
+                        url::BLDR_URL_ENVVAR}};
 
     use super::ExportFormat;
     use crate::{command,
@@ -101,10 +101,10 @@ mod inner {
     use super::ExportFormat;
     use crate::error::{Error,
                        Result};
-    use dojo_common::ui::{UIWriter,
-                          UI};
-    use dojo_core::{package::PackageIdent,
-                    ChannelIdent};
+    use dojo_common::ui::{UI,
+                          UIWriter};
+    use dojo_core::{ChannelIdent,
+                    package::PackageIdent};
     use std::env;
 
     pub fn format_for(ui: &mut UI, value: &str) -> Result<ExportFormat> {

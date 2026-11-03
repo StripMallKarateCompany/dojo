@@ -146,8 +146,8 @@ pub mod sign {
 }
 
 pub mod box_ {
-    use crypto_box::{aead::Aead,
-                     SalsaBox};
+    use crypto_box::{SalsaBox,
+                     aead::Aead};
 
     use super::*;
 
@@ -206,9 +206,9 @@ pub mod sealedbox {
 }
 
 pub mod secretbox {
-    use crypto_secretbox::{aead::Aead,
-                           KeyInit,
-                           XSalsa20Poly1305};
+    use crypto_secretbox::{KeyInit,
+                           XSalsa20Poly1305,
+                           aead::Aead};
 
     use super::*;
 

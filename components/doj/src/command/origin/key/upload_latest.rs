@@ -17,14 +17,14 @@ use std::path::Path;
 use crate::{api_client::{self,
                          Client},
             common::ui::{Status,
-                         UIWriter,
-                         UI},
+                         UI,
+                         UIWriter},
             error::{Error,
                     Result},
-            hcore::crypto::{keys::parse_name_with_rev,
+            hcore::crypto::{PUBLIC_SIG_KEY_VERSION,
+                            SECRET_SIG_KEY_VERSION,
                             SigKeyPair,
-                            PUBLIC_SIG_KEY_VERSION,
-                            SECRET_SIG_KEY_VERSION}};
+                            keys::parse_name_with_rev}};
 use dojo_api_client::StatusCode;
 
 use super::get_name_with_rev;

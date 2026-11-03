@@ -17,10 +17,10 @@ use std::{path::Path,
           str::FromStr};
 
 use crate::hcore::package::PackageIdent;
-use clap::{builder::ValueRange,
-           Arg,
+use clap::{Arg,
            ArgAction,
-           Command};
+           Command,
+           builder::ValueRange};
 use dojo_common::cli::HELP_TEMPLATE;
 use url::Url;
 

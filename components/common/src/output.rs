@@ -33,18 +33,18 @@
 //! with ANSI color codes, but does honor the verbose flag.
 
 use crate::PROGRAM_NAME;
-use serde::{ser::SerializeMap,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeMap};
 use serde_json;
 use std::{fmt,
           io::{self,
                Write},
           result,
-          sync::{atomic::{AtomicBool,
-                          Ordering},
-                 LazyLock,
-                 Mutex}};
+          sync::{LazyLock,
+                 Mutex,
+                 atomic::{AtomicBool,
+                          Ordering}}};
 use termcolor::{BufferWriter,
                 Color,
                 ColorChoice,

@@ -26,11 +26,11 @@ use std::{collections::HashMap,
 use liblzma::read::XzDecoder;
 use regex::Regex;
 
-use super::{metadata::{MetaFile,
-                       PackageType},
-            Identifiable,
+use super::{Identifiable,
             PackageIdent,
-            PackageTarget};
+            PackageTarget,
+            metadata::{MetaFile,
+                       PackageType}};
 use crate::{crypto::{artifact,
                      hash},
             error::{Error,

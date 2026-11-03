@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{config::GossipListenAddr,
+use crate::{VERSION,
+            config::GossipListenAddr,
             error::{Error,
                     Result},
-            http_gateway,
-            VERSION};
+            http_gateway};
 use dojo_butterfly::rumor::service::SysInfo;
 use dojo_common::{outputln,
                   types::ListenCtlAddr};

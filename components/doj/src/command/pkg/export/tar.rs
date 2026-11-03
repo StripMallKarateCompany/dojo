@@ -35,10 +35,10 @@ mod inner {
                         package::PackageIdent}};
 
     use super::EXPORT_CMD;
-    use crate::{error::{Error,
+    use crate::{VERSION,
+                error::{Error,
                         Result},
-                exec,
-                VERSION};
+                exec};
 
     const EXPORT_CMD_ENVVAR: &str = "DOJ_PKG_EXPORT_TAR_BINARY";
     const EXPORT_PKG_IDENT: &str = "karate/doj-pkg-export-tar";
@@ -71,8 +71,8 @@ mod inner {
 mod inner {
     use std::ffi::OsString;
 
-    use crate::common::ui::{UIWriter,
-                            UI};
+    use crate::common::ui::{UI,
+                            UIWriter};
 
     use super::EXPORT_CMD;
     use crate::error::{Error,

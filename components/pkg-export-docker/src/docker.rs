@@ -21,8 +21,8 @@ use std::{fs,
 
 use crate::{common::{templating::TemplateRenderer,
                      ui::{Status,
-                          UIWriter,
-                          UI}},
+                          UI,
+                          UIWriter}},
             hcore::{fs as hfs,
                     package::PackageIdent}};
 

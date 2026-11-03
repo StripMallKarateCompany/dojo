@@ -23,9 +23,9 @@ use std::cmp::Ordering;
 use crate::{error::{Error,
                     Result},
             protocol::{self,
+                       FromProto,
                        newscast::{self,
-                                  Rumor as ProtoRumor},
-                       FromProto},
+                                  Rumor as ProtoRumor}},
             rumor::{Rumor,
                     RumorPayload,
                     RumorType}};

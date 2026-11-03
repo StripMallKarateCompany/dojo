@@ -13,21 +13,21 @@
 // limitations under the License.
 
 use crate::{common::{self,
+                     PROGRAM_NAME,
                      command::package::install::{InstallHookMode,
                                                  InstallMode,
                                                  InstallSource,
                                                  LocalPackageUsage},
                      ui::{Status,
-                          UIWriter,
-                          UI},
-                     PROGRAM_NAME},
+                          UI,
+                          UIWriter}},
             error::Result,
-            hcore::{fs::{cache_artifact_path,
-                         cache_key_path,
-                         CACHE_ARTIFACT_PATH,
-                         CACHE_KEY_PATH},
-                    package::PackageIdent,
-                    ChannelIdent}};
+            hcore::{ChannelIdent,
+                    fs::{CACHE_ARTIFACT_PATH,
+                         CACHE_KEY_PATH,
+                         cache_artifact_path,
+                         cache_key_path},
+                    package::PackageIdent}};
 use clap;
 #[cfg(unix)]
 use std::os::unix::fs::symlink;

@@ -72,9 +72,10 @@ pub fn start(ui: &mut UI, args: &[OsString]) -> Result<()> {
 
 #[cfg(target_os = "linux")]
 mod inner {
-    use crate::{command::studio::docker,
-                common::ui::{UIWriter,
-                             UI},
+    use crate::{VERSION,
+                command::studio::docker,
+                common::ui::{UI,
+                             UIWriter},
                 error::{Error,
                         Result},
                 exec,
@@ -83,8 +84,7 @@ mod inner {
                              find_command},
                         os::process,
                         package::PackageIdent,
-                        users::linux as group},
-                VERSION};
+                        users::linux as group}};
     use std::{env,
               ffi::OsString,
               path::PathBuf,

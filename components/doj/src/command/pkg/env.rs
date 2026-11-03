@@ -15,9 +15,9 @@
 use std::{collections::BTreeMap,
           path::Path};
 
-use crate::hcore::package::{install::list_separator,
-                            PackageIdent,
-                            PackageInstall};
+use crate::hcore::package::{PackageIdent,
+                            PackageInstall,
+                            install::list_separator};
 
 use crate::error::{Error,
                    Result};

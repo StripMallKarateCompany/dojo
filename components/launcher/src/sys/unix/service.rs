@@ -22,8 +22,8 @@ use std::{io,
           result};
 
 use crate::{core::os::{self,
-                       process::{signal,
-                                 Signal}},
+                       process::{Signal,
+                                 signal}},
             protocol::{self,
                        ShutdownMethod}};
 use libc;

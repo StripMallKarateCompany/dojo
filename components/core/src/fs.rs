@@ -824,10 +824,10 @@ mod test_find_command {
 
 #[cfg(test)]
 mod test_atomic_writer {
-    use super::{atomic_write,
-                AtomicWriter};
-    use std::{fs::{remove_file,
-                   File},
+    use super::{AtomicWriter,
+                atomic_write};
+    use std::{fs::{File,
+                   remove_file},
               io::{Read,
                    Seek,
                    SeekFrom,

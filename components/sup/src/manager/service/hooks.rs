@@ -14,13 +14,13 @@
 
 use super::health;
 use dojo_common::{outputln,
-                  templating::{hooks::{self,
+                  templating::{TemplateRenderer,
+                               hooks::{self,
                                        ExitCode,
                                        Hook,
                                        HookOutput,
                                        RenderPair},
-                               package::Pkg,
-                               TemplateRenderer}};
+                               package::Pkg}};
 use serde::Serialize;
 use std::{self,
           io::prelude::*,
@@ -533,14 +533,14 @@ mod tests {
                 http_gateway,
                 manager::sys::Sys};
     use dojo_butterfly::{member::MemberList,
-                         rumor::{election::{self,
+                         rumor::{RumorStore,
+                                 election::{self,
                                             Election as ElectionRumor,
                                             ElectionUpdate as ElectionUpdateRumor},
                                  service::{Service as ServiceRumor,
                                            SysInfo},
                                  service_config::ServiceConfig as ServiceConfigRumor,
-                                 service_file::ServiceFile as ServiceFileRumor,
-                                 RumorStore}};
+                                 service_file::ServiceFile as ServiceFileRumor}};
     use dojo_common::{cli::FS_ROOT,
                       templating::{config::Cfg,
                                    package::Pkg,

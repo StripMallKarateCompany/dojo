@@ -14,8 +14,8 @@
 
 use std::path::Path;
 
-use crate::{common::ui::{UIWriter,
-                         UI},
+use crate::{common::ui::{UI,
+                         UIWriter},
             hcore::crypto::BoxKeyPair};
 
 use crate::error::Result;

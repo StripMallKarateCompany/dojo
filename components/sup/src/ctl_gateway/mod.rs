@@ -25,12 +25,12 @@ pub mod server;
 use crate::error::{Error,
                    Result};
 use dojo_api_client::DisplayProgress;
-use dojo_common::{output::{self,
+use dojo_common::{PROGRAM_NAME,
+                  output::{self,
                            OutputContext,
                            OutputFormat,
                            StructuredOutput},
-                  ui::UIWriter,
-                  PROGRAM_NAME};
+                  ui::UIWriter};
 use dojo_core;
 use dojo_sup_protocol;
 use std::{fmt,

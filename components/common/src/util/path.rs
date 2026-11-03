@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{command::package::install::{self,
+use crate::{PROGRAM_NAME,
+            command::package::install::{self,
                                         InstallHookMode,
                                         InstallMode,
                                         LocalPackageUsage},
             error::{Error,
                     Result},
-            ui,
-            PROGRAM_NAME};
-use dojo_core::{fs::{cache_artifact_path,
-                     find_command,
-                     FS_ROOT_PATH},
+            ui};
+use dojo_core::{ChannelIdent,
+                fs::{FS_ROOT_PATH,
+                     cache_artifact_path,
+                     find_command},
                 package::{PackageIdent,
                           PackageInstall,
                           PackageTarget},
-                url::default_bldr_url,
-                ChannelIdent};
+                url::default_bldr_url};
 use std::{env,
           fs::File,
-          io::{prelude::*,
-               BufReader},
+          io::{BufReader,
+               prelude::*},
           path::PathBuf,
           str::FromStr};
 

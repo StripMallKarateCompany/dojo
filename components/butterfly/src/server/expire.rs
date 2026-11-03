@@ -21,8 +21,8 @@ use std::{thread,
 
 use crate::{rumor::{RumorKey,
                     RumorType},
-            server::{timing::Timing,
-                     Server}};
+            server::{Server,
+                     timing::Timing}};
 
 const LOOP_DELAY_MS: u64 = 500;
 

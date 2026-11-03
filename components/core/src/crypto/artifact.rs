@@ -14,20 +14,20 @@
 
 use std::{fs::File,
           io::{self,
-               prelude::*,
                BufReader,
-               BufWriter},
+               BufWriter,
+               prelude::*},
           path::Path};
 
 use super::sodium::sign;
-use base64::{engine::general_purpose::STANDARD as BASE64,
-             Engine};
+use base64::{Engine,
+             engine::general_purpose::STANDARD as BASE64};
 
-use super::{hash,
-            keys::parse_name_with_rev,
+use super::{HART_FORMAT_VERSION,
+            SIG_HASH_TYPE,
             SigKeyPair,
-            HART_FORMAT_VERSION,
-            SIG_HASH_TYPE};
+            hash,
+            keys::parse_name_with_rev};
 use crate::error::{Error,
                    Result};
 
@@ -282,11 +282,11 @@ mod test {
 
     use tempfile::Builder;
 
-    use super::{super::{keys::parse_name_with_rev,
-                        test_support::*,
+    use super::{super::{HART_FORMAT_VERSION,
+                        SIG_HASH_TYPE,
                         SigKeyPair,
-                        HART_FORMAT_VERSION,
-                        SIG_HASH_TYPE},
+                        keys::parse_name_with_rev,
+                        test_support::*},
                 *};
 
     #[test]

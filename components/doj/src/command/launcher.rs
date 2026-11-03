@@ -35,10 +35,10 @@ mod inner {
     use super::super::sup::{SUP_CMD,
                             SUP_CMD_ENVVAR,
                             SUP_PKG_IDENT};
-    use crate::{error::{Error,
+    use crate::{VERSION,
+                error::{Error,
                         Result},
-                exec,
-                VERSION};
+                exec};
 
     const LAUNCH_CMD: &str = "doj-launch";
     const LAUNCH_CMD_ENVVAR: &str = "DOJ_LAUNCH_BINARY";
@@ -75,8 +75,8 @@ mod inner {
     use std::{env,
               ffi::OsString};
 
-    use crate::common::ui::{UIWriter,
-                            UI};
+    use crate::common::ui::{UI,
+                            UIWriter};
 
     use crate::error::{Error,
                        Result};

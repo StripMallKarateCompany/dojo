@@ -13,21 +13,21 @@
 // limitations under the License.
 
 use crate::{common::ui::{Status,
-                         UIWriter,
-                         UI},
+                         UI,
+                         UIWriter},
             error::{Error,
                     Result},
             hcore::{fs::FS_ROOT_PATH,
                     os::net::hostname}};
 use chrono::Local;
-use flate2::{write::GzEncoder,
-             Compression};
+use flate2::{Compression,
+             write::GzEncoder};
 use std::{env,
           error::Error as StdErr,
           fs::{self,
                File},
-          path::{Path,
-                 MAIN_SEPARATOR},
+          path::{MAIN_SEPARATOR,
+                 Path},
           process};
 use tar;
 

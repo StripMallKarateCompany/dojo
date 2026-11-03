@@ -17,8 +17,8 @@ use std::{fs,
                  PathBuf}};
 
 use crate::{common::ui::{Status,
-                         UIWriter,
-                         UI},
+                         UI,
+                         UIWriter},
             hcore::{fs as hfs,
                     package::{PackageIdent,
                               PackageInstall}}};
@@ -160,9 +160,9 @@ mod test {
                                   PackageTarget}}};
     use tempfile::TempDir;
 
-    use super::{binlink_all_in_pkg,
-                start,
-                Binlink};
+    use super::{Binlink,
+                binlink_all_in_pkg,
+                start};
 
     #[test]
     fn start_symlinks_binaries() {

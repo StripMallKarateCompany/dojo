@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::{collections::{hash_map::Entry,
-                        HashMap,
+use std::{collections::{HashMap,
                         HashSet,
-                        VecDeque},
+                        VecDeque,
+                        hash_map::Entry},
           env,
           ffi::OsString,
           mem::swap,
           path::{Component,
                  Path,
                  PathBuf},
-          sync::mpsc::{channel,
-                       Receiver,
-                       TryRecvError},
+          sync::mpsc::{Receiver,
+                       TryRecvError,
+                       channel},
           thread,
           time::Duration};
 

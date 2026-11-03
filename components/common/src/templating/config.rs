@@ -20,8 +20,8 @@ use crate::{error::{Error,
                     fs::{self,
                          USER_CONFIG_FILE}},
             outputln,
-            templating::{package::Pkg,
-                         TemplateRenderer}};
+            templating::{TemplateRenderer,
+                         package::Pkg}};
 use serde::{Serialize,
             Serializer};
 use serde_json;

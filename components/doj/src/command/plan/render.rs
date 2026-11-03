@@ -13,19 +13,19 @@
 // limitations under the License.
 
 use serde_json::{self,
-                 json,
-                 Value as Json};
-use std::{fs::{create_dir_all,
-               read_to_string,
-               File},
+                 Value as Json,
+                 json};
+use std::{fs::{File,
+               create_dir_all,
+               read_to_string},
           io::Write,
           path::Path};
 use toml::Value;
 
 use crate::{common::{templating::TemplateRenderer,
                      ui::{Status,
-                          UIWriter,
-                          UI}},
+                          UI,
+                          UIWriter}},
             error::Result};
 
 #[allow(clippy::too_many_arguments)]

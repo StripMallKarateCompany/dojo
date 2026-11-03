@@ -15,14 +15,14 @@
 use super::super::key::download::download_public_encryption_key;
 use crate::{api_client::Client,
             common::ui::{Status,
-                         UIWriter,
-                         UI}};
+                         UI,
+                         UIWriter}};
 
-use crate::{error::{Error,
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
                     Result},
-            hcore::crypto::BoxKeyPair,
-            PRODUCT,
-            VERSION};
+            hcore::crypto::BoxKeyPair};
 use std::path::Path;
 
 pub fn start(ui: &mut UI,

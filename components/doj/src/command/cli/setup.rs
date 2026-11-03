@@ -15,22 +15,22 @@
 use std::{path::Path,
           result};
 
-use crate::{common::ui::{UIReader,
-                         UIWriter,
-                         UI},
-            hcore::{crypto::SigKeyPair,
+use crate::{common::ui::{UI,
+                         UIReader,
+                         UIWriter},
+            hcore::{Error::InvalidOrigin,
+                    crypto::SigKeyPair,
                     env as henv,
-                    package::ident,
-                    Error::InvalidOrigin}};
+                    package::ident}};
 use url::Url;
 
-use crate::{command,
-            config,
-            error::Result,
-            AUTH_TOKEN_ENVVAR,
+use crate::{AUTH_TOKEN_ENVVAR,
             BLDR_URL_ENVVAR,
             CTL_SECRET_ENVVAR,
-            ORIGIN_ENVVAR};
+            ORIGIN_ENVVAR,
+            command,
+            config,
+            error::Result};
 
 pub fn start(ui: &mut UI, cache_path: &Path) -> Result<()> {
     ui.br()?;

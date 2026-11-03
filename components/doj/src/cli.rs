@@ -17,7 +17,8 @@ use clap::{Arg,
            ArgAction,
            ArgGroup,
            Command};
-use dojo_common::{cli::{BINLINK_DIR_ENVVAR,
+use dojo_common::{FeatureFlag,
+                  cli::{BINLINK_DIR_ENVVAR,
                         DEFAULT_BINLINK_DIR,
                         GOSSIP_DEFAULT_ADDR,
                         GOSSIP_LISTEN_ADDRESS_ENVVAR,
@@ -28,19 +29,18 @@ use dojo_common::{cli::{BINLINK_DIR_ENVVAR,
                         PACKAGE_TARGET_ENVVAR,
                         RING_ENVVAR,
                         RING_KEY_ENVVAR},
-                  types::ListenCtlAddr,
-                  FeatureFlag};
-use dojo_core::{crypto::{keys::PairType,
-                         CACHE_KEY_PATH_ENV_VAR},
+                  types::ListenCtlAddr};
+use dojo_core::{ChannelIdent,
+                crypto::{CACHE_KEY_PATH_ENV_VAR,
+                         keys::PairType},
                 env::Config,
                 fs::CACHE_KEY_PATH,
-                package::{ident,
-                          Identifiable,
+                package::{Identifiable,
                           PackageIdent,
-                          PackageTarget},
+                          PackageTarget,
+                          ident},
                 service::{HealthCheckInterval,
-                          ServiceGroup},
-                ChannelIdent};
+                          ServiceGroup}};
 use dojo_sup_protocol;
 use std::{net::SocketAddr,
           path::Path,
@@ -962,11 +962,7 @@ fn file_exists(val: String) -> result::Result<(), String> {
 }
 
 fn file_exists_or_stdin(val: String) -> result::Result<(), String> {
-    if val == "-" {
-        Ok(())
-    } else {
-        file_exists(val)
-    }
+    if val == "-" { Ok(()) } else { file_exists(val) }
 }
 
 #[allow(clippy::needless_pass_by_value)] // Signature required by CLAP

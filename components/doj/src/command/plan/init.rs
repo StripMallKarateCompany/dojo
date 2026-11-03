@@ -14,10 +14,10 @@
 
 use std::{collections::HashMap,
           env,
-          fs::{canonicalize,
-               create_dir_all,
-               File,
-               OpenOptions},
+          fs::{File,
+               OpenOptions,
+               canonicalize,
+               create_dir_all},
           io::{BufRead,
                BufReader,
                Write},
@@ -27,8 +27,8 @@ use crate::hcore::package::PackageIdent;
 use handlebars::Handlebars;
 
 use crate::{common::ui::{Status,
-                         UIWriter,
-                         UI},
+                         UI,
+                         UIWriter},
             error::Result};
 
 const DEFAULT_PLAN_TEMPLATE: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"),

@@ -13,8 +13,8 @@
 // limitations under the License.
 
 use crate::{error::Result,
-            sys::{service,
-                  ShutdownMethod}};
+            sys::{ShutdownMethod,
+                  service}};
 use dojo_common::outputln;
 use dojo_core::os::process::Pid;
 

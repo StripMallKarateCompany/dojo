@@ -45,10 +45,10 @@ mod inner {
                         os::process,
                         package::PackageIdent}};
 
-    use crate::{error::{Error,
+    use crate::{VERSION,
+                error::{Error,
                         Result},
-                exec,
-                VERSION};
+                exec};
 
     pub fn start(ui: &mut UI,
                  args: &[OsString],
@@ -83,8 +83,8 @@ mod inner {
 mod inner {
     use std::ffi::OsString;
 
-    use crate::common::ui::{UIWriter,
-                            UI};
+    use crate::common::ui::{UI,
+                            UIWriter};
 
     use crate::error::{Error,
                        Result};
