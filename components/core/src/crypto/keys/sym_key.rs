@@ -20,23 +20,23 @@ use std::{fmt,
 use crate::crypto::sodium::{randombytes,
                             secretbox::{self,
                                         Key as SymSecretKey}};
-use base64::{engine::general_purpose::STANDARD as BASE64,
-             Engine};
+use base64::{Engine,
+             engine::general_purpose::STANDARD as BASE64};
 use hex;
 
-use super::{super::{hash,
-                    SECRET_SYM_KEY_SUFFIX,
-                    SECRET_SYM_KEY_VERSION},
+use super::{super::{SECRET_SYM_KEY_SUFFIX,
+                    SECRET_SYM_KEY_VERSION,
+                    hash},
+            KeyPair,
+            KeyType,
+            PairType,
+            TmpKeyfile,
             get_key_revisions,
             mk_key_filename,
             mk_revision_string,
             parse_name_with_rev,
             read_key_bytes,
-            write_keypair_files,
-            KeyPair,
-            KeyType,
-            PairType,
-            TmpKeyfile};
+            write_keypair_files};
 use crate::error::{Error,
                    Result};
 
@@ -270,8 +270,8 @@ impl SymKey {
     /// extern crate dojo_core;
     /// extern crate tempfile;
     ///
-    /// use dojo_core::crypto::{keys::PairType,
-    ///                         SymKey};
+    /// use dojo_core::crypto::{SymKey,
+    ///                         keys::PairType};
     /// use tempfile::Builder;
     ///
     /// fn main() {

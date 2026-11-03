@@ -108,9 +108,9 @@ const VM_INHERIT_SHARE: vm_inherit_t = 0;
 type name_t = *const c_char;
 
 pub fn channel() -> Result<(OsIpcSender, OsIpcReceiver),MachError> {
-    let receiver = try!(OsIpcReceiver::new());
-    let sender = try!(receiver.sender());
-    try!(receiver.request_no_senders_notification());
+    let receiver = r#try!(OsIpcReceiver::new());
+    let sender = r#try!(receiver.sender());
+    r#try!(receiver.request_no_senders_notification());
     Ok((sender, receiver))
 }
 
@@ -223,7 +223,7 @@ impl OsIpcReceiver {
             let mut os_result;
             let mut name;
             loop {
-                name = format!("{}{}", BOOTSTRAP_PREFIX, rand::thread_rng().gen::<i64>());
+                name = format!("{}{}", BOOTSTRAP_PREFIX, rand::thread_rng().r#gen::<i64>());
                 let c_name = CString::new(name.clone()).unwrap();
                 os_result = bootstrap_register2(bootstrap_port, c_name.as_ptr(), right, 0);
                 if os_result == BOOTSTRAP_NAME_IN_USE {
@@ -668,8 +668,8 @@ impl Drop for OsIpcOneShotServer {
 
 impl OsIpcOneShotServer {
     pub fn new() -> Result<(OsIpcOneShotServer, String),MachError> {
-        let receiver = try!(OsIpcReceiver::new());
-        let name = try!(receiver.register_bootstrap_name());
+        let receiver = r#try!(OsIpcReceiver::new());
+        let name = r#try!(receiver.register_bootstrap_name());
         Ok((OsIpcOneShotServer {
             receiver: receiver,
             name: name.clone(),
@@ -680,7 +680,7 @@ impl OsIpcOneShotServer {
                                    Vec<u8>,
                                    Vec<OsOpaqueIpcChannel>,
                                    Vec<OsIpcSharedMemory>),MachError> {
-        let (bytes, channels, shared_memory_regions) = try!(self.receiver.recv());
+        let (bytes, channels, shared_memory_regions) = r#try!(self.receiver.recv());
         Ok((self.receiver.consume(), bytes, channels, shared_memory_regions))
     }
 }
@@ -781,24 +781,24 @@ impl OsIpcSharedMemory {
     }
 }
 
-unsafe fn allocate_vm_pages(length: usize) -> *mut u8 {
+unsafe fn allocate_vm_pages(length: usize) -> *mut u8 { unsafe {
     let mut address = 0;
     let result = mach_sys::vm_allocate(mach_task_self(), &mut address, length, 1);
     if result != KERN_SUCCESS {
         panic!("`vm_allocate()` failed: {}", result);
     }
     address as *mut u8
-}
+}}
 
-unsafe fn setup_receive_buffer(buffer: &mut [u8], port_name: mach_port_t) {
+unsafe fn setup_receive_buffer(buffer: &mut [u8], port_name: mach_port_t) { unsafe {
     let message: *mut mach_msg_header_t = mem::transmute(&buffer[0]);
     (*message).msgh_local_port = port_name;
     (*message).msgh_size = buffer.len() as u32
-}
+}}
 
-unsafe fn mach_task_self() -> mach_port_t {
+unsafe fn mach_task_self() -> mach_port_t { unsafe {
     mach_task_self_
-}
+}}
 
 #[repr(C)]
 struct Message {
@@ -1054,7 +1054,7 @@ impl From<MachError> for Error {
     }
 }
 
-extern {
+unsafe extern {
     fn bootstrap_register2(bp: mach_port_t, service_name: name_t, sp: mach_port_t, flags: u64)
                            -> kern_return_t;
     fn bootstrap_look_up(bp: mach_port_t, service_name: name_t, sp: *mut mach_port_t)

@@ -39,10 +39,10 @@ mod inner {
     use super::{SUP_CMD,
                 SUP_CMD_ENVVAR,
                 SUP_PKG_IDENT};
-    use crate::{error::{Error,
+    use crate::{VERSION,
+                error::{Error,
                         Result},
-                exec,
-                VERSION};
+                exec};
 
     pub fn start(ui: &mut UI, args: &[OsString]) -> Result<()> {
         let command = match henv::var(SUP_CMD_ENVVAR) {
@@ -70,8 +70,8 @@ mod inner {
     use std::{env,
               ffi::OsString};
 
-    use crate::common::ui::{UIWriter,
-                            UI};
+    use crate::common::ui::{UI,
+                            UIWriter};
 
     use crate::error::{Error,
                        Result};

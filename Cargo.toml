@@ -2,6 +2,7 @@
 debug = true
 
 [workspace]
+resolver = "3"
 members = [
   "components/builder-api-client",
   "components/butterfly",

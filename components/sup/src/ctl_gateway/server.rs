@@ -24,8 +24,8 @@
 
 use super::{CtlRequest,
             REQ_TIMEOUT};
-use crate::manager::{commands,
-                     ManagerState};
+use crate::manager::{ManagerState,
+                     commands};
 use dojo_core::crypto;
 use dojo_sup_protocol::{self as protocol,
                         codec::*,
@@ -169,7 +169,7 @@ async fn serve(mut io: SrvStream, secret_key: &str, mgr_tx: MgrSender) -> Result
         Ok(result) => result?,
         Err(_) => {
             return Err(HandlerError::from(io::Error::new(io::ErrorKind::TimedOut,
-                                                         "client timed out")))
+                                                         "client timed out")));
         }
     }
 

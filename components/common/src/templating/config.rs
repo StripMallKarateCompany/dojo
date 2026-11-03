@@ -20,8 +20,8 @@ use crate::{error::{Error,
                     fs::{self,
                          USER_CONFIG_FILE}},
             outputln,
-            templating::{package::Pkg,
-                         TemplateRenderer}};
+            templating::{TemplateRenderer,
+                         package::Pkg}};
 use serde::{Serialize,
             Serializer};
 use serde_json;
@@ -59,7 +59,7 @@ pub enum UserConfigPath {
 impl UserConfigPath {
     pub fn get_path(&self) -> &PathBuf {
         match self {
-            UserConfigPath::Recommended(ref p) | UserConfigPath::Deprecated(ref p) => p,
+            UserConfigPath::Recommended(p) | UserConfigPath::Deprecated(p) => p,
         }
     }
 }
@@ -940,13 +940,15 @@ mod test {
                                                     package_name: &str,
                                                     input_config: &str,
                                                     expected_config_as_toml: &str) {
-        env::set_var(env_key, &input_config);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var(env_key, &input_config) };
 
         let expected = toml_from_str(expected_config_as_toml);
         let result = Cfg::load_environment(&package_name.to_string());
 
         // Clean up the environment after ourselves
-        env::remove_var(env_key);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::remove_var(env_key) };
 
         match result {
             Ok(Some(actual)) => {
@@ -979,12 +981,14 @@ mod test {
         let key = "DOJ_TESTING_TRASH";
         let config = "{\"port: 1234 what even is this!!!!?! =";
 
-        env::set_var(key, &config);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var(key, &config) };
 
         let result = Cfg::load_environment(&"testing-trash".to_string());
 
         // Clean up the environment after ourselves
-        env::remove_var(key);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::remove_var(key) };
 
         assert!(result.is_err(), "Expected an error: got {:?}", result);
     }

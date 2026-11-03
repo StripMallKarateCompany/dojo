@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::{collections::{hash_map::Entry,
-                        HashMap,
+use std::{collections::{HashMap,
                         HashSet,
-                        VecDeque},
+                        VecDeque,
+                        hash_map::Entry},
           env,
           ffi::OsString,
           mem::swap,
           path::{Component,
                  Path,
                  PathBuf},
-          sync::mpsc::{channel,
-                       Receiver,
-                       TryRecvError},
+          sync::mpsc::{Receiver,
+                       TryRecvError,
+                       channel},
           thread,
           time::Duration};
 
@@ -409,21 +409,21 @@ enum WatchedFile {
 impl WatchedFile {
     fn get_common(&self) -> &Common {
         match self {
-            WatchedFile::Regular(ref c)
-            | WatchedFile::MissingRegular(ref c)
-            | WatchedFile::Symlink(ref c)
-            | WatchedFile::Directory(ref c)
-            | WatchedFile::MissingDirectory(ref c) => c,
+            WatchedFile::Regular(c)
+            | WatchedFile::MissingRegular(c)
+            | WatchedFile::Symlink(c)
+            | WatchedFile::Directory(c)
+            | WatchedFile::MissingDirectory(c) => c,
         }
     }
 
     fn get_mut_common(&mut self) -> &mut Common {
         match self {
-            WatchedFile::Regular(ref mut c)
-            | WatchedFile::MissingRegular(ref mut c)
-            | WatchedFile::Symlink(ref mut c)
-            | WatchedFile::Directory(ref mut c)
-            | WatchedFile::MissingDirectory(ref mut c) => c,
+            WatchedFile::Regular(c)
+            | WatchedFile::MissingRegular(c)
+            | WatchedFile::Symlink(c)
+            | WatchedFile::Directory(c)
+            | WatchedFile::MissingDirectory(c) => c,
         }
     }
 
@@ -502,27 +502,27 @@ impl IndentedToString for EventAction {
     fn indented_to_string(&self, spaces: &str, repeat: usize) -> String {
         match self {
             EventAction::Ignore => "Ignore".to_string(),
-            EventAction::PlainChange(ref p) => format!("PlainChange({})", its!(p, spaces, repeat)),
+            EventAction::PlainChange(p) => format!("PlainChange({})", its!(p, spaces, repeat)),
             EventAction::RestartWatching => "RestartWatching".to_string(),
-            EventAction::AddRegular(ref pad) => {
+            EventAction::AddRegular(pad) => {
                 format!("AddRegular({})", its!(pad, spaces, repeat))
             }
-            EventAction::DropRegular(ref pad) => {
+            EventAction::DropRegular(pad) => {
                 format!("DropRegular({})", its!(pad, spaces, repeat))
             }
-            EventAction::AddDirectory(ref pad) => {
+            EventAction::AddDirectory(pad) => {
                 format!("AddDirectory({})", its!(pad, spaces, repeat))
             }
-            EventAction::DropDirectory(ref pad) => {
+            EventAction::DropDirectory(pad) => {
                 format!("DropDirectory({})", its!(pad, spaces, repeat))
             }
-            EventAction::RewireSymlink(ref pad) => {
+            EventAction::RewireSymlink(pad) => {
                 format!("RewireSymlink({})", its!(pad, spaces, repeat))
             }
-            EventAction::DropSymlink(ref pad) => {
+            EventAction::DropSymlink(pad) => {
                 format!("DropSymlink({})", its!(pad, spaces, repeat))
             }
-            EventAction::SettlePath(ref p) => format!("SettlePath({})", its!(p, spaces, repeat)),
+            EventAction::SettlePath(p) => format!("SettlePath({})", its!(p, spaces, repeat)),
         }
     }
 }
@@ -543,23 +543,23 @@ enum PathsAction {
 impl IndentedToString for PathsAction {
     fn indented_to_string(&self, spaces: &str, repeat: usize) -> String {
         match self {
-            PathsAction::NotifyFileAppeared(ref p) => {
+            PathsAction::NotifyFileAppeared(p) => {
                 format!("NotifyFileAppeared({})", its!(p, spaces, repeat + 1))
             }
-            PathsAction::NotifyFileModified(ref p) => {
+            PathsAction::NotifyFileModified(p) => {
                 format!("NotifyFileModified({})", its!(p, spaces, repeat + 1))
             }
-            PathsAction::NotifyFileDisappeared(ref p) => {
+            PathsAction::NotifyFileDisappeared(p) => {
                 format!("NotifyFileDisappeared({})", its!(p, spaces, repeat + 1))
             }
-            PathsAction::DropWatch(ref p) => format!("DropWatch({})", its!(p, spaces, repeat + 1)),
-            PathsAction::AddPathToSettle(ref p) => {
+            PathsAction::DropWatch(p) => format!("DropWatch({})", its!(p, spaces, repeat + 1)),
+            PathsAction::AddPathToSettle(p) => {
                 format!("AddPathToSettle({})", its!(p, spaces, repeat + 1))
             }
-            PathsAction::SettlePath(ref p) => {
+            PathsAction::SettlePath(p) => {
                 format!("SettlePath({})", its!(p, spaces, repeat + 1))
             }
-            PathsAction::ProcessPathAfterSettle(ref a) => {
+            PathsAction::ProcessPathAfterSettle(a) => {
                 format!("ProcessPathAfterSettle({})", its!(a, spaces, repeat + 1))
             }
             PathsAction::RestartWatching => "RestartWatching".to_string(),
@@ -587,10 +587,10 @@ impl IndentedToString for BranchResult {
     fn indented_to_string(&self, spaces: &str, repeat: usize) -> String {
         match self {
             BranchResult::AlreadyExists => "AlreadyExists".to_string(),
-            BranchResult::NewInOldDirectory(ref i) => {
+            BranchResult::NewInOldDirectory(i) => {
                 format!("NewInOldDirectory({})", its!(i, spaces, repeat))
             }
-            BranchResult::NewInNewDirectory(ref i, ref p) => {
+            BranchResult::NewInNewDirectory(i, p) => {
                 format!("NewInNewDirectory({}, {})",
                         its!(i, spaces, repeat),
                         p.to_string_lossy())
@@ -610,10 +610,10 @@ enum LeafResult {
 impl IndentedToString for LeafResult {
     fn indented_to_string(&self, spaces: &str, repeat: usize) -> String {
         match self {
-            LeafResult::NewInOldDirectory(ref i) => {
+            LeafResult::NewInOldDirectory(i) => {
                 format!("NewInOldDirectory({})", its!(i, spaces, repeat))
             }
-            LeafResult::NewInNewDirectory(ref i, ref p) => {
+            LeafResult::NewInNewDirectory(i, p) => {
                 format!("NewInNewDirectory({}, {})",
                         its!(i, spaces, repeat),
                         p.to_string_lossy())
@@ -1370,17 +1370,17 @@ impl<C: Callbacks, W: Watcher> FileWatcher<C, W> {
 
     fn emit_directories_for_event(&mut self, event: &DebouncedEvent) {
         let paths = match event {
-            DebouncedEvent::NoticeWrite(ref p)
-            | DebouncedEvent::Write(ref p)
-            | DebouncedEvent::Chmod(ref p)
-            | DebouncedEvent::NoticeRemove(ref p)
-            | DebouncedEvent::Remove(ref p)
-            | DebouncedEvent::Create(ref p) => vec![p],
-            DebouncedEvent::Rename(ref from, ref to) => vec![from, to],
+            DebouncedEvent::NoticeWrite(p)
+            | DebouncedEvent::Write(p)
+            | DebouncedEvent::Chmod(p)
+            | DebouncedEvent::NoticeRemove(p)
+            | DebouncedEvent::Remove(p)
+            | DebouncedEvent::Create(p) => vec![p],
+            DebouncedEvent::Rename(from, to) => vec![from, to],
             DebouncedEvent::Rescan => vec![],
-            DebouncedEvent::Error(_, ref o) => {
+            DebouncedEvent::Error(_, o) => {
                 match o {
-                    Some(ref p) => vec![p],
+                    Some(p) => vec![p],
                     None => vec![],
                 }
             }
@@ -2918,13 +2918,13 @@ mod tests {
             let fs_ops = self.get_fs_ops();
             for command in commands {
                 match command {
-                    InitCommand::MkdirP(ref path) => {
+                    InitCommand::MkdirP(path) => {
                         fs_ops.mkdir_p(path);
                     }
-                    InitCommand::Touch(ref path) => {
+                    InitCommand::Touch(path) => {
                         fs_ops.touch(path);
                     }
-                    InitCommand::LnS(ref target, ref path) => {
+                    InitCommand::LnS(target, path) => {
                         fs_ops.ln_s(target, path);
                     }
                 }
@@ -2972,11 +2972,11 @@ mod tests {
                 let tw = setup.watcher.get_mut_underlying_watcher();
                 let mut fs_ops = self.get_fs_ops_with_dirs(&tw.watched_dirs);
                 match action {
-                    StepAction::LnS(ref target, ref path) => fs_ops.ln_s(target, path),
-                    StepAction::MkdirP(ref path) => fs_ops.mkdir_p(path),
-                    StepAction::Touch(ref path) => fs_ops.touch(path),
-                    StepAction::Mv(ref from, ref to) => fs_ops.mv(from, to),
-                    StepAction::RmRF(ref path) => fs_ops.rm_rf(path),
+                    StepAction::LnS(target, path) => fs_ops.ln_s(target, path),
+                    StepAction::MkdirP(path) => fs_ops.mkdir_p(path),
+                    StepAction::Touch(path) => fs_ops.touch(path),
+                    StepAction::Mv(from, to) => fs_ops.mv(from, to),
+                    StepAction::RmRF(path) => fs_ops.rm_rf(path),
                     StepAction::Nop => 0,
                 }
             };
@@ -3178,11 +3178,11 @@ mod tests {
                       PathState { kind:      s.kind,
                                   path_rest: s.path_rest.clone(),
                                   prev:      match &s.prev {
-                                      Some(ref p) => Some(self.prepend_root(&p)),
+                                      Some(p) => Some(self.prepend_root(&p)),
                                       None => None,
                                   },
                                   next:      match &s.next {
-                                      Some(ref p) => Some(self.prepend_root(&p)),
+                                      Some(p) => Some(self.prepend_root(&p)),
                                       None => None,
                                   }, })
                  })

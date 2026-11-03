@@ -14,16 +14,16 @@
 
 use crate::{api_client::Client,
             common::ui::{Status,
+                         UI,
                          UIReader,
-                         UIWriter,
-                         UI},
+                         UIWriter},
             hcore::package::{PackageIdent,
                              PackageTarget}};
 
-use crate::{error::{Error,
-                    Result},
-            PRODUCT,
-            VERSION};
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
+                    Result}};
 
 pub fn start(ui: &mut UI,
              bldr_url: &str,

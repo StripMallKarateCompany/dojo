@@ -45,7 +45,8 @@ fn set_path() -> Result<()> {
     let new_path = path::append_interpreter_and_path(&mut paths)?;
 
     debug!("Setting the PATH to {}", &new_path);
-    env::set_var("PATH", &new_path);
+    // SAFETY: `doj-sup sh` and `bash` start no thread before this, and exec the shell after it.
+    unsafe { env::set_var("PATH", &new_path) };
     Ok(())
 }
 

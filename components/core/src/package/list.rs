@@ -18,10 +18,10 @@ use std::{fs,
                  PathBuf},
           str::FromStr};
 
-use super::{metadata::{read_metafile,
-                       MetaFile},
-            PackageIdent,
-            PackageTarget};
+use super::{PackageIdent,
+            PackageTarget,
+            metadata::{MetaFile,
+                       read_metafile}};
 
 use crate::error::{Error,
                    Result};

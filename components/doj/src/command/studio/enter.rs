@@ -37,14 +37,18 @@ pub fn start(ui: &mut UI, args: &[OsString]) -> Result<()> {
         let config = config::load()?;
         if let Some(default_origin) = config.origin {
             debug!("Setting default origin {} via CLI config", &default_origin);
-            env::set_var("DOJ_ORIGIN", default_origin);
+            // SAFETY: doj has one thread here: `start` joins the clap parser's before a subcommand
+            // runs.
+            unsafe { env::set_var("DOJ_ORIGIN", default_origin) };
         }
     }
 
     if henv::var(CACHE_KEY_PATH_ENV_VAR).is_err() {
         let path = fs::cache_key_path(None::<&str>);
         debug!("Setting {}={}", CACHE_KEY_PATH_ENV_VAR, path.display());
-        env::set_var(CACHE_KEY_PATH_ENV_VAR, &path);
+        // SAFETY: doj has one thread here: `start` joins the clap parser's before a subcommand
+        // runs.
+        unsafe { env::set_var(CACHE_KEY_PATH_ENV_VAR, &path) };
     };
 
     let artifact_path = match henv::var(ARTIFACT_PATH_ENVVAR) {
@@ -52,7 +56,9 @@ pub fn start(ui: &mut UI, args: &[OsString]) -> Result<()> {
         Err(_) => {
             let path = fs::cache_artifact_path(None::<&str>);
             debug!("Setting {}={}", ARTIFACT_PATH_ENVVAR, path.display());
-            env::set_var(ARTIFACT_PATH_ENVVAR, &path);
+            // SAFETY: doj has one thread here: `start` joins the clap parser's before a subcommand
+            // runs.
+            unsafe { env::set_var(ARTIFACT_PATH_ENVVAR, &path) };
             path
         }
     };
@@ -66,9 +72,10 @@ pub fn start(ui: &mut UI, args: &[OsString]) -> Result<()> {
 
 #[cfg(target_os = "linux")]
 mod inner {
-    use crate::{command::studio::docker,
-                common::ui::{UIWriter,
-                             UI},
+    use crate::{VERSION,
+                command::studio::docker,
+                common::ui::{UI,
+                             UIWriter},
                 error::{Error,
                         Result},
                 exec,
@@ -77,8 +84,7 @@ mod inner {
                              find_command},
                         os::process,
                         package::PackageIdent,
-                        users::linux as group},
-                VERSION};
+                        users::linux as group}};
     use std::{env,
               ffi::OsString,
               path::PathBuf,

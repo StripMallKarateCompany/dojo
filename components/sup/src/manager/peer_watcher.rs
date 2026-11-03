@@ -14,8 +14,8 @@
 
 use crate::{error::{Error,
                     Result},
-            manager::file_watcher::{default_file_watcher,
-                                    Callbacks}};
+            manager::file_watcher::{Callbacks,
+                                    default_file_watcher}};
 use dojo_butterfly::member::Member;
 use dojo_common::{cli::GOSSIP_DEFAULT_PORT,
                   outputln};
@@ -26,9 +26,9 @@ use std::{fs::File,
                 ToSocketAddrs},
           path::{Path,
                  PathBuf},
-          sync::{atomic::{AtomicBool,
-                          Ordering},
-                 Arc},
+          sync::{Arc,
+                 atomic::{AtomicBool,
+                          Ordering}},
           thread::Builder as ThreadBuilder};
 
 static LOGKEY: &'static str = "PW";

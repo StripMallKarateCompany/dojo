@@ -435,7 +435,8 @@ impl<'a> SvcDir<'a> {
 /// let second_path = fs::canonicalize("./tests/fixtures/bin").unwrap();
 /// let path_bufs = vec![first_path, second_path];
 /// let new_path = env::join_paths(path_bufs).unwrap();
-/// env::set_var("PATH", &new_path);
+/// // SAFETY: a doc test is its own program, and it starts no other thread.
+/// unsafe { env::set_var("PATH", &new_path) };
 ///
 /// let result = find_command("bin_with_no_extension");
 /// assert_eq!(result.is_some(), true);
@@ -452,7 +453,8 @@ impl<'a> SvcDir<'a> {
 /// let second_path = fs::canonicalize("./tests/fixtures/bin").unwrap();
 /// let path_bufs = vec![first_path, second_path];
 /// let new_path = env::join_paths(path_bufs).unwrap();
-/// env::set_var("PATH", &new_path);
+/// // SAFETY: a doc test is its own program, and it starts no other thread.
+/// unsafe { env::set_var("PATH", &new_path) };
 ///
 /// let result = find_command("missing");
 /// assert_eq!(result.is_some(), false);
@@ -755,7 +757,8 @@ mod test_find_command {
         let mut path_bufs = vec![first_path, second_path];
         path_bufs.append(&mut os_paths);
         let new_path = env::join_paths(path_bufs).unwrap();
-        env::set_var("PATH", &new_path);
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var("PATH", &new_path) };
     }
 
     mod with_path_set {
@@ -823,10 +826,10 @@ mod test_find_command {
 
 #[cfg(test)]
 mod test_atomic_writer {
-    use super::{atomic_write,
-                AtomicWriter};
-    use std::{fs::{remove_file,
-                   File},
+    use super::{AtomicWriter,
+                atomic_write};
+    use std::{fs::{File,
+                   remove_file},
               io::{Read,
                    Seek,
                    SeekFrom,

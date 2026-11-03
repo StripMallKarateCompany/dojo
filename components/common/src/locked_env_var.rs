@@ -44,6 +44,13 @@
 //! locking paradigm. Once the locks are in place, however, only the
 //! tests that need access to the locked variable will be serialized,
 //! leaving the rest of the tests to proceed in parallel.
+//!
+//! The lock does not make changing the environment sound. `env::set_var` and
+//! `env::remove_var` are `unsafe` because another thread may read the
+//! environment at the same time (libc's `getenv`, from any code), and the
+//! tests that do not take this lock keep running on other threads. Every
+//! test that changes the environment, through this lock or directly, carries
+//! that race; edition 2024 made the calls `unsafe`, it did not add the race.
 
 use std::{env,
           ffi::{OsStr,
@@ -82,21 +89,25 @@ impl LockedEnvVar {
     pub fn set<V>(&self, value: V)
         where V: AsRef<OsStr>
     {
-        env::set_var(&*self.lock, value.as_ref());
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var(&*self.lock, value.as_ref()) };
     }
 
     /// Unsets an environment variable.
-    pub fn unset(&self) { env::remove_var(&*self.lock); }
+    // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+    pub fn unset(&self) { unsafe { env::remove_var(&*self.lock) }; }
 }
 
 impl Drop for LockedEnvVar {
     fn drop(&mut self) {
         match self.original_value {
             Some(ref val) => {
-                env::set_var(&*self.lock, val);
+                // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+                unsafe { env::set_var(&*self.lock, val) };
             }
             None => {
-                env::remove_var(&*self.lock);
+                // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+                unsafe { env::remove_var(&*self.lock) };
             }
         }
     }
@@ -169,7 +180,8 @@ mod tests {
         // macro and types behave properly!
         locked_env_var!(DOJ_TESTING_LOCKED_ENV_VAR, lock_var);
 
-        env::set_var("DOJ_TESTING_LOCKED_ENV_VAR", "original_value");
+        // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+        unsafe { env::set_var("DOJ_TESTING_LOCKED_ENV_VAR", "original_value") };
 
         {
             let lock = lock_var();

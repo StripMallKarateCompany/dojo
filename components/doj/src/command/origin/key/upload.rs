@@ -15,20 +15,20 @@
 use std::path::Path;
 
 use super::get_name_with_rev;
-use crate::{api_client::{self,
+use crate::{PRODUCT,
+            VERSION,
+            api_client::{self,
                          Client},
-            common::{command::package::install::{with_retries,
-                                                 RETRIES},
+            common::{command::package::install::{RETRIES,
+                                                 with_retries},
                      ui::{Status,
-                          UIWriter,
-                          UI}},
+                          UI,
+                          UIWriter}},
             error::{Error,
                     Result},
-            hcore::crypto::{keys::parse_name_with_rev,
-                            PUBLIC_SIG_KEY_VERSION,
-                            SECRET_SIG_KEY_VERSION},
-            PRODUCT,
-            VERSION};
+            hcore::crypto::{PUBLIC_SIG_KEY_VERSION,
+                            SECRET_SIG_KEY_VERSION,
+                            keys::parse_name_with_rev}};
 use dojo_api_client::StatusCode;
 
 pub fn start(ui: &mut UI,

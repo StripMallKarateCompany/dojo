@@ -60,10 +60,10 @@ pub mod types;
 use crate::{core::env as henv,
             net::{ErrCode,
                   NetResult}};
-use base64::{engine::general_purpose::STANDARD as BASE64,
-             Engine};
-use rand::{rngs::SysRng,
-           TryRng};
+use base64::{Engine,
+             engine::general_purpose::STANDARD as BASE64};
+use rand::{TryRng,
+           rngs::SysRng};
 use std::{fs::File,
           io::Read,
           net::SocketAddr,

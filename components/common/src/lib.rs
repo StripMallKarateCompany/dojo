@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::ui::{UIWriter,
-                UI};
+use crate::ui::{UI,
+                UIWriter};
 use dojo_api_client as api_client;
 use dojo_core as hcore;
 use std::{collections::HashMap,

@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use handlebars::{to_json,
-                 BlockContext,
+use handlebars::{BlockContext,
                  BlockParams,
                  Context,
                  Handlebars,
@@ -23,7 +22,8 @@ use handlebars::{to_json,
                  JsonTruthy,
                  Output,
                  RenderContext,
-                 Renderable};
+                 Renderable,
+                 to_json};
 use serde_json::Value as Json;
 
 use super::render_error;

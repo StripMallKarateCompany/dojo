@@ -16,17 +16,17 @@ use std::{collections::HashSet,
           fmt,
           fs::{self,
                File},
-          io::{prelude::*,
-               BufReader,
-               BufWriter},
+          io::{BufReader,
+               BufWriter,
+               prelude::*},
           path::{Path,
                  PathBuf},
           result,
           str::FromStr,
           sync::LazyLock};
 
-use base64::{engine::general_purpose::STANDARD as BASE64,
-             Engine};
+use base64::{Engine,
+             engine::general_purpose::STANDARD as BASE64};
 use regex::Regex;
 
 use crate::error::{Error,
@@ -377,8 +377,8 @@ pub fn parse_name_with_rev<T>(name_with_rev: T) -> Result<(String, String)>
 /// ```
 /// extern crate dojo_core;
 ///
-/// use dojo_core::crypto::keys::{parse_key_str,
-///                               PairType};
+/// use dojo_core::crypto::keys::{PairType,
+///                               parse_key_str};
 ///
 /// fn main() {
 ///     let content = "SIG-PUB-1
@@ -397,8 +397,8 @@ pub fn parse_name_with_rev<T>(name_with_rev: T) -> Result<(String, String)>
 /// ```
 /// extern crate dojo_core;
 ///
-/// use dojo_core::crypto::keys::{parse_key_str,
-///                               PairType};
+/// use dojo_core::crypto::keys::{PairType,
+///                               parse_key_str};
 ///
 /// fn main() {
 ///     let content = "SIG-SEC-1
@@ -550,11 +550,11 @@ mod test {
     use hex;
     use tempfile::Builder;
 
-    use super::{box_key_pair::BoxKeyPair,
+    use super::{KeyType,
+                PairType,
+                box_key_pair::BoxKeyPair,
                 sig_key_pair::SigKeyPair,
-                sym_key::SymKey,
-                KeyType,
-                PairType};
+                sym_key::SymKey};
 
     use super::{super::test_support::*,
                 TmpKeyfile};

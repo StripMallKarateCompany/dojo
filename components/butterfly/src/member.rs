@@ -14,8 +14,8 @@
 
 //! Tracks membership. Contains both the `Member` struct and the `MemberList`.
 
-use std::{collections::{hash_map,
-                        HashMap},
+use std::{collections::{HashMap,
+                        hash_map},
           convert::TryFrom,
           fmt,
           net::SocketAddr,
@@ -23,10 +23,10 @@ use std::{collections::{hash_map,
           ops::Add,
           result,
           str::FromStr,
-          sync::{atomic::{AtomicUsize,
-                          Ordering},
-                 LazyLock,
-                 RwLock},
+          sync::{LazyLock,
+                 RwLock,
+                 atomic::{AtomicUsize,
+                          Ordering}},
           time::{Duration,
                  Instant}};
 
@@ -34,22 +34,22 @@ use dojo_core::util::ToI64;
 use prometheus::IntGaugeVec;
 use rand::seq::{IteratorRandom,
                 SliceRandom};
-use serde::{de,
-            ser::{SerializeMap,
-                  SerializeStruct},
-            Deserialize,
+use serde::{Deserialize,
             Deserializer,
             Serialize,
-            Serializer};
+            Serializer,
+            de,
+            ser::{SerializeMap,
+                  SerializeStruct}};
 use uuid::Uuid;
 
 pub use crate::protocol::swim::Health;
 use crate::{error::{Error,
                     Result},
             protocol::{self,
+                       FromProto,
                        newscast,
-                       swim as proto,
-                       FromProto},
+                       swim as proto},
             rumor::{RumorKey,
                     RumorPayload,
                     RumorType}};

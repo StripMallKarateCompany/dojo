@@ -24,9 +24,9 @@ use crate::hcore::{fs,
                              PackageInstall},
                    util::{deserialize_using_from_str,
                           serialize_using_to_string}};
-use serde::{ser::SerializeStruct,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeStruct};
 
 use crate::{error::{Error,
                     Result},

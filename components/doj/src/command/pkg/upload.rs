@@ -35,23 +35,23 @@ use std::path::{Path,
 // External Libraries
 use dojo_api_client::StatusCode;
 // Local Dependencies
-use crate::{api_client::{self,
+use crate::{PRODUCT,
+            VERSION,
+            api_client::{self,
                          Client},
-            common::{command::package::install::{with_retries,
-                                                 RETRIES},
+            common::{command::package::install::{RETRIES,
+                                                 with_retries},
                      ui::{Status,
-                          UIWriter,
-                          UI}},
+                          UI,
+                          UIWriter}},
             error::{Error,
                     Result},
-            hcore::{crypto::{artifact::get_artifact_header,
+            hcore::{ChannelIdent,
+                    crypto::{artifact::get_artifact_header,
                              keys::parse_name_with_rev},
                     package::{PackageArchive,
                               PackageIdent,
-                              PackageTarget},
-                    ChannelIdent},
-            PRODUCT,
-            VERSION};
+                              PackageTarget}}};
 
 /// Upload a package from the cache to a Depot. The latest version/release of the package
 /// will be uploaded if not specified.

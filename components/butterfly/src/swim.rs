@@ -26,8 +26,8 @@ use crate::{error::{Error,
                      Member,
                      Membership},
             protocol::{self,
-                       swim as proto,
-                       FromProto}};
+                       FromProto,
+                       swim as proto}};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Ack {

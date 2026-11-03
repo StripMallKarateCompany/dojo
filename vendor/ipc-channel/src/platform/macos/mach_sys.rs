@@ -267,23 +267,23 @@ pub struct Union_Unnamed9 {
     pub _bindgen_data_: [u32; 4usize],
 }
 impl Union_Unnamed9 {
-    pub unsafe fn port(&mut self) -> *mut mach_msg_port_descriptor_t {
+    pub unsafe fn port(&mut self) -> *mut mach_msg_port_descriptor_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn out_of_line(&mut self) -> *mut mach_msg_ool_descriptor_t {
+    }}
+    pub unsafe fn out_of_line(&mut self) -> *mut mach_msg_ool_descriptor_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn ool_ports(&mut self)
-     -> *mut mach_msg_ool_ports_descriptor_t {
+     -> *mut mach_msg_ool_ports_descriptor_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn _type(&mut self) -> *mut mach_msg_type_descriptor_t {
+    }}
+    pub unsafe fn _type(&mut self) -> *mut mach_msg_type_descriptor_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed9 {
     fn clone(&self) -> Self { *self }
@@ -500,14 +500,14 @@ pub struct Union_Unnamed24 {
     pub _bindgen_data_: [u32; 8usize],
 }
 impl Union_Unnamed24 {
-    pub unsafe fn send(&mut self) -> *mut mach_msg_empty_send_t {
+    pub unsafe fn send(&mut self) -> *mut mach_msg_empty_send_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn rcv(&mut self) -> *mut mach_msg_empty_rcv_t {
+    }}
+    pub unsafe fn rcv(&mut self) -> *mut mach_msg_empty_rcv_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed24 {
     fn clone(&self) -> Self { *self }
@@ -1201,14 +1201,14 @@ pub struct Union_Unnamed25 {
     pub _bindgen_data_: [u64; 21usize],
 }
 impl Union_Unnamed25 {
-    pub unsafe fn ts32(&mut self) -> *mut x86_thread_state32_t {
+    pub unsafe fn ts32(&mut self) -> *mut x86_thread_state32_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn ts64(&mut self) -> *mut x86_thread_state64_t {
+    }}
+    pub unsafe fn ts64(&mut self) -> *mut x86_thread_state64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed25 {
     fn clone(&self) -> Self { *self }
@@ -1234,14 +1234,14 @@ pub struct Union_Unnamed26 {
     pub _bindgen_data_: [u32; 131usize],
 }
 impl Union_Unnamed26 {
-    pub unsafe fn fs32(&mut self) -> *mut x86_float_state32_t {
+    pub unsafe fn fs32(&mut self) -> *mut x86_float_state32_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn fs64(&mut self) -> *mut x86_float_state64_t {
+    }}
+    pub unsafe fn fs64(&mut self) -> *mut x86_float_state64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed26 {
     fn clone(&self) -> Self { *self }
@@ -1267,14 +1267,14 @@ pub struct Union_Unnamed27 {
     pub _bindgen_data_: [u64; 2usize],
 }
 impl Union_Unnamed27 {
-    pub unsafe fn es32(&mut self) -> *mut x86_exception_state32_t {
+    pub unsafe fn es32(&mut self) -> *mut x86_exception_state32_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn es64(&mut self) -> *mut x86_exception_state64_t {
+    }}
+    pub unsafe fn es64(&mut self) -> *mut x86_exception_state64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed27 {
     fn clone(&self) -> Self { *self }
@@ -1300,14 +1300,14 @@ pub struct Union_Unnamed28 {
     pub _bindgen_data_: [u64; 8usize],
 }
 impl Union_Unnamed28 {
-    pub unsafe fn ds32(&mut self) -> *mut x86_debug_state32_t {
+    pub unsafe fn ds32(&mut self) -> *mut x86_debug_state32_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn ds64(&mut self) -> *mut x86_debug_state64_t {
+    }}
+    pub unsafe fn ds64(&mut self) -> *mut x86_debug_state64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed28 {
     fn clone(&self) -> Self { *self }
@@ -1333,14 +1333,14 @@ pub struct Union_Unnamed29 {
     pub _bindgen_data_: [u32; 211usize],
 }
 impl Union_Unnamed29 {
-    pub unsafe fn as32(&mut self) -> *mut x86_avx_state32_t {
+    pub unsafe fn as32(&mut self) -> *mut x86_avx_state32_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn as64(&mut self) -> *mut x86_avx_state64_t {
+    }}
+    pub unsafe fn as64(&mut self) -> *mut x86_avx_state64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union_Unnamed29 {
     fn clone(&self) -> Self { *self }
@@ -2601,15 +2601,15 @@ pub struct Union___RequestUnion__clock_priv_subsystem {
 }
 impl Union___RequestUnion__clock_priv_subsystem {
     pub unsafe fn Request_clock_set_time(&mut self)
-     -> *mut __Request__clock_set_time_t {
+     -> *mut __Request__clock_set_time_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_clock_set_attributes(&mut self)
-     -> *mut __Request__clock_set_attributes_t {
+     -> *mut __Request__clock_set_attributes_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__clock_priv_subsystem {
     fn clone(&self) -> Self { *self }
@@ -2652,15 +2652,15 @@ pub struct Union___ReplyUnion__clock_priv_subsystem {
 }
 impl Union___ReplyUnion__clock_priv_subsystem {
     pub unsafe fn Reply_clock_set_time(&mut self)
-     -> *mut __Reply__clock_set_time_t {
+     -> *mut __Reply__clock_set_time_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_clock_set_attributes(&mut self)
-     -> *mut __Reply__clock_set_attributes_t {
+     -> *mut __Reply__clock_set_attributes_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__clock_priv_subsystem {
     fn clone(&self) -> Self { *self }
@@ -3050,129 +3050,129 @@ pub struct Union___RequestUnion__host_priv_subsystem {
 }
 impl Union___RequestUnion__host_priv_subsystem {
     pub unsafe fn Request_host_get_boot_info(&mut self)
-     -> *mut __Request__host_get_boot_info_t {
+     -> *mut __Request__host_get_boot_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_reboot(&mut self)
-     -> *mut __Request__host_reboot_t {
+     -> *mut __Request__host_reboot_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_priv_statistics(&mut self)
-     -> *mut __Request__host_priv_statistics_t {
+     -> *mut __Request__host_priv_statistics_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_default_memory_manager(&mut self)
-     -> *mut __Request__host_default_memory_manager_t {
+     -> *mut __Request__host_default_memory_manager_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_wire(&mut self) -> *mut __Request__vm_wire_t {
+    }}
+    pub unsafe fn Request_vm_wire(&mut self) -> *mut __Request__vm_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_wire(&mut self)
-     -> *mut __Request__thread_wire_t {
+     -> *mut __Request__thread_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_allocate_cpm(&mut self)
-     -> *mut __Request__vm_allocate_cpm_t {
+     -> *mut __Request__vm_allocate_cpm_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_processors(&mut self)
-     -> *mut __Request__host_processors_t {
+     -> *mut __Request__host_processors_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_get_clock_control(&mut self)
-     -> *mut __Request__host_get_clock_control_t {
+     -> *mut __Request__host_get_clock_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_kmod_create(&mut self)
-     -> *mut __Request__kmod_create_t {
+     -> *mut __Request__kmod_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_kmod_destroy(&mut self)
-     -> *mut __Request__kmod_destroy_t {
+     -> *mut __Request__kmod_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_kmod_control(&mut self)
-     -> *mut __Request__kmod_control_t {
+     -> *mut __Request__kmod_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_get_special_port(&mut self)
-     -> *mut __Request__host_get_special_port_t {
+     -> *mut __Request__host_get_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_set_special_port(&mut self)
-     -> *mut __Request__host_set_special_port_t {
+     -> *mut __Request__host_set_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_set_exception_ports(&mut self)
-     -> *mut __Request__host_set_exception_ports_t {
+     -> *mut __Request__host_set_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_get_exception_ports(&mut self)
-     -> *mut __Request__host_get_exception_ports_t {
+     -> *mut __Request__host_get_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_swap_exception_ports(&mut self)
-     -> *mut __Request__host_swap_exception_ports_t {
+     -> *mut __Request__host_swap_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_vm_wire(&mut self)
-     -> *mut __Request__mach_vm_wire_t {
+     -> *mut __Request__mach_vm_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_processor_sets(&mut self)
-     -> *mut __Request__host_processor_sets_t {
+     -> *mut __Request__host_processor_sets_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_processor_set_priv(&mut self)
-     -> *mut __Request__host_processor_set_priv_t {
+     -> *mut __Request__host_processor_set_priv_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_set_dp_control_port(&mut self)
-     -> *mut __Request__set_dp_control_port_t {
+     -> *mut __Request__set_dp_control_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_get_dp_control_port(&mut self)
-     -> *mut __Request__get_dp_control_port_t {
+     -> *mut __Request__get_dp_control_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_set_UNDServer(&mut self)
-     -> *mut __Request__host_set_UNDServer_t {
+     -> *mut __Request__host_set_UNDServer_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_get_UNDServer(&mut self)
-     -> *mut __Request__host_get_UNDServer_t {
+     -> *mut __Request__host_get_UNDServer_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_kext_request(&mut self)
-     -> *mut __Request__kext_request_t {
+     -> *mut __Request__kext_request_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__host_priv_subsystem {
     fn clone(&self) -> Self { *self }
@@ -3565,129 +3565,129 @@ pub struct Union___ReplyUnion__host_priv_subsystem {
 }
 impl Union___ReplyUnion__host_priv_subsystem {
     pub unsafe fn Reply_host_get_boot_info(&mut self)
-     -> *mut __Reply__host_get_boot_info_t {
+     -> *mut __Reply__host_get_boot_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_reboot(&mut self)
-     -> *mut __Reply__host_reboot_t {
+     -> *mut __Reply__host_reboot_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_priv_statistics(&mut self)
-     -> *mut __Reply__host_priv_statistics_t {
+     -> *mut __Reply__host_priv_statistics_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_default_memory_manager(&mut self)
-     -> *mut __Reply__host_default_memory_manager_t {
+     -> *mut __Reply__host_default_memory_manager_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_wire(&mut self) -> *mut __Reply__vm_wire_t {
+    }}
+    pub unsafe fn Reply_vm_wire(&mut self) -> *mut __Reply__vm_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_wire(&mut self)
-     -> *mut __Reply__thread_wire_t {
+     -> *mut __Reply__thread_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_allocate_cpm(&mut self)
-     -> *mut __Reply__vm_allocate_cpm_t {
+     -> *mut __Reply__vm_allocate_cpm_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_processors(&mut self)
-     -> *mut __Reply__host_processors_t {
+     -> *mut __Reply__host_processors_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_get_clock_control(&mut self)
-     -> *mut __Reply__host_get_clock_control_t {
+     -> *mut __Reply__host_get_clock_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_kmod_create(&mut self)
-     -> *mut __Reply__kmod_create_t {
+     -> *mut __Reply__kmod_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_kmod_destroy(&mut self)
-     -> *mut __Reply__kmod_destroy_t {
+     -> *mut __Reply__kmod_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_kmod_control(&mut self)
-     -> *mut __Reply__kmod_control_t {
+     -> *mut __Reply__kmod_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_get_special_port(&mut self)
-     -> *mut __Reply__host_get_special_port_t {
+     -> *mut __Reply__host_get_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_set_special_port(&mut self)
-     -> *mut __Reply__host_set_special_port_t {
+     -> *mut __Reply__host_set_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_set_exception_ports(&mut self)
-     -> *mut __Reply__host_set_exception_ports_t {
+     -> *mut __Reply__host_set_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_get_exception_ports(&mut self)
-     -> *mut __Reply__host_get_exception_ports_t {
+     -> *mut __Reply__host_get_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_swap_exception_ports(&mut self)
-     -> *mut __Reply__host_swap_exception_ports_t {
+     -> *mut __Reply__host_swap_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_vm_wire(&mut self)
-     -> *mut __Reply__mach_vm_wire_t {
+     -> *mut __Reply__mach_vm_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_processor_sets(&mut self)
-     -> *mut __Reply__host_processor_sets_t {
+     -> *mut __Reply__host_processor_sets_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_processor_set_priv(&mut self)
-     -> *mut __Reply__host_processor_set_priv_t {
+     -> *mut __Reply__host_processor_set_priv_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_set_dp_control_port(&mut self)
-     -> *mut __Reply__set_dp_control_port_t {
+     -> *mut __Reply__set_dp_control_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_get_dp_control_port(&mut self)
-     -> *mut __Reply__get_dp_control_port_t {
+     -> *mut __Reply__get_dp_control_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_set_UNDServer(&mut self)
-     -> *mut __Reply__host_set_UNDServer_t {
+     -> *mut __Reply__host_set_UNDServer_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_get_UNDServer(&mut self)
-     -> *mut __Reply__host_get_UNDServer_t {
+     -> *mut __Reply__host_get_UNDServer_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_kext_request(&mut self)
-     -> *mut __Reply__kext_request_t {
+     -> *mut __Reply__kext_request_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__host_priv_subsystem {
     fn clone(&self) -> Self { *self }
@@ -3741,15 +3741,15 @@ pub struct Union___RequestUnion__host_security_subsystem {
 }
 impl Union___RequestUnion__host_security_subsystem {
     pub unsafe fn Request_host_security_create_task_token(&mut self)
-     -> *mut __Request__host_security_create_task_token_t {
+     -> *mut __Request__host_security_create_task_token_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_security_set_task_token(&mut self)
-     -> *mut __Request__host_security_set_task_token_t {
+     -> *mut __Request__host_security_set_task_token_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__host_security_subsystem {
     fn clone(&self) -> Self { *self }
@@ -3793,15 +3793,15 @@ pub struct Union___ReplyUnion__host_security_subsystem {
 }
 impl Union___ReplyUnion__host_security_subsystem {
     pub unsafe fn Reply_host_security_create_task_token(&mut self)
-     -> *mut __Reply__host_security_create_task_token_t {
+     -> *mut __Reply__host_security_create_task_token_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_security_set_task_token(&mut self)
-     -> *mut __Reply__host_security_set_task_token_t {
+     -> *mut __Reply__host_security_set_task_token_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__host_security_subsystem {
     fn clone(&self) -> Self { *self }
@@ -3900,34 +3900,34 @@ pub struct Union___RequestUnion__lock_set_subsystem {
 }
 impl Union___RequestUnion__lock_set_subsystem {
     pub unsafe fn Request_lock_acquire(&mut self)
-     -> *mut __Request__lock_acquire_t {
+     -> *mut __Request__lock_acquire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_lock_release(&mut self)
-     -> *mut __Request__lock_release_t {
+     -> *mut __Request__lock_release_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_lock_try(&mut self) -> *mut __Request__lock_try_t {
+    }}
+    pub unsafe fn Request_lock_try(&mut self) -> *mut __Request__lock_try_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_lock_make_stable(&mut self)
-     -> *mut __Request__lock_make_stable_t {
+     -> *mut __Request__lock_make_stable_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_lock_handoff(&mut self)
-     -> *mut __Request__lock_handoff_t {
+     -> *mut __Request__lock_handoff_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_lock_handoff_accept(&mut self)
-     -> *mut __Request__lock_handoff_accept_t {
+     -> *mut __Request__lock_handoff_accept_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__lock_set_subsystem {
     fn clone(&self) -> Self { *self }
@@ -4026,34 +4026,34 @@ pub struct Union___ReplyUnion__lock_set_subsystem {
 }
 impl Union___ReplyUnion__lock_set_subsystem {
     pub unsafe fn Reply_lock_acquire(&mut self)
-     -> *mut __Reply__lock_acquire_t {
+     -> *mut __Reply__lock_acquire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_lock_release(&mut self)
-     -> *mut __Reply__lock_release_t {
+     -> *mut __Reply__lock_release_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_lock_try(&mut self) -> *mut __Reply__lock_try_t {
+    }}
+    pub unsafe fn Reply_lock_try(&mut self) -> *mut __Reply__lock_try_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_lock_make_stable(&mut self)
-     -> *mut __Reply__lock_make_stable_t {
+     -> *mut __Reply__lock_make_stable_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_lock_handoff(&mut self)
-     -> *mut __Reply__lock_handoff_t {
+     -> *mut __Reply__lock_handoff_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_lock_handoff_accept(&mut self)
-     -> *mut __Reply__lock_handoff_accept_t {
+     -> *mut __Reply__lock_handoff_accept_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__lock_set_subsystem {
     fn clone(&self) -> Self { *self }
@@ -4150,35 +4150,35 @@ pub struct Union___RequestUnion__processor_subsystem {
 }
 impl Union___RequestUnion__processor_subsystem {
     pub unsafe fn Request_processor_start(&mut self)
-     -> *mut __Request__processor_start_t {
+     -> *mut __Request__processor_start_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_exit(&mut self)
-     -> *mut __Request__processor_exit_t {
+     -> *mut __Request__processor_exit_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_info(&mut self)
-     -> *mut __Request__processor_info_t {
+     -> *mut __Request__processor_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_control(&mut self)
-     -> *mut __Request__processor_control_t {
+     -> *mut __Request__processor_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_assign(&mut self)
-     -> *mut __Request__processor_assign_t {
+     -> *mut __Request__processor_assign_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_get_assignment(&mut self)
-     -> *mut __Request__processor_get_assignment_t {
+     -> *mut __Request__processor_get_assignment_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__processor_subsystem {
     fn clone(&self) -> Self { *self }
@@ -4280,35 +4280,35 @@ pub struct Union___ReplyUnion__processor_subsystem {
 }
 impl Union___ReplyUnion__processor_subsystem {
     pub unsafe fn Reply_processor_start(&mut self)
-     -> *mut __Reply__processor_start_t {
+     -> *mut __Reply__processor_start_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_exit(&mut self)
-     -> *mut __Reply__processor_exit_t {
+     -> *mut __Reply__processor_exit_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_info(&mut self)
-     -> *mut __Reply__processor_info_t {
+     -> *mut __Reply__processor_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_control(&mut self)
-     -> *mut __Reply__processor_control_t {
+     -> *mut __Reply__processor_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_assign(&mut self)
-     -> *mut __Reply__processor_assign_t {
+     -> *mut __Reply__processor_assign_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_get_assignment(&mut self)
-     -> *mut __Reply__processor_get_assignment_t {
+     -> *mut __Reply__processor_get_assignment_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__processor_subsystem {
     fn clone(&self) -> Self { *self }
@@ -4462,55 +4462,55 @@ pub struct Union___RequestUnion__processor_set_subsystem {
 }
 impl Union___RequestUnion__processor_set_subsystem {
     pub unsafe fn Request_processor_set_statistics(&mut self)
-     -> *mut __Request__processor_set_statistics_t {
+     -> *mut __Request__processor_set_statistics_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_destroy(&mut self)
-     -> *mut __Request__processor_set_destroy_t {
+     -> *mut __Request__processor_set_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_max_priority(&mut self)
-     -> *mut __Request__processor_set_max_priority_t {
+     -> *mut __Request__processor_set_max_priority_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_policy_enable(&mut self)
-     -> *mut __Request__processor_set_policy_enable_t {
+     -> *mut __Request__processor_set_policy_enable_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_policy_disable(&mut self)
-     -> *mut __Request__processor_set_policy_disable_t {
+     -> *mut __Request__processor_set_policy_disable_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_tasks(&mut self)
-     -> *mut __Request__processor_set_tasks_t {
+     -> *mut __Request__processor_set_tasks_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_threads(&mut self)
-     -> *mut __Request__processor_set_threads_t {
+     -> *mut __Request__processor_set_threads_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_policy_control(&mut self)
-     -> *mut __Request__processor_set_policy_control_t {
+     -> *mut __Request__processor_set_policy_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_stack_usage(&mut self)
-     -> *mut __Request__processor_set_stack_usage_t {
+     -> *mut __Request__processor_set_stack_usage_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_info(&mut self)
-     -> *mut __Request__processor_set_info_t {
+     -> *mut __Request__processor_set_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__processor_set_subsystem {
     fn clone(&self) -> Self { *self }
@@ -4680,55 +4680,55 @@ pub struct Union___ReplyUnion__processor_set_subsystem {
 }
 impl Union___ReplyUnion__processor_set_subsystem {
     pub unsafe fn Reply_processor_set_statistics(&mut self)
-     -> *mut __Reply__processor_set_statistics_t {
+     -> *mut __Reply__processor_set_statistics_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_destroy(&mut self)
-     -> *mut __Reply__processor_set_destroy_t {
+     -> *mut __Reply__processor_set_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_max_priority(&mut self)
-     -> *mut __Reply__processor_set_max_priority_t {
+     -> *mut __Reply__processor_set_max_priority_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_policy_enable(&mut self)
-     -> *mut __Reply__processor_set_policy_enable_t {
+     -> *mut __Reply__processor_set_policy_enable_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_policy_disable(&mut self)
-     -> *mut __Reply__processor_set_policy_disable_t {
+     -> *mut __Reply__processor_set_policy_disable_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_tasks(&mut self)
-     -> *mut __Reply__processor_set_tasks_t {
+     -> *mut __Reply__processor_set_tasks_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_threads(&mut self)
-     -> *mut __Reply__processor_set_threads_t {
+     -> *mut __Reply__processor_set_threads_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_policy_control(&mut self)
-     -> *mut __Reply__processor_set_policy_control_t {
+     -> *mut __Reply__processor_set_policy_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_stack_usage(&mut self)
-     -> *mut __Reply__processor_set_stack_usage_t {
+     -> *mut __Reply__processor_set_stack_usage_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_info(&mut self)
-     -> *mut __Reply__processor_set_info_t {
+     -> *mut __Reply__processor_set_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__processor_set_subsystem {
     fn clone(&self) -> Self { *self }
@@ -5263,180 +5263,180 @@ pub struct Union___RequestUnion__task_subsystem {
 }
 impl Union___RequestUnion__task_subsystem {
     pub unsafe fn Request_task_create(&mut self)
-     -> *mut __Request__task_create_t {
+     -> *mut __Request__task_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_terminate(&mut self)
-     -> *mut __Request__task_terminate_t {
+     -> *mut __Request__task_terminate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_threads(&mut self)
-     -> *mut __Request__task_threads_t {
+     -> *mut __Request__task_threads_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_ports_register(&mut self)
-     -> *mut __Request__mach_ports_register_t {
+     -> *mut __Request__mach_ports_register_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_ports_lookup(&mut self)
-     -> *mut __Request__mach_ports_lookup_t {
+     -> *mut __Request__mach_ports_lookup_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_info(&mut self)
-     -> *mut __Request__task_info_t {
+     -> *mut __Request__task_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_info(&mut self)
-     -> *mut __Request__task_set_info_t {
+     -> *mut __Request__task_set_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_suspend(&mut self)
-     -> *mut __Request__task_suspend_t {
+     -> *mut __Request__task_suspend_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_resume(&mut self)
-     -> *mut __Request__task_resume_t {
+     -> *mut __Request__task_resume_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_get_special_port(&mut self)
-     -> *mut __Request__task_get_special_port_t {
+     -> *mut __Request__task_get_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_special_port(&mut self)
-     -> *mut __Request__task_set_special_port_t {
+     -> *mut __Request__task_set_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_create(&mut self)
-     -> *mut __Request__thread_create_t {
+     -> *mut __Request__thread_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_create_running(&mut self)
-     -> *mut __Request__thread_create_running_t {
+     -> *mut __Request__thread_create_running_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_exception_ports(&mut self)
-     -> *mut __Request__task_set_exception_ports_t {
+     -> *mut __Request__task_set_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_get_exception_ports(&mut self)
-     -> *mut __Request__task_get_exception_ports_t {
+     -> *mut __Request__task_get_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_swap_exception_ports(&mut self)
-     -> *mut __Request__task_swap_exception_ports_t {
+     -> *mut __Request__task_swap_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_lock_set_create(&mut self)
-     -> *mut __Request__lock_set_create_t {
+     -> *mut __Request__lock_set_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_lock_set_destroy(&mut self)
-     -> *mut __Request__lock_set_destroy_t {
+     -> *mut __Request__lock_set_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_semaphore_create(&mut self)
-     -> *mut __Request__semaphore_create_t {
+     -> *mut __Request__semaphore_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_semaphore_destroy(&mut self)
-     -> *mut __Request__semaphore_destroy_t {
+     -> *mut __Request__semaphore_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_policy_set(&mut self)
-     -> *mut __Request__task_policy_set_t {
+     -> *mut __Request__task_policy_set_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_policy_get(&mut self)
-     -> *mut __Request__task_policy_get_t {
+     -> *mut __Request__task_policy_get_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_sample(&mut self)
-     -> *mut __Request__task_sample_t {
+     -> *mut __Request__task_sample_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_policy(&mut self)
-     -> *mut __Request__task_policy_t {
+     -> *mut __Request__task_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_emulation(&mut self)
-     -> *mut __Request__task_set_emulation_t {
+     -> *mut __Request__task_set_emulation_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_get_emulation_vector(&mut self)
-     -> *mut __Request__task_get_emulation_vector_t {
+     -> *mut __Request__task_get_emulation_vector_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_emulation_vector(&mut self)
-     -> *mut __Request__task_set_emulation_vector_t {
+     -> *mut __Request__task_set_emulation_vector_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_ras_pc(&mut self)
-     -> *mut __Request__task_set_ras_pc_t {
+     -> *mut __Request__task_set_ras_pc_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_zone_info(&mut self)
-     -> *mut __Request__task_zone_info_t {
+     -> *mut __Request__task_zone_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_assign(&mut self)
-     -> *mut __Request__task_assign_t {
+     -> *mut __Request__task_assign_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_assign_default(&mut self)
-     -> *mut __Request__task_assign_default_t {
+     -> *mut __Request__task_assign_default_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_get_assignment(&mut self)
-     -> *mut __Request__task_get_assignment_t {
+     -> *mut __Request__task_get_assignment_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_policy(&mut self)
-     -> *mut __Request__task_set_policy_t {
+     -> *mut __Request__task_set_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_get_state(&mut self)
-     -> *mut __Request__task_get_state_t {
+     -> *mut __Request__task_get_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_state(&mut self)
-     -> *mut __Request__task_set_state_t {
+     -> *mut __Request__task_set_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__task_subsystem {
     fn clone(&self) -> Self { *self }
@@ -5969,179 +5969,179 @@ pub struct Union___ReplyUnion__task_subsystem {
 }
 impl Union___ReplyUnion__task_subsystem {
     pub unsafe fn Reply_task_create(&mut self)
-     -> *mut __Reply__task_create_t {
+     -> *mut __Reply__task_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_terminate(&mut self)
-     -> *mut __Reply__task_terminate_t {
+     -> *mut __Reply__task_terminate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_threads(&mut self)
-     -> *mut __Reply__task_threads_t {
+     -> *mut __Reply__task_threads_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_ports_register(&mut self)
-     -> *mut __Reply__mach_ports_register_t {
+     -> *mut __Reply__mach_ports_register_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_ports_lookup(&mut self)
-     -> *mut __Reply__mach_ports_lookup_t {
+     -> *mut __Reply__mach_ports_lookup_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_task_info(&mut self) -> *mut __Reply__task_info_t {
+    }}
+    pub unsafe fn Reply_task_info(&mut self) -> *mut __Reply__task_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_info(&mut self)
-     -> *mut __Reply__task_set_info_t {
+     -> *mut __Reply__task_set_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_suspend(&mut self)
-     -> *mut __Reply__task_suspend_t {
+     -> *mut __Reply__task_suspend_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_resume(&mut self)
-     -> *mut __Reply__task_resume_t {
+     -> *mut __Reply__task_resume_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_get_special_port(&mut self)
-     -> *mut __Reply__task_get_special_port_t {
+     -> *mut __Reply__task_get_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_special_port(&mut self)
-     -> *mut __Reply__task_set_special_port_t {
+     -> *mut __Reply__task_set_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_create(&mut self)
-     -> *mut __Reply__thread_create_t {
+     -> *mut __Reply__thread_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_create_running(&mut self)
-     -> *mut __Reply__thread_create_running_t {
+     -> *mut __Reply__thread_create_running_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_exception_ports(&mut self)
-     -> *mut __Reply__task_set_exception_ports_t {
+     -> *mut __Reply__task_set_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_get_exception_ports(&mut self)
-     -> *mut __Reply__task_get_exception_ports_t {
+     -> *mut __Reply__task_get_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_swap_exception_ports(&mut self)
-     -> *mut __Reply__task_swap_exception_ports_t {
+     -> *mut __Reply__task_swap_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_lock_set_create(&mut self)
-     -> *mut __Reply__lock_set_create_t {
+     -> *mut __Reply__lock_set_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_lock_set_destroy(&mut self)
-     -> *mut __Reply__lock_set_destroy_t {
+     -> *mut __Reply__lock_set_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_semaphore_create(&mut self)
-     -> *mut __Reply__semaphore_create_t {
+     -> *mut __Reply__semaphore_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_semaphore_destroy(&mut self)
-     -> *mut __Reply__semaphore_destroy_t {
+     -> *mut __Reply__semaphore_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_policy_set(&mut self)
-     -> *mut __Reply__task_policy_set_t {
+     -> *mut __Reply__task_policy_set_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_policy_get(&mut self)
-     -> *mut __Reply__task_policy_get_t {
+     -> *mut __Reply__task_policy_get_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_sample(&mut self)
-     -> *mut __Reply__task_sample_t {
+     -> *mut __Reply__task_sample_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_policy(&mut self)
-     -> *mut __Reply__task_policy_t {
+     -> *mut __Reply__task_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_emulation(&mut self)
-     -> *mut __Reply__task_set_emulation_t {
+     -> *mut __Reply__task_set_emulation_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_get_emulation_vector(&mut self)
-     -> *mut __Reply__task_get_emulation_vector_t {
+     -> *mut __Reply__task_get_emulation_vector_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_emulation_vector(&mut self)
-     -> *mut __Reply__task_set_emulation_vector_t {
+     -> *mut __Reply__task_set_emulation_vector_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_ras_pc(&mut self)
-     -> *mut __Reply__task_set_ras_pc_t {
+     -> *mut __Reply__task_set_ras_pc_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_zone_info(&mut self)
-     -> *mut __Reply__task_zone_info_t {
+     -> *mut __Reply__task_zone_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_assign(&mut self)
-     -> *mut __Reply__task_assign_t {
+     -> *mut __Reply__task_assign_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_assign_default(&mut self)
-     -> *mut __Reply__task_assign_default_t {
+     -> *mut __Reply__task_assign_default_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_get_assignment(&mut self)
-     -> *mut __Reply__task_get_assignment_t {
+     -> *mut __Reply__task_get_assignment_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_policy(&mut self)
-     -> *mut __Reply__task_set_policy_t {
+     -> *mut __Reply__task_set_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_get_state(&mut self)
-     -> *mut __Reply__task_get_state_t {
+     -> *mut __Reply__task_get_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_state(&mut self)
-     -> *mut __Reply__task_set_state_t {
+     -> *mut __Reply__task_set_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__task_subsystem {
     fn clone(&self) -> Self { *self }
@@ -6520,130 +6520,130 @@ pub struct Union___RequestUnion__thread_act_subsystem {
 }
 impl Union___RequestUnion__thread_act_subsystem {
     pub unsafe fn Request_thread_terminate(&mut self)
-     -> *mut __Request__thread_terminate_t {
+     -> *mut __Request__thread_terminate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_act_get_state(&mut self)
-     -> *mut __Request__act_get_state_t {
+     -> *mut __Request__act_get_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_act_set_state(&mut self)
-     -> *mut __Request__act_set_state_t {
+     -> *mut __Request__act_set_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_get_state(&mut self)
-     -> *mut __Request__thread_get_state_t {
+     -> *mut __Request__thread_get_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_set_state(&mut self)
-     -> *mut __Request__thread_set_state_t {
+     -> *mut __Request__thread_set_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_suspend(&mut self)
-     -> *mut __Request__thread_suspend_t {
+     -> *mut __Request__thread_suspend_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_resume(&mut self)
-     -> *mut __Request__thread_resume_t {
+     -> *mut __Request__thread_resume_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_abort(&mut self)
-     -> *mut __Request__thread_abort_t {
+     -> *mut __Request__thread_abort_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_abort_safely(&mut self)
-     -> *mut __Request__thread_abort_safely_t {
+     -> *mut __Request__thread_abort_safely_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_depress_abort(&mut self)
-     -> *mut __Request__thread_depress_abort_t {
+     -> *mut __Request__thread_depress_abort_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_get_special_port(&mut self)
-     -> *mut __Request__thread_get_special_port_t {
+     -> *mut __Request__thread_get_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_set_special_port(&mut self)
-     -> *mut __Request__thread_set_special_port_t {
+     -> *mut __Request__thread_set_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_info(&mut self)
-     -> *mut __Request__thread_info_t {
+     -> *mut __Request__thread_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_set_exception_ports(&mut self)
-     -> *mut __Request__thread_set_exception_ports_t {
+     -> *mut __Request__thread_set_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_get_exception_ports(&mut self)
-     -> *mut __Request__thread_get_exception_ports_t {
+     -> *mut __Request__thread_get_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_swap_exception_ports(&mut self)
-     -> *mut __Request__thread_swap_exception_ports_t {
+     -> *mut __Request__thread_swap_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_policy(&mut self)
-     -> *mut __Request__thread_policy_t {
+     -> *mut __Request__thread_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_policy_set(&mut self)
-     -> *mut __Request__thread_policy_set_t {
+     -> *mut __Request__thread_policy_set_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_policy_get(&mut self)
-     -> *mut __Request__thread_policy_get_t {
+     -> *mut __Request__thread_policy_get_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_sample(&mut self)
-     -> *mut __Request__thread_sample_t {
+     -> *mut __Request__thread_sample_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_etap_trace_thread(&mut self)
-     -> *mut __Request__etap_trace_thread_t {
+     -> *mut __Request__etap_trace_thread_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_assign(&mut self)
-     -> *mut __Request__thread_assign_t {
+     -> *mut __Request__thread_assign_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_assign_default(&mut self)
-     -> *mut __Request__thread_assign_default_t {
+     -> *mut __Request__thread_assign_default_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_get_assignment(&mut self)
-     -> *mut __Request__thread_get_assignment_t {
+     -> *mut __Request__thread_get_assignment_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_thread_set_policy(&mut self)
-     -> *mut __Request__thread_set_policy_t {
+     -> *mut __Request__thread_set_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__thread_act_subsystem {
     fn clone(&self) -> Self { *self }
@@ -7027,130 +7027,130 @@ pub struct Union___ReplyUnion__thread_act_subsystem {
 }
 impl Union___ReplyUnion__thread_act_subsystem {
     pub unsafe fn Reply_thread_terminate(&mut self)
-     -> *mut __Reply__thread_terminate_t {
+     -> *mut __Reply__thread_terminate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_act_get_state(&mut self)
-     -> *mut __Reply__act_get_state_t {
+     -> *mut __Reply__act_get_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_act_set_state(&mut self)
-     -> *mut __Reply__act_set_state_t {
+     -> *mut __Reply__act_set_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_get_state(&mut self)
-     -> *mut __Reply__thread_get_state_t {
+     -> *mut __Reply__thread_get_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_set_state(&mut self)
-     -> *mut __Reply__thread_set_state_t {
+     -> *mut __Reply__thread_set_state_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_suspend(&mut self)
-     -> *mut __Reply__thread_suspend_t {
+     -> *mut __Reply__thread_suspend_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_resume(&mut self)
-     -> *mut __Reply__thread_resume_t {
+     -> *mut __Reply__thread_resume_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_abort(&mut self)
-     -> *mut __Reply__thread_abort_t {
+     -> *mut __Reply__thread_abort_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_abort_safely(&mut self)
-     -> *mut __Reply__thread_abort_safely_t {
+     -> *mut __Reply__thread_abort_safely_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_depress_abort(&mut self)
-     -> *mut __Reply__thread_depress_abort_t {
+     -> *mut __Reply__thread_depress_abort_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_get_special_port(&mut self)
-     -> *mut __Reply__thread_get_special_port_t {
+     -> *mut __Reply__thread_get_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_set_special_port(&mut self)
-     -> *mut __Reply__thread_set_special_port_t {
+     -> *mut __Reply__thread_set_special_port_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_info(&mut self)
-     -> *mut __Reply__thread_info_t {
+     -> *mut __Reply__thread_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_set_exception_ports(&mut self)
-     -> *mut __Reply__thread_set_exception_ports_t {
+     -> *mut __Reply__thread_set_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_get_exception_ports(&mut self)
-     -> *mut __Reply__thread_get_exception_ports_t {
+     -> *mut __Reply__thread_get_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_swap_exception_ports(&mut self)
-     -> *mut __Reply__thread_swap_exception_ports_t {
+     -> *mut __Reply__thread_swap_exception_ports_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_policy(&mut self)
-     -> *mut __Reply__thread_policy_t {
+     -> *mut __Reply__thread_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_policy_set(&mut self)
-     -> *mut __Reply__thread_policy_set_t {
+     -> *mut __Reply__thread_policy_set_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_policy_get(&mut self)
-     -> *mut __Reply__thread_policy_get_t {
+     -> *mut __Reply__thread_policy_get_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_sample(&mut self)
-     -> *mut __Reply__thread_sample_t {
+     -> *mut __Reply__thread_sample_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_etap_trace_thread(&mut self)
-     -> *mut __Reply__etap_trace_thread_t {
+     -> *mut __Reply__etap_trace_thread_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_assign(&mut self)
-     -> *mut __Reply__thread_assign_t {
+     -> *mut __Reply__thread_assign_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_assign_default(&mut self)
-     -> *mut __Reply__thread_assign_default_t {
+     -> *mut __Reply__thread_assign_default_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_get_assignment(&mut self)
-     -> *mut __Reply__thread_get_assignment_t {
+     -> *mut __Reply__thread_get_assignment_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_thread_set_policy(&mut self)
-     -> *mut __Reply__thread_set_policy_t {
+     -> *mut __Reply__thread_set_policy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__thread_act_subsystem {
     fn clone(&self) -> Self { *self }
@@ -7611,134 +7611,134 @@ pub struct Union___RequestUnion__vm_map_subsystem {
 }
 impl Union___RequestUnion__vm_map_subsystem {
     pub unsafe fn Request_vm_region(&mut self)
-     -> *mut __Request__vm_region_t {
+     -> *mut __Request__vm_region_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_allocate(&mut self)
-     -> *mut __Request__vm_allocate_t {
+     -> *mut __Request__vm_allocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_deallocate(&mut self)
-     -> *mut __Request__vm_deallocate_t {
+     -> *mut __Request__vm_deallocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_protect(&mut self)
-     -> *mut __Request__vm_protect_t {
+     -> *mut __Request__vm_protect_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_inherit(&mut self)
-     -> *mut __Request__vm_inherit_t {
+     -> *mut __Request__vm_inherit_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_read(&mut self) -> *mut __Request__vm_read_t {
+    }}
+    pub unsafe fn Request_vm_read(&mut self) -> *mut __Request__vm_read_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_read_list(&mut self)
-     -> *mut __Request__vm_read_list_t {
+     -> *mut __Request__vm_read_list_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_write(&mut self) -> *mut __Request__vm_write_t {
+    }}
+    pub unsafe fn Request_vm_write(&mut self) -> *mut __Request__vm_write_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_copy(&mut self) -> *mut __Request__vm_copy_t {
+    }}
+    pub unsafe fn Request_vm_copy(&mut self) -> *mut __Request__vm_copy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_read_overwrite(&mut self)
-     -> *mut __Request__vm_read_overwrite_t {
+     -> *mut __Request__vm_read_overwrite_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_msync(&mut self) -> *mut __Request__vm_msync_t {
+    }}
+    pub unsafe fn Request_vm_msync(&mut self) -> *mut __Request__vm_msync_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_behavior_set(&mut self)
-     -> *mut __Request__vm_behavior_set_t {
+     -> *mut __Request__vm_behavior_set_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_map(&mut self) -> *mut __Request__vm_map_t {
+    }}
+    pub unsafe fn Request_vm_map(&mut self) -> *mut __Request__vm_map_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_machine_attribute(&mut self)
-     -> *mut __Request__vm_machine_attribute_t {
+     -> *mut __Request__vm_machine_attribute_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Request_vm_remap(&mut self) -> *mut __Request__vm_remap_t {
+    }}
+    pub unsafe fn Request_vm_remap(&mut self) -> *mut __Request__vm_remap_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_wire(&mut self)
-     -> *mut __Request__task_wire_t {
+     -> *mut __Request__task_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_make_memory_entry(&mut self)
-     -> *mut __Request__mach_make_memory_entry_t {
+     -> *mut __Request__mach_make_memory_entry_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_map_page_query(&mut self)
-     -> *mut __Request__vm_map_page_query_t {
+     -> *mut __Request__vm_map_page_query_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_vm_region_info(&mut self)
-     -> *mut __Request__mach_vm_region_info_t {
+     -> *mut __Request__mach_vm_region_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_mapped_pages_info(&mut self)
-     -> *mut __Request__vm_mapped_pages_info_t {
+     -> *mut __Request__vm_mapped_pages_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_region_recurse(&mut self)
-     -> *mut __Request__vm_region_recurse_t {
+     -> *mut __Request__vm_region_recurse_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_region_recurse_64(&mut self)
-     -> *mut __Request__vm_region_recurse_64_t {
+     -> *mut __Request__vm_region_recurse_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_vm_region_info_64(&mut self)
-     -> *mut __Request__mach_vm_region_info_64_t {
+     -> *mut __Request__mach_vm_region_info_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_region_64(&mut self)
-     -> *mut __Request__vm_region_64_t {
+     -> *mut __Request__vm_region_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_make_memory_entry_64(&mut self)
-     -> *mut __Request__mach_make_memory_entry_64_t {
+     -> *mut __Request__mach_make_memory_entry_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_map_64(&mut self)
-     -> *mut __Request__vm_map_64_t {
+     -> *mut __Request__vm_map_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_vm_purgable_control(&mut self)
-     -> *mut __Request__vm_purgable_control_t {
+     -> *mut __Request__vm_purgable_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__vm_map_subsystem {
     fn clone(&self) -> Self { *self }
@@ -8142,120 +8142,120 @@ pub struct Union___ReplyUnion__vm_map_subsystem {
     pub _bindgen_data_: [u32; 1033usize],
 }
 impl Union___ReplyUnion__vm_map_subsystem {
-    pub unsafe fn Reply_vm_region(&mut self) -> *mut __Reply__vm_region_t {
+    pub unsafe fn Reply_vm_region(&mut self) -> *mut __Reply__vm_region_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_allocate(&mut self)
-     -> *mut __Reply__vm_allocate_t {
+     -> *mut __Reply__vm_allocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_deallocate(&mut self)
-     -> *mut __Reply__vm_deallocate_t {
+     -> *mut __Reply__vm_deallocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_protect(&mut self) -> *mut __Reply__vm_protect_t {
+    }}
+    pub unsafe fn Reply_vm_protect(&mut self) -> *mut __Reply__vm_protect_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_inherit(&mut self) -> *mut __Reply__vm_inherit_t {
+    }}
+    pub unsafe fn Reply_vm_inherit(&mut self) -> *mut __Reply__vm_inherit_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_read(&mut self) -> *mut __Reply__vm_read_t {
+    }}
+    pub unsafe fn Reply_vm_read(&mut self) -> *mut __Reply__vm_read_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_read_list(&mut self)
-     -> *mut __Reply__vm_read_list_t {
+     -> *mut __Reply__vm_read_list_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_write(&mut self) -> *mut __Reply__vm_write_t {
+    }}
+    pub unsafe fn Reply_vm_write(&mut self) -> *mut __Reply__vm_write_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_copy(&mut self) -> *mut __Reply__vm_copy_t {
+    }}
+    pub unsafe fn Reply_vm_copy(&mut self) -> *mut __Reply__vm_copy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_read_overwrite(&mut self)
-     -> *mut __Reply__vm_read_overwrite_t {
+     -> *mut __Reply__vm_read_overwrite_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_msync(&mut self) -> *mut __Reply__vm_msync_t {
+    }}
+    pub unsafe fn Reply_vm_msync(&mut self) -> *mut __Reply__vm_msync_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_behavior_set(&mut self)
-     -> *mut __Reply__vm_behavior_set_t {
+     -> *mut __Reply__vm_behavior_set_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_map(&mut self) -> *mut __Reply__vm_map_t {
+    }}
+    pub unsafe fn Reply_vm_map(&mut self) -> *mut __Reply__vm_map_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_machine_attribute(&mut self)
-     -> *mut __Reply__vm_machine_attribute_t {
+     -> *mut __Reply__vm_machine_attribute_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_remap(&mut self) -> *mut __Reply__vm_remap_t {
+    }}
+    pub unsafe fn Reply_vm_remap(&mut self) -> *mut __Reply__vm_remap_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_task_wire(&mut self) -> *mut __Reply__task_wire_t {
+    }}
+    pub unsafe fn Reply_task_wire(&mut self) -> *mut __Reply__task_wire_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_make_memory_entry(&mut self)
-     -> *mut __Reply__mach_make_memory_entry_t {
+     -> *mut __Reply__mach_make_memory_entry_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_map_page_query(&mut self)
-     -> *mut __Reply__vm_map_page_query_t {
+     -> *mut __Reply__vm_map_page_query_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_mapped_pages_info(&mut self)
-     -> *mut __Reply__vm_mapped_pages_info_t {
+     -> *mut __Reply__vm_mapped_pages_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_region_recurse(&mut self)
-     -> *mut __Reply__vm_region_recurse_t {
+     -> *mut __Reply__vm_region_recurse_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_region_recurse_64(&mut self)
-     -> *mut __Reply__vm_region_recurse_64_t {
+     -> *mut __Reply__vm_region_recurse_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_region_64(&mut self)
-     -> *mut __Reply__vm_region_64_t {
+     -> *mut __Reply__vm_region_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_make_memory_entry_64(&mut self)
-     -> *mut __Reply__mach_make_memory_entry_64_t {
+     -> *mut __Reply__mach_make_memory_entry_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
-    pub unsafe fn Reply_vm_map_64(&mut self) -> *mut __Reply__vm_map_64_t {
+    }}
+    pub unsafe fn Reply_vm_map_64(&mut self) -> *mut __Reply__vm_map_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_vm_purgable_control(&mut self)
-     -> *mut __Reply__vm_purgable_control_t {
+     -> *mut __Reply__vm_purgable_control_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__vm_map_subsystem {
     fn clone(&self) -> Self { *self }
@@ -8714,155 +8714,155 @@ pub struct Union___RequestUnion__mach_port_subsystem {
 }
 impl Union___RequestUnion__mach_port_subsystem {
     pub unsafe fn Request_mach_port_names(&mut self)
-     -> *mut __Request__mach_port_names_t {
+     -> *mut __Request__mach_port_names_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_type(&mut self)
-     -> *mut __Request__mach_port_type_t {
+     -> *mut __Request__mach_port_type_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_rename(&mut self)
-     -> *mut __Request__mach_port_rename_t {
+     -> *mut __Request__mach_port_rename_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_allocate_name(&mut self)
-     -> *mut __Request__mach_port_allocate_name_t {
+     -> *mut __Request__mach_port_allocate_name_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_allocate(&mut self)
-     -> *mut __Request__mach_port_allocate_t {
+     -> *mut __Request__mach_port_allocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_destroy(&mut self)
-     -> *mut __Request__mach_port_destroy_t {
+     -> *mut __Request__mach_port_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_deallocate(&mut self)
-     -> *mut __Request__mach_port_deallocate_t {
+     -> *mut __Request__mach_port_deallocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_get_refs(&mut self)
-     -> *mut __Request__mach_port_get_refs_t {
+     -> *mut __Request__mach_port_get_refs_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_mod_refs(&mut self)
-     -> *mut __Request__mach_port_mod_refs_t {
+     -> *mut __Request__mach_port_mod_refs_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_set_mscount(&mut self)
-     -> *mut __Request__mach_port_set_mscount_t {
+     -> *mut __Request__mach_port_set_mscount_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_get_set_status(&mut self)
-     -> *mut __Request__mach_port_get_set_status_t {
+     -> *mut __Request__mach_port_get_set_status_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_move_member(&mut self)
-     -> *mut __Request__mach_port_move_member_t {
+     -> *mut __Request__mach_port_move_member_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_request_notification(&mut self)
-     -> *mut __Request__mach_port_request_notification_t {
+     -> *mut __Request__mach_port_request_notification_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_insert_right(&mut self)
-     -> *mut __Request__mach_port_insert_right_t {
+     -> *mut __Request__mach_port_insert_right_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_extract_right(&mut self)
-     -> *mut __Request__mach_port_extract_right_t {
+     -> *mut __Request__mach_port_extract_right_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_set_seqno(&mut self)
-     -> *mut __Request__mach_port_set_seqno_t {
+     -> *mut __Request__mach_port_set_seqno_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_get_attributes(&mut self)
-     -> *mut __Request__mach_port_get_attributes_t {
+     -> *mut __Request__mach_port_get_attributes_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_set_attributes(&mut self)
-     -> *mut __Request__mach_port_set_attributes_t {
+     -> *mut __Request__mach_port_set_attributes_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_allocate_qos(&mut self)
-     -> *mut __Request__mach_port_allocate_qos_t {
+     -> *mut __Request__mach_port_allocate_qos_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_allocate_full(&mut self)
-     -> *mut __Request__mach_port_allocate_full_t {
+     -> *mut __Request__mach_port_allocate_full_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_task_set_port_space(&mut self)
-     -> *mut __Request__task_set_port_space_t {
+     -> *mut __Request__task_set_port_space_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_get_srights(&mut self)
-     -> *mut __Request__mach_port_get_srights_t {
+     -> *mut __Request__mach_port_get_srights_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_space_info(&mut self)
-     -> *mut __Request__mach_port_space_info_t {
+     -> *mut __Request__mach_port_space_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_dnrequest_info(&mut self)
-     -> *mut __Request__mach_port_dnrequest_info_t {
+     -> *mut __Request__mach_port_dnrequest_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_kernel_object(&mut self)
-     -> *mut __Request__mach_port_kernel_object_t {
+     -> *mut __Request__mach_port_kernel_object_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_insert_member(&mut self)
-     -> *mut __Request__mach_port_insert_member_t {
+     -> *mut __Request__mach_port_insert_member_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_extract_member(&mut self)
-     -> *mut __Request__mach_port_extract_member_t {
+     -> *mut __Request__mach_port_extract_member_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_get_context(&mut self)
-     -> *mut __Request__mach_port_get_context_t {
+     -> *mut __Request__mach_port_get_context_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_set_context(&mut self)
-     -> *mut __Request__mach_port_set_context_t {
+     -> *mut __Request__mach_port_set_context_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_port_kobject(&mut self)
-     -> *mut __Request__mach_port_kobject_t {
+     -> *mut __Request__mach_port_kobject_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__mach_port_subsystem {
     fn clone(&self) -> Self { *self }
@@ -9306,150 +9306,150 @@ pub struct Union___ReplyUnion__mach_port_subsystem {
 }
 impl Union___ReplyUnion__mach_port_subsystem {
     pub unsafe fn Reply_mach_port_names(&mut self)
-     -> *mut __Reply__mach_port_names_t {
+     -> *mut __Reply__mach_port_names_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_type(&mut self)
-     -> *mut __Reply__mach_port_type_t {
+     -> *mut __Reply__mach_port_type_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_rename(&mut self)
-     -> *mut __Reply__mach_port_rename_t {
+     -> *mut __Reply__mach_port_rename_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_allocate_name(&mut self)
-     -> *mut __Reply__mach_port_allocate_name_t {
+     -> *mut __Reply__mach_port_allocate_name_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_allocate(&mut self)
-     -> *mut __Reply__mach_port_allocate_t {
+     -> *mut __Reply__mach_port_allocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_destroy(&mut self)
-     -> *mut __Reply__mach_port_destroy_t {
+     -> *mut __Reply__mach_port_destroy_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_deallocate(&mut self)
-     -> *mut __Reply__mach_port_deallocate_t {
+     -> *mut __Reply__mach_port_deallocate_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_get_refs(&mut self)
-     -> *mut __Reply__mach_port_get_refs_t {
+     -> *mut __Reply__mach_port_get_refs_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_mod_refs(&mut self)
-     -> *mut __Reply__mach_port_mod_refs_t {
+     -> *mut __Reply__mach_port_mod_refs_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_set_mscount(&mut self)
-     -> *mut __Reply__mach_port_set_mscount_t {
+     -> *mut __Reply__mach_port_set_mscount_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_get_set_status(&mut self)
-     -> *mut __Reply__mach_port_get_set_status_t {
+     -> *mut __Reply__mach_port_get_set_status_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_move_member(&mut self)
-     -> *mut __Reply__mach_port_move_member_t {
+     -> *mut __Reply__mach_port_move_member_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_request_notification(&mut self)
-     -> *mut __Reply__mach_port_request_notification_t {
+     -> *mut __Reply__mach_port_request_notification_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_insert_right(&mut self)
-     -> *mut __Reply__mach_port_insert_right_t {
+     -> *mut __Reply__mach_port_insert_right_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_extract_right(&mut self)
-     -> *mut __Reply__mach_port_extract_right_t {
+     -> *mut __Reply__mach_port_extract_right_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_set_seqno(&mut self)
-     -> *mut __Reply__mach_port_set_seqno_t {
+     -> *mut __Reply__mach_port_set_seqno_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_get_attributes(&mut self)
-     -> *mut __Reply__mach_port_get_attributes_t {
+     -> *mut __Reply__mach_port_get_attributes_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_set_attributes(&mut self)
-     -> *mut __Reply__mach_port_set_attributes_t {
+     -> *mut __Reply__mach_port_set_attributes_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_allocate_qos(&mut self)
-     -> *mut __Reply__mach_port_allocate_qos_t {
+     -> *mut __Reply__mach_port_allocate_qos_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_allocate_full(&mut self)
-     -> *mut __Reply__mach_port_allocate_full_t {
+     -> *mut __Reply__mach_port_allocate_full_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_task_set_port_space(&mut self)
-     -> *mut __Reply__task_set_port_space_t {
+     -> *mut __Reply__task_set_port_space_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_get_srights(&mut self)
-     -> *mut __Reply__mach_port_get_srights_t {
+     -> *mut __Reply__mach_port_get_srights_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_dnrequest_info(&mut self)
-     -> *mut __Reply__mach_port_dnrequest_info_t {
+     -> *mut __Reply__mach_port_dnrequest_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_kernel_object(&mut self)
-     -> *mut __Reply__mach_port_kernel_object_t {
+     -> *mut __Reply__mach_port_kernel_object_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_insert_member(&mut self)
-     -> *mut __Reply__mach_port_insert_member_t {
+     -> *mut __Reply__mach_port_insert_member_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_extract_member(&mut self)
-     -> *mut __Reply__mach_port_extract_member_t {
+     -> *mut __Reply__mach_port_extract_member_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_get_context(&mut self)
-     -> *mut __Reply__mach_port_get_context_t {
+     -> *mut __Reply__mach_port_get_context_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_set_context(&mut self)
-     -> *mut __Reply__mach_port_set_context_t {
+     -> *mut __Reply__mach_port_set_context_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_port_kobject(&mut self)
-     -> *mut __Reply__mach_port_kobject_t {
+     -> *mut __Reply__mach_port_kobject_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__mach_port_subsystem {
     fn clone(&self) -> Self { *self }
@@ -9709,95 +9709,95 @@ pub struct Union___RequestUnion__mach_host_subsystem {
 }
 impl Union___RequestUnion__mach_host_subsystem {
     pub unsafe fn Request_host_info(&mut self)
-     -> *mut __Request__host_info_t {
+     -> *mut __Request__host_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_kernel_version(&mut self)
-     -> *mut __Request__host_kernel_version_t {
+     -> *mut __Request__host_kernel_version_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request__host_page_size(&mut self)
-     -> *mut __Request___host_page_size_t {
+     -> *mut __Request___host_page_size_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_memory_object_memory_entry(&mut self)
-     -> *mut __Request__mach_memory_object_memory_entry_t {
+     -> *mut __Request__mach_memory_object_memory_entry_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_processor_info(&mut self)
-     -> *mut __Request__host_processor_info_t {
+     -> *mut __Request__host_processor_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_get_io_master(&mut self)
-     -> *mut __Request__host_get_io_master_t {
+     -> *mut __Request__host_get_io_master_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_get_clock_service(&mut self)
-     -> *mut __Request__host_get_clock_service_t {
+     -> *mut __Request__host_get_clock_service_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_kmod_get_info(&mut self)
-     -> *mut __Request__kmod_get_info_t {
+     -> *mut __Request__kmod_get_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_zone_info(&mut self)
-     -> *mut __Request__host_zone_info_t {
+     -> *mut __Request__host_zone_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_virtual_physical_table_info(&mut self)
-     -> *mut __Request__host_virtual_physical_table_info_t {
+     -> *mut __Request__host_virtual_physical_table_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_default(&mut self)
-     -> *mut __Request__processor_set_default_t {
+     -> *mut __Request__processor_set_default_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_processor_set_create(&mut self)
-     -> *mut __Request__processor_set_create_t {
+     -> *mut __Request__processor_set_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_memory_object_memory_entry_64(&mut self)
-     -> *mut __Request__mach_memory_object_memory_entry_64_t {
+     -> *mut __Request__mach_memory_object_memory_entry_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_statistics(&mut self)
-     -> *mut __Request__host_statistics_t {
+     -> *mut __Request__host_statistics_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_request_notification(&mut self)
-     -> *mut __Request__host_request_notification_t {
+     -> *mut __Request__host_request_notification_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_lockgroup_info(&mut self)
-     -> *mut __Request__host_lockgroup_info_t {
+     -> *mut __Request__host_lockgroup_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_host_statistics64(&mut self)
-     -> *mut __Request__host_statistics64_t {
+     -> *mut __Request__host_statistics64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Request_mach_zone_info(&mut self)
-     -> *mut __Request__mach_zone_info_t {
+     -> *mut __Request__mach_zone_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___RequestUnion__mach_host_subsystem {
     fn clone(&self) -> Self { *self }
@@ -10091,95 +10091,95 @@ pub struct Union___ReplyUnion__mach_host_subsystem {
     pub _bindgen_data_: [u32; 266usize],
 }
 impl Union___ReplyUnion__mach_host_subsystem {
-    pub unsafe fn Reply_host_info(&mut self) -> *mut __Reply__host_info_t {
+    pub unsafe fn Reply_host_info(&mut self) -> *mut __Reply__host_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_kernel_version(&mut self)
-     -> *mut __Reply__host_kernel_version_t {
+     -> *mut __Reply__host_kernel_version_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply__host_page_size(&mut self)
-     -> *mut __Reply___host_page_size_t {
+     -> *mut __Reply___host_page_size_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_memory_object_memory_entry(&mut self)
-     -> *mut __Reply__mach_memory_object_memory_entry_t {
+     -> *mut __Reply__mach_memory_object_memory_entry_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_processor_info(&mut self)
-     -> *mut __Reply__host_processor_info_t {
+     -> *mut __Reply__host_processor_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_get_io_master(&mut self)
-     -> *mut __Reply__host_get_io_master_t {
+     -> *mut __Reply__host_get_io_master_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_get_clock_service(&mut self)
-     -> *mut __Reply__host_get_clock_service_t {
+     -> *mut __Reply__host_get_clock_service_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_kmod_get_info(&mut self)
-     -> *mut __Reply__kmod_get_info_t {
+     -> *mut __Reply__kmod_get_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_zone_info(&mut self)
-     -> *mut __Reply__host_zone_info_t {
+     -> *mut __Reply__host_zone_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_virtual_physical_table_info(&mut self)
-     -> *mut __Reply__host_virtual_physical_table_info_t {
+     -> *mut __Reply__host_virtual_physical_table_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_default(&mut self)
-     -> *mut __Reply__processor_set_default_t {
+     -> *mut __Reply__processor_set_default_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_processor_set_create(&mut self)
-     -> *mut __Reply__processor_set_create_t {
+     -> *mut __Reply__processor_set_create_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_memory_object_memory_entry_64(&mut self)
-     -> *mut __Reply__mach_memory_object_memory_entry_64_t {
+     -> *mut __Reply__mach_memory_object_memory_entry_64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_statistics(&mut self)
-     -> *mut __Reply__host_statistics_t {
+     -> *mut __Reply__host_statistics_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_request_notification(&mut self)
-     -> *mut __Reply__host_request_notification_t {
+     -> *mut __Reply__host_request_notification_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_lockgroup_info(&mut self)
-     -> *mut __Reply__host_lockgroup_info_t {
+     -> *mut __Reply__host_lockgroup_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_host_statistics64(&mut self)
-     -> *mut __Reply__host_statistics64_t {
+     -> *mut __Reply__host_statistics64_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
     pub unsafe fn Reply_mach_zone_info(&mut self)
-     -> *mut __Reply__mach_zone_info_t {
+     -> *mut __Reply__mach_zone_info_t { unsafe {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
-    }
+    }}
 }
 impl ::std::clone::Clone for Union___ReplyUnion__mach_host_subsystem {
     fn clone(&self) -> Self { *self }
@@ -10256,7 +10256,7 @@ pub type rpc_subsystem_t = *mut Struct_rpc_subsystem;
 pub type mach_error_t = kern_return_t;
 pub type mach_error_fn_t =
     ::std::option::Option<extern "C" fn() -> mach_error_t>;
-extern "C" {
+unsafe extern "C" {
     pub static mut KERNEL_SECURITY_TOKEN: security_token_t;
     pub static mut KERNEL_AUDIT_TOKEN: audit_token_t;
     pub static mut NDR_record: NDR_record_t;
@@ -10266,7 +10266,7 @@ extern "C" {
     pub static mut vm_page_mask: vm_size_t;
     pub static mut vm_page_shift: ::libc::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn mach_msg_overwrite(msg: *mut mach_msg_header_t,
                               option: mach_msg_option_t,
                               send_size: mach_msg_size_t,

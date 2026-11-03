@@ -17,23 +17,23 @@ use crate::{common::{self,
                                                  InstallMode,
                                                  LocalPackageUsage},
                      ui::{Status,
-                          UIWriter,
-                          UI}},
+                          UI,
+                          UIWriter}},
             hcore::{self,
+                    ChannelIdent,
                     fs::{self,
-                         cache_artifact_path,
-                         FS_ROOT_PATH},
+                         FS_ROOT_PATH,
+                         cache_artifact_path},
                     package::{PackageIdent,
                               PackageInstall,
                               PackageTarget},
-                    url::default_bldr_url,
-                    ChannelIdent}};
+                    url::default_bldr_url}};
 use std::path::PathBuf;
 
-use crate::{error::{Error,
-                    Result},
-            PRODUCT,
-            VERSION};
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
+                    Result}};
 
 const RETRY_LIMIT: u8 = 5;
 const INTERNAL_TOOLING_CHANNEL_ENVVAR: &str = "DOJ_INTERNAL_BLDR_CHANNEL";

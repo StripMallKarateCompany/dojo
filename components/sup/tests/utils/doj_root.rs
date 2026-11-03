@@ -32,8 +32,8 @@ use std::{fs::File,
           time::SystemTime};
 
 use crate::hcore::{fs::PKG_PATH,
-                   package::{metadata::MetaFile,
-                             PackageIdent}};
+                   package::{PackageIdent,
+                             metadata::MetaFile}};
 use tempfile::{Builder,
                TempDir};
 

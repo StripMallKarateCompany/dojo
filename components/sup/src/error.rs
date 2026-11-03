@@ -39,11 +39,11 @@
 use dojo_api_client;
 use dojo_butterfly;
 use dojo_common::{self,
+                  PROGRAM_NAME,
                   output::{self,
                            OutputContext,
                            OutputVerbosity,
-                           StructuredOutput},
-                  PROGRAM_NAME};
+                           StructuredOutput}};
 use dojo_core::{self,
                 os::process::Pid,
                 package::{self,

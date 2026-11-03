@@ -28,10 +28,10 @@ use crate::{error::{Error,
                     Result},
             gossip,
             message,
-            rumor::{departure::Departure,
+            rumor::{Rumor,
+                    departure::Departure,
                     service_config::ServiceConfig,
-                    service_file::ServiceFile,
-                    Rumor}};
+                    service_file::ServiceFile}};
 
 /// Sends rumors to one member's gossip port, optionally encrypting them with a ring key. Each
 /// send opens its own connection.

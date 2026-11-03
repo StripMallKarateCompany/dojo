@@ -28,25 +28,25 @@ pub mod service;
 pub mod service_config;
 pub mod service_file;
 
-use std::{collections::{hash_map::Entry,
-                        HashMap},
+use std::{collections::{HashMap,
+                        hash_map::Entry},
           convert::TryFrom,
           default::Default,
           ops::Deref,
           result,
-          sync::{atomic::{AtomicUsize,
-                          Ordering},
-                 Arc,
+          sync::{Arc,
                  LazyLock,
-                 RwLock}};
+                 RwLock,
+                 atomic::{AtomicUsize,
+                          Ordering}}};
 
 use prometheus::IntCounterVec;
 use prost::Message as ProstMessage;
-use serde::{ser::{SerializeMap,
+use serde::{Serialize,
+            Serializer,
+            ser::{SerializeMap,
                   SerializeSeq,
-                  SerializeStruct},
-            Serialize,
-            Serializer};
+                  SerializeStruct}};
 
 pub use self::{departure::Departure,
                election::{Election,

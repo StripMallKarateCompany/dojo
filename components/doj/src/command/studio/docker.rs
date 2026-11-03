@@ -24,15 +24,15 @@ use crate::{command::studio::enter::ARTIFACT_PATH_ENVVAR,
             common::ui::UI,
             hcore::{crypto::default_cache_key_path,
                     env as henv,
-                    fs::{find_command,
-                         CACHE_ARTIFACT_PATH,
-                         CACHE_KEY_PATH},
+                    fs::{CACHE_ARTIFACT_PATH,
+                         CACHE_KEY_PATH,
+                         find_command},
                     os::process,
                     package::target}};
 
-use crate::{error::{Error,
-                    Result},
-            VERSION};
+use crate::{VERSION,
+            error::{Error,
+                    Result}};
 
 const DOCKER_CMD: &str = "docker";
 const DOCKER_CMD_ENVVAR: &str = "DOJ_DOCKER_BINARY";
@@ -267,7 +267,9 @@ fn unset_proxy_env_vars() {
     for var in &["http_proxy", "https_proxy"] {
         if henv::var(var).is_ok() {
             debug!("Unsetting process environment variable '{}'", var);
-            env::remove_var(var);
+            // SAFETY: doj has one thread here: `start` joins the clap parser's before a subcommand
+            // runs.
+            unsafe { env::remove_var(var) };
         }
     }
 }
@@ -292,8 +294,8 @@ fn image_identifier(target: target::PackageTarget) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{image_identifier,
-                DOCKER_IMAGE};
+    use super::{DOCKER_IMAGE,
+                image_identifier};
     use crate::VERSION;
 
     use crate::hcore::package::target;

@@ -19,9 +19,9 @@ use dojo_launcher::{init,
                     server::{self,
                              Ending}};
 use env_logger;
-use log::{error,
-          log,
-          Level};
+use log::{Level,
+          error,
+          log};
 use std::env;
 
 fn main() {

@@ -28,17 +28,17 @@
 use crate::{api_client::{self,
                          Client},
             common::ui::{Status,
-                         UIWriter,
-                         UI},
-            hcore::{package::{PackageIdent,
-                              PackageTarget},
-                    ChannelIdent}};
+                         UI,
+                         UIWriter},
+            hcore::{ChannelIdent,
+                    package::{PackageIdent,
+                              PackageTarget}}};
 use dojo_api_client::StatusCode;
 
-use crate::{error::{Error,
-                    Result},
-            PRODUCT,
-            VERSION};
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
+                    Result}};
 
 /// Promote a package to the specified channel.
 ///

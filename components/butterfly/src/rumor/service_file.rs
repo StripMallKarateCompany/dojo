@@ -19,14 +19,14 @@
 use crate::{error::{Error,
                     Result},
             protocol::{self,
+                       FromProto,
                        newscast::{self,
-                                  Rumor as ProtoRumor},
-                       FromProto},
+                                  Rumor as ProtoRumor}},
             rumor::{Rumor,
                     RumorPayload,
                     RumorType}};
-use dojo_core::{crypto::{keys::box_key_pair::WrappedSealedBox,
-                         BoxKeyPair},
+use dojo_core::{crypto::{BoxKeyPair,
+                         keys::box_key_pair::WrappedSealedBox},
                 service::ServiceGroup};
 use std::{cmp::Ordering,
           mem,

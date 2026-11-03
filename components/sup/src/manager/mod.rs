@@ -27,8 +27,8 @@ mod sys;
 mod user_config_watcher;
 
 use self::{peer_watcher::PeerWatcher,
-           self_updater::{SelfUpdater,
-                          SUP_PKG_IDENT},
+           self_updater::{SUP_PKG_IDENT,
+                          SelfUpdater},
            service::{ConfigRendering,
                      DesiredState,
                      HealthCheck,
@@ -41,7 +41,8 @@ use self::{peer_watcher::PeerWatcher,
            spec_watcher::SpecWatcher,
            sys::Sys,
            user_config_watcher::UserConfigWatcher};
-use crate::{census::{CensusRing,
+use crate::{VERSION,
+            census::{CensusRing,
                      CensusRingProxy},
             config::GossipListenAddr,
             ctl_gateway::{self,
@@ -52,18 +53,18 @@ use crate::{census::{CensusRing,
             event::{self,
                     EventConnectionInfo,
                     EventCore},
-            http_gateway,
-            VERSION};
+            http_gateway};
 use cpu_time::ProcessTime;
 use dojo_butterfly::{member::Member,
-                     server::{timing::Timing,
-                              ServerProxy,
-                              Suitability},
+                     server::{ServerProxy,
+                              Suitability,
+                              timing::Timing},
                      trace::Trace};
-use dojo_common::{outputln,
-                  types::ListenCtlAddr,
-                  FeatureFlag};
-use dojo_core::{crypto::SymKey,
+use dojo_common::{FeatureFlag,
+                  outputln,
+                  types::ListenCtlAddr};
+use dojo_core::{ChannelIdent,
+                crypto::SymKey,
                 env::{self,
                       Config},
                 fs::FS_ROOT_PATH,
@@ -76,23 +77,22 @@ use dojo_core::{crypto::SymKey,
                           PackageIdent,
                           PackageInstall},
                 service::ServiceGroup,
-                util::ToI64,
-                ChannelIdent};
-use dojo_launcher_client::{LauncherCli,
-                           LAUNCHER_LOCK_CLEAN_ENV,
-                           LAUNCHER_PID_ENV};
+                util::ToI64};
+use dojo_launcher_client::{LAUNCHER_LOCK_CLEAN_ENV,
+                           LAUNCHER_PID_ENV,
+                           LauncherCli};
 use dojo_sup_protocol;
 use num_cpus;
 #[cfg(unix)]
 use prometheus::{HistogramVec,
                  IntGauge,
                  IntGaugeVec};
-use rustls::{pki_types::{pem::PemObject,
-                         CertificateDer,
-                         PrivateKeyDer},
-             server::WebPkiClientVerifier,
-             RootCertStore,
-             ServerConfig};
+use rustls::{RootCertStore,
+             ServerConfig,
+             pki_types::{CertificateDer,
+                         PrivateKeyDer,
+                         pem::PemObject},
+             server::WebPkiClientVerifier};
 use serde_json;
 use std::{self,
           collections::{HashMap,
@@ -111,12 +111,12 @@ use std::{self,
                  PathBuf},
           result,
           str::FromStr,
-          sync::{atomic::{AtomicBool,
-                          Ordering},
-                 Arc,
+          sync::{Arc,
                  LazyLock,
                  Mutex,
-                 RwLock},
+                 RwLock,
+                 atomic::{AtomicBool,
+                          Ordering}},
           thread,
           time::{Duration,
                  Instant,
@@ -979,7 +979,8 @@ impl Manager {
     // our specfile reconciliation logic to catch the fact that
     // the service needs to be restarted. At that point, this function
     // can be renamed; right now, it says exactly what it's doing.
-    fn stop_services_with_updates(&mut self) -> Vec<impl Future<Output = ()> + Send + 'static> {
+    fn stop_services_with_updates(&mut self)
+                                  -> Vec<impl Future<Output = ()> + Send + 'static + use<>> {
         self.take_services_with_updates()
             .into_iter()
             .map(|service| self.stop(service))
@@ -1120,7 +1121,7 @@ impl Manager {
     /// to have been removed from the internal list of active services
     /// already (see, e.g., take_services_with_updates and
     /// remove_service_from_state).
-    fn stop(&self, service: Service) -> impl Future<Output = ()> + Send + 'static {
+    fn stop(&self, service: Service) -> impl Future<Output = ()> + Send + 'static + use<> {
         Self::service_stop_future(service,
                                   Arc::clone(&self.user_config_watcher),
                                   Arc::clone(&self.updater),
@@ -1248,7 +1249,7 @@ impl Manager {
     /// shutdowns and restarts are turned into futures.
     fn operations_into_futures<O>(&mut self,
                                   ops: O)
-                                  -> Vec<impl Future<Output = ()> + Send + 'static>
+                                  -> Vec<impl Future<Output = ()> + Send + 'static + use<O>>
         where O: IntoIterator<Item = ServiceOperation>
     {
         ops.into_iter()
@@ -1688,8 +1689,8 @@ mod test {
     fn fd_count_rises_by_one_for_each_file_opened() {
         const CHILD: &str = "DOJ_TEST_FD_COUNT_CHILD";
         if std::env::var_os(CHILD).is_none() {
-            let out = std::process::Command::new(std::env::current_exe().unwrap())
-                .args(&["--exact",
+            let out =
+                std::process::Command::new(std::env::current_exe().unwrap()).args(&["--exact",
                         "manager::test::fd_count_rises_by_one_for_each_file_opened",
                         "--test-threads=1",
                         "--nocapture"])

@@ -27,21 +27,21 @@ use std::{collections::BTreeMap,
                  PathBuf},
           str::FromStr};
 
-use crate::{common::{command::package::install::{self,
+use crate::{PRODUCT,
+            VERSION,
+            common::{command::package::install::{self,
                                                  InstallHookMode,
                                                  InstallMode,
                                                  InstallSource,
                                                  LocalPackageUsage},
                      ui::UI},
-            hcore::{fs::cache_artifact_path,
+            hcore::{ChannelIdent,
+                    fs::cache_artifact_path,
                     package::{Identifiable,
                               PackageArchive,
                               PackageIdent,
                               PackageInstall,
-                              PackageTarget},
-                    ChannelIdent},
-            PRODUCT,
-            VERSION};
+                              PackageTarget}}};
 use termcolor::ColorChoice;
 
 use super::pkg::env::render_overlay;
@@ -51,8 +51,7 @@ use crate::error::{Error,
 pub const DECLARATION: &str = "shell.toml";
 pub const LOCK: &str = "shell.lock";
 const LOCK_VERSION: u32 = 1;
-const LOCK_HEADER: &str =
-    "# Written by `doj shell lock` from shell.toml: the release each package \
+const LOCK_HEADER: &str = "# Written by `doj shell lock` from shell.toml: the release each package \
                            resolved to, per target, and\n# the BLAKE2b checksum of every archive \
                            they and their dependencies install from.\n\n";
 
@@ -85,12 +84,12 @@ impl Declaration {
                 return Err(Error::ShellError(format!("no {} in {}: the directory declares no \
                                                       Dojo shell",
                                                      DECLARATION,
-                                                     dir.display())))
+                                                     dir.display())));
             }
             Err(e) => {
                 return Err(Error::ShellError(format!("cannot read {}: {}",
                                                      path.display(),
-                                                     e)))
+                                                     e)));
             }
         };
         let declaration: Declaration = toml::from_str(&text).map_err(|e| {
@@ -152,7 +151,7 @@ impl Lock {
             Err(e) => {
                 return Err(Error::ShellError(format!("cannot read {}: {}",
                                                      path.display(),
-                                                     e)))
+                                                     e)));
             }
         };
         let lock: Lock =
@@ -485,8 +484,8 @@ fn matching_pins(declaration: &Declaration,
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::hcore::crypto::{artifact,
-                               SigKeyPair};
+    use crate::hcore::crypto::{SigKeyPair,
+                               artifact};
     use std::fs::File;
     use tempfile::TempDir;
 

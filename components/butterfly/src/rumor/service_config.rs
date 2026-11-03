@@ -19,14 +19,14 @@
 use crate::{error::{Error,
                     Result},
             protocol::{self,
+                       FromProto,
                        newscast::{self,
-                                  Rumor as ProtoRumor},
-                       FromProto},
+                                  Rumor as ProtoRumor}},
             rumor::{Rumor,
                     RumorPayload,
                     RumorType}};
-use dojo_core::{crypto::{keys::box_key_pair::WrappedSealedBox,
-                         BoxKeyPair},
+use dojo_core::{crypto::{BoxKeyPair,
+                         keys::box_key_pair::WrappedSealedBox},
                 service::ServiceGroup};
 use std::{cmp::Ordering,
           mem,
@@ -119,8 +119,7 @@ impl FromProto<ProtoRumor> for ServiceConfig {
             RumorPayload::ServiceConfig(payload) => payload,
             _ => panic!("from-bytes service-config"),
         };
-        Ok(ServiceConfig { from_id:       rumor.from_id
-                                               .ok_or(Error::ProtocolMismatch("from-id"))?,
+        Ok(ServiceConfig { from_id:       rumor.from_id.ok_or(Error::ProtocolMismatch("from-id"))?,
                            service_group:
                                payload.service_group
                                       .ok_or(Error::ProtocolMismatch("service-group"))

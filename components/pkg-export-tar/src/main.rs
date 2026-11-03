@@ -4,9 +4,9 @@ use env_logger;
 #[macro_use]
 extern crate log;
 
-use crate::{common::{ui::{UIWriter,
-                          UI},
-                     PROGRAM_NAME},
+use crate::{common::{PROGRAM_NAME,
+                     ui::{UI,
+                          UIWriter}},
             export_tar::{Cli,
                          Result}};
 use clap::Command;

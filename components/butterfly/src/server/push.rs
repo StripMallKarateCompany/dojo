@@ -37,8 +37,8 @@ use crate::{gossip,
                     RumorKey,
                     RumorKind,
                     RumorType},
-            server::{timing::Timing,
-                     Server},
+            server::{Server,
+                     timing::Timing},
             trace::TraceKind};
 
 const FANOUT: usize = 5;

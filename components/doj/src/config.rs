@@ -20,8 +20,8 @@ use std::{fs::{self,
 use dirs;
 
 use crate::hcore::{config::ConfigFile,
-                   fs::{am_i_root,
-                        FS_ROOT_PATH}};
+                   fs::{FS_ROOT_PATH,
+                        am_i_root}};
 use toml;
 
 use crate::error::{Error,

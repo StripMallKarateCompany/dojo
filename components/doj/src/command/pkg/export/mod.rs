@@ -14,8 +14,8 @@
 
 use crate::error::Result;
 use dojo_common::ui::UI;
-use dojo_core::{package::PackageIdent,
-                ChannelIdent};
+use dojo_core::{ChannelIdent,
+                package::PackageIdent};
 
 pub mod docker;
 pub mod tar;
@@ -52,11 +52,11 @@ mod inner {
               ffi::OsString};
 
     use crate::{common::ui::UI,
-                hcore::{env::Config,
+                hcore::{ChannelIdent,
+                        env::Config,
                         fs::find_command,
                         package::PackageIdent,
-                        url::BLDR_URL_ENVVAR,
-                        ChannelIdent}};
+                        url::BLDR_URL_ENVVAR}};
 
     use super::ExportFormat;
     use crate::{command,
@@ -78,8 +78,13 @@ mod inner {
 
         if let Some(cmd) = find_command(command.to_string_lossy().as_ref()) {
             let pkg_arg = OsString::from(&ident.to_string());
-            env::set_var(BLDR_URL_ENVVAR, url);
-            env::set_var(ChannelIdent::ENVVAR, channel.to_string());
+            // SAFETY: doj has one thread here: `start` joins the clap parser's before a subcommand
+            // runs, and the blocking HTTP client an install used was dropped, which joins its
+            // thread.
+            unsafe {
+                env::set_var(BLDR_URL_ENVVAR, url);
+                env::set_var(ChannelIdent::ENVVAR, channel.to_string());
+            }
             // TODO fn: Currently, the PATH-setting behavior of `doj pkg exec` is being used to put
             // dependent programs such as `docker` on `$PATH`. This is not ideal and we should be
             // using `hcore::os::process::become_command` but for the moment we'll continue to use
@@ -96,10 +101,10 @@ mod inner {
     use super::ExportFormat;
     use crate::error::{Error,
                        Result};
-    use dojo_common::ui::{UIWriter,
-                          UI};
-    use dojo_core::{package::PackageIdent,
-                    ChannelIdent};
+    use dojo_common::ui::{UI,
+                          UIWriter};
+    use dojo_core::{ChannelIdent,
+                    package::PackageIdent};
     use std::env;
 
     pub fn format_for(ui: &mut UI, value: &str) -> Result<ExportFormat> {

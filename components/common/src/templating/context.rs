@@ -52,9 +52,9 @@ use std::{borrow::Cow,
           path::PathBuf,
           result};
 
-use serde::{ser::SerializeMap,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeMap};
 
 use super::{config::Cfg,
             package::{Env,
@@ -219,10 +219,10 @@ mod tests {
     use serde_json;
     use tempfile::TempDir;
 
-    use crate::templating::{config::{Cfg,
+    use crate::templating::{TemplateRenderer,
+                            config::{Cfg,
                                      PackageConfigPaths},
-                            test_helpers::*,
-                            TemplateRenderer};
+                            test_helpers::*};
 
     ////////////////////////////////////////////////////////////////////////
 

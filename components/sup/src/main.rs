@@ -24,27 +24,27 @@ use crate::sup::{cli::cli,
                          SupError},
                  manager::{Manager,
                            ManagerConfig,
-                           TLSConfig,
-                           PROC_LOCK_FILE},
+                           PROC_LOCK_FILE,
+                           TLSConfig},
                  util};
 use clap::ArgMatches;
-use dojo_common::{cli::{cache_key_path_from_matches,
-                        GOSSIP_DEFAULT_PORT},
+use dojo_common::{FeatureFlag,
+                  cli::{GOSSIP_DEFAULT_PORT,
+                        cache_key_path_from_matches},
                   command::package::install::InstallSource,
                   output::{self,
                            OutputFormat,
                            OutputVerbosity},
                   outputln,
                   ui::{NONINTERACTIVE_ENVVAR,
-                       UI},
-                  FeatureFlag};
-use dojo_core::{crypto::{self,
+                       UI}};
+use dojo_core::{ChannelIdent,
+                crypto::{self,
                          SymKey},
                 url::{bldr_url_from_env,
-                      default_bldr_url},
-                ChannelIdent};
-use dojo_launcher_client::{LauncherCli,
-                           ERR_NO_RETRY_EXCODE};
+                      default_bldr_url}};
+use dojo_launcher_client::{ERR_NO_RETRY_EXCODE,
+                           LauncherCli};
 use dojo_sup_protocol::{ctl::ServiceBindList,
                         types::{ApplicationEnvironment,
                                 BindingMode,
@@ -697,7 +697,8 @@ mod test {
             let lock = lock_var();
             lock.set(key_cache.path());
 
-            env::set_var("DOJ_CACHE_KEY_PATH", key_cache.path());
+            // SAFETY: not shown: tests run on several threads (see `locked_env_var`).
+            unsafe { env::set_var("DOJ_CACHE_KEY_PATH", key_cache.path()) };
             let cmd_vec = vec![
                                "doj-sup",
                                "run",

@@ -18,13 +18,13 @@ use std::{borrow::Cow,
           str};
 
 use crate::crypto::sodium::{box_::{self,
-                                   gen_nonce,
                                    Nonce,
                                    PublicKey as BoxPublicKey,
-                                   SecretKey as BoxSecretKey},
+                                   SecretKey as BoxSecretKey,
+                                   gen_nonce},
                             sealedbox};
-use base64::{engine::general_purpose::STANDARD as BASE64,
-             Engine};
+use base64::{Engine,
+             engine::general_purpose::STANDARD as BASE64};
 use serde::{Deserialize,
             Serialize};
 
@@ -34,15 +34,15 @@ use super::{super::{ANONYMOUS_BOX_FORMAT_VERSION,
                     PUBLIC_KEY_SUFFIX,
                     SECRET_BOX_KEY_SUFFIX,
                     SECRET_BOX_KEY_VERSION},
+            KeyPair,
+            KeyType,
             get_key_revisions,
             mk_key_filename,
             mk_revision_string,
             parse_name_with_rev,
             read_key_bytes,
             read_key_bytes_from_str,
-            write_keypair_files,
-            KeyPair,
-            KeyType};
+            write_keypair_files};
 use crate::error::{Error,
                    Result};
 

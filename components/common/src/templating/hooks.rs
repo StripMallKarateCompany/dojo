@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::{package::Pkg,
-            TemplateRenderer};
+use super::{TemplateRenderer,
+            package::Pkg};
 use crate::{error::{Error,
                     Result},
             outputln};
@@ -27,8 +27,8 @@ use std::os::unix::process::{CommandExt,
 use std::{ffi::OsStr,
           fmt,
           fs::File,
-          io::{prelude::*,
-               BufReader},
+          io::{BufReader,
+               prelude::*},
           path::{Path,
                  PathBuf},
           process::{Child,

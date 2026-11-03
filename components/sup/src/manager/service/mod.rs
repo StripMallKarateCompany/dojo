@@ -57,18 +57,18 @@ pub use dojo_common::templating::{config::{Cfg,
 use dojo_common::{outputln,
                   templating::{config::CfgRenderer,
                                hooks::Hook}};
-use dojo_core::{crypto::hash,
-                fs::{atomic_write,
-                     svc_hooks_path,
+use dojo_core::{ChannelIdent,
+                crypto::hash,
+                fs::{FS_ROOT_PATH,
                      SvcDir,
-                     FS_ROOT_PATH},
-                package::{metadata::Bind,
-                          PackageIdent,
-                          PackageInstall},
+                     atomic_write,
+                     svc_hooks_path},
+                package::{PackageIdent,
+                          PackageInstall,
+                          metadata::Bind},
                 service::{HealthCheckInterval,
                           ServiceBind,
-                          ServiceGroup},
-                ChannelIdent};
+                          ServiceGroup}};
 use dojo_launcher_client::LauncherCli;
 use dojo_sup_protocol::types::BindingMode;
 pub use dojo_sup_protocol::types::{ProcessState,
@@ -76,9 +76,9 @@ pub use dojo_sup_protocol::types::{ProcessState,
                                    UpdateStrategy};
 use prometheus::{HistogramTimer,
                  HistogramVec};
-use serde::{ser::SerializeStruct,
-            Serialize,
-            Serializer};
+use serde::{Serialize,
+            Serializer,
+            ser::SerializeStruct};
 use std::{self,
           collections::HashSet,
           fmt,
@@ -294,7 +294,7 @@ impl Service {
 
     /// Return a future that will shut down a service, performing any
     /// necessary cleanup, and run its post-stop hook, if any.
-    pub fn stop(&self) -> impl Future<Output = Result<()>> + Send + 'static {
+    pub fn stop(&self) -> impl Future<Output = Result<()>> + Send + 'static + use<> {
         let service_group = self.service_group.clone();
         let gs = Arc::clone(&self.gateway_state);
         let stop_supervisor = self.supervisor.stop();
@@ -819,8 +819,7 @@ impl Service {
             match self.scheduled_health_check {
                 Some(scheduled_check_instant) if scheduled_check_instant > now => {
                     trace!("Skipping health check; next scheduled for {:?} (now: {:?})",
-                           scheduled_check_instant,
-                           now);
+                           scheduled_check_instant, now);
                 }
                 _ => self.run_health_check_hook(),
             }
@@ -934,8 +933,7 @@ impl Service {
             Some(already_scheduled_instant) if instant_to_schedule > already_scheduled_instant => {
                 trace!("Skipping health check schedule request for {:?}; there is already one \
                         scheduled sooner at {:?}",
-                       instant_to_schedule,
-                       already_scheduled_instant);
+                       instant_to_schedule, already_scheduled_instant);
             }
             _ => {
                 debug!("Scheduling next health check for ({}) in {}",

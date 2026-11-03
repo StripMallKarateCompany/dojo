@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{error::{Error,
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
                     Result,
-                    SupError},
-            PRODUCT,
-            VERSION};
+                    SupError}};
 use dojo_common::{self,
                   command::package::install::{InstallHookMode,
                                               InstallMode,
@@ -24,13 +24,13 @@ use dojo_common::{self,
                                               LocalPackageUsage},
                   outputln,
                   ui::UIWriter};
-use dojo_core::{env as henv,
+use dojo_core::{AUTH_TOKEN_ENVVAR,
+                ChannelIdent,
+                env as henv,
                 fs::{self,
                      FS_ROOT_PATH},
                 package::{PackageIdent,
-                          PackageInstall},
-                ChannelIdent,
-                AUTH_TOKEN_ENVVAR};
+                          PackageInstall}};
 use std::path::Path;
 
 static LOGKEY: &'static str = "UT";

@@ -14,14 +14,14 @@
 
 use crate::{api_client,
             common::ui::{Status,
+                         UI,
                          UIReader,
-                         UIWriter,
-                         UI}};
+                         UIWriter}};
 
-use crate::{error::{Error,
-                    Result},
-            PRODUCT,
-            VERSION};
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
+                    Result}};
 
 pub fn start(ui: &mut UI, bldr_url: &str, group_id: &str, token: &str, force: bool) -> Result<()> {
     if !force {

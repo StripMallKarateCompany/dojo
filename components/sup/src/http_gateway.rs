@@ -17,24 +17,24 @@ use crate::{error::{Result,
             manager::{self,
                       service::{HealthCheck,
                                 HealthCheckHook}}};
-use axum::{extract::{Path,
+use axum::{Json,
+           Router,
+           extract::{Path,
                      Request,
                      State},
-           http::{header,
-                  StatusCode},
+           http::{StatusCode,
+                  header},
            middleware::{self,
                         Next},
            response::{Html,
                       IntoResponse,
                       Response},
-           routing::get,
-           Json,
-           Router};
-use dojo_common::{cli::{LISTEN_HTTP_ADDRESS_ENVVAR,
+           routing::get};
+use dojo_common::{FeatureFlag,
+                  cli::{LISTEN_HTTP_ADDRESS_ENVVAR,
                         LISTEN_HTTP_DEFAULT_IP,
                         LISTEN_HTTP_DEFAULT_PORT},
-                  templating::hooks,
-                  FeatureFlag};
+                  templating::hooks};
 use dojo_core::{crypto,
                 env::Config as EnvConfig,
                 service::ServiceGroup};

@@ -16,9 +16,9 @@ use std::{fs::File,
           io::{BufReader,
                Read}};
 
-use blake2::{digest::consts::U32,
-             Blake2b,
-             Digest};
+use blake2::{Blake2b,
+             Digest,
+             digest::consts::U32};
 
 use crate::error::Result;
 

@@ -19,8 +19,8 @@ use std::{fs,
 use crate::error::Result;
 
 use crate::{common::ui::{Status,
-                         UIWriter,
-                         UI},
+                         UI,
+                         UIWriter},
             hcore::package::PackageIdent};
 
 const SCAFFOLDING_GO_IDENT: &str = "karate/scaffolding-go";

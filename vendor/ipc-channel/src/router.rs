@@ -12,8 +12,8 @@ use std::sync::Mutex;
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::thread;
 
-use ipc::{self, IpcReceiver, IpcReceiverSet, IpcSelectionResult, IpcSender, OpaqueIpcMessage};
-use ipc::{OpaqueIpcReceiver};
+use crate::ipc::{self, IpcReceiver, IpcReceiverSet, IpcSelectionResult, IpcSender, OpaqueIpcMessage};
+use crate::ipc::{OpaqueIpcReceiver};
 use serde::{Deserialize, Serialize};
 
 lazy_static! {
@@ -128,5 +128,5 @@ enum RouterMsg {
     AddRoute(OpaqueIpcReceiver, RouterHandler),
 }
 
-pub type RouterHandler = Box<FnMut(OpaqueIpcMessage) + Send>;
+pub type RouterHandler = Box<dyn FnMut(OpaqueIpcMessage) + Send>;
 

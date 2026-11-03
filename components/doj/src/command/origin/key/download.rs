@@ -16,17 +16,17 @@ use std::path::Path;
 
 use crate::{api_client::Client,
             common::{self,
-                     command::package::install::{with_retries,
-                                                 RETRIES},
+                     command::package::install::{RETRIES,
+                                                 with_retries},
                      ui::{Status,
-                          UIWriter,
-                          UI}},
+                          UI,
+                          UIWriter}},
             hcore::crypto::SigKeyPair};
 
-use crate::{error::{Error,
-                    Result},
-            PRODUCT,
-            VERSION};
+use crate::{PRODUCT,
+            VERSION,
+            error::{Error,
+                    Result}};
 
 #[allow(clippy::too_many_arguments)]
 pub fn start(ui: &mut UI,

@@ -17,8 +17,8 @@ use std::net::{IpAddr,
 
 use crate::error::Result;
 
-pub use crate::os::system::{uname,
-                            Uname};
+pub use crate::os::system::{Uname,
+                            uname};
 
 static GOOGLE_DNS: &'static str = "8.8.8.8:53";
 
