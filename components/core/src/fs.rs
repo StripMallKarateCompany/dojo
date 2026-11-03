@@ -435,7 +435,8 @@ impl<'a> SvcDir<'a> {
 /// let second_path = fs::canonicalize("./tests/fixtures/bin").unwrap();
 /// let path_bufs = vec![first_path, second_path];
 /// let new_path = env::join_paths(path_bufs).unwrap();
-/// env::set_var("PATH", &new_path);
+/// // SAFETY: a doc test is its own program, and it starts no other thread.
+/// unsafe { env::set_var("PATH", &new_path) };
 ///
 /// let result = find_command("bin_with_no_extension");
 /// assert_eq!(result.is_some(), true);
@@ -452,7 +453,8 @@ impl<'a> SvcDir<'a> {
 /// let second_path = fs::canonicalize("./tests/fixtures/bin").unwrap();
 /// let path_bufs = vec![first_path, second_path];
 /// let new_path = env::join_paths(path_bufs).unwrap();
-/// env::set_var("PATH", &new_path);
+/// // SAFETY: a doc test is its own program, and it starts no other thread.
+/// unsafe { env::set_var("PATH", &new_path) };
 ///
 /// let result = find_command("missing");
 /// assert_eq!(result.is_some(), false);
