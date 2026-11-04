@@ -42,7 +42,7 @@ Exclude = [
   "components/plan-build/**", "components/*/dojo/**", "components/studio/**", "components/rootless_studio/**",
   "support/ci/**", "support/linux/**", "support/mac/**", "BUILDING.md", "VERIFICATION_TESTING.md", "test/integration/**",
   # Single files no formatter owns.
-  "rust-toolchain", "components/plan/rust-toolchain", "VERSION", "Vagrantfile",
+  "rust-toolchain", "VERSION", "Vagrantfile",
   "support/vm/expected-failures", "support/vm/applets", "tools/bldr_toml_create/**",
 ]
 # smk format and typecheck take the Rust, but smk lint does not yet: clippy finds some 2,760 problems in the
