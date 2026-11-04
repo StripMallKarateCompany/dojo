@@ -23,8 +23,8 @@
 
 set -euo pipefail
 
-flags=()
+builder="${WORKTREE_REPO}/support/vm/builder"
 if [[ -n "${TREES_FORCE:-}" ]]; then
-  flags+=(--stop)
+  exec "${builder}" discard "${WORKTREE_NAME}" --stop
 fi
-exec "${WORKTREE_REPO}/support/vm/builder" discard "${WORKTREE_NAME}" "${flags[@]}"
+exec "${builder}" discard "${WORKTREE_NAME}"
