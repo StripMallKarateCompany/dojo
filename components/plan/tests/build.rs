@@ -285,25 +285,30 @@ fn packaging_uses_the_builders_tools_not_a_dependencys() {
                "the build itself sees the dependency's xz");
 }
 
-// The check reads ELF files and the copied /bin/true is one only on Linux.
+// The check reads ELF files, and the copied test binary is one only on Linux. The test binary,
+// not /bin/true: it names the host's dynamic linker on any Linux, NixOS included, which has no
+// /bin/true.
 #[cfg(target_os = "linux")]
 #[test]
 fn a_package_naming_host_paths_is_refused_when_asked() {
     let sandbox = Sandbox::new("host-paths");
     let mut options = sandbox.options();
     options.refuse_host_paths = true;
+    let host_elf = std::env::current_exe().unwrap();
     let source = plan("leaky",
                       r#":bin_dirs ["bin"]"#,
-                      r##" :install (fn [b]
+                      &format!(r##" :install (fn [b]
                                       (b:mkdir (.. b.prefix "/bin"))
                                       (b:write (.. b.prefix "/bin/tool") "#!/bin/bash\necho hi\n")
                                       (b:chmod (.. b.prefix "/bin/tool") "755")
-                                      (b:run ["cp" "/bin/true" (.. b.prefix "/bin/true")]))"##);
+                                      (b:run ["cp" {:?} (.. b.prefix "/bin/linked")]))"##,
+                               host_elf.display().to_string()));
     let error = sandbox.build_with(&source, &options)
                        .expect_err("names the host's bash and linker");
     assert!(error.contains("bin/tool: interpreter /bin/bash"), "{error}");
-    assert!(error.contains("bin/true: dynamic linker /"), "{error}");
-    assert!(error.contains("2 files name paths outside"), "{error}");
+    assert!(error.contains("bin/linked: dynamic linker /"), "{error}");
+    // How many it counts depends on the host: a Nix-built binary also names its runpaths.
+    assert!(error.contains("name paths outside"), "{error}");
 
     // The same plan builds when not asked to refuse.
     sandbox.build(&source).expect("builds without the check");

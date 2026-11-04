@@ -7,10 +7,6 @@ authors = []
 license = "Apache-2.0"
 description = "Loads Dojo plans written in Fennel"
 
-# Not a member of the root workspace: that builds with the Rust pinned in
-# rust-toolchain, and mlua needs 1.88 or newer.
-[workspace]
-
 [[bin]]
 name = "doj-plan-build"
 path = "src/main.rs"
