@@ -18,24 +18,63 @@
 #   builder verify                 the checks a pull request carries: every test
 #                                  against support/vm/expected-failures, the
 #                                  payload, and boot --check and --check-reboot
+#   builder discard <tree> [--stop]
+#                                  delete a tree's VM state; refuses while that
+#                                  VM runs, unless --stop stops it first
 #
 # Each command but ssh copies this tree over the VM's ~/dojo first, so a file
 # the VM changed and no command copied back is gone at the next one.
 #
-# The VM's disk, ssh key and log live in DOJO_BUILDER_STATE (default
-# ~/.local/state/dojo-builder). Its ssh port, DOJO_BUILDER_PORT (default 31022),
-# listens on localhost only; a second builder takes another port and state.
+# The VM's disk, ssh key and log live in DOJO_BUILDER_STATE, and its ssh port,
+# DOJO_BUILDER_PORT, listens on localhost only. Each tree (trees add) has a VM
+# of its own by default: ~/.local/state/dojo-builder-<tree> on a port derived
+# from the tree's name, which .trees.d/pre-remove discards with the tree. The
+# main checkout's is ~/.local/state/dojo-builder on 31022.
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo="$(cd "${here}/../.." && pwd)"
-state="${DOJO_BUILDER_STATE:-${XDG_STATE_HOME:-${HOME}/.local/state}/dojo-builder}"
-port="${DOJO_BUILDER_PORT:-31022}"
+state_root="${XDG_STATE_HOME:-${HOME}/.local/state}"
 
 usage() {
-  sed -n '5,25p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' >&2
+  sed -n '5,32p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' >&2
   exit 2
 }
+
+# A tree's VM state: one place names it, for this script's default and for
+# discard, which the main checkout's copy runs for a tree being removed.
+tree_state() {
+  printf '%s/dojo-builder-%s\n' "${state_root}" "$1"
+}
+
+# A port in 31100-31899 from the tree's name, so parallel trees' VMs do not
+# collide by default. Two names can still land on one port; the second VM then
+# fails to forward it and start says the VM exited.
+tree_port() {
+  local sum
+  sum="$(printf '%s' "$1" | cksum)"
+  printf '%d\n' "$((31100 + ${sum%% *} % 800))"
+}
+
+# The tree this script runs from, or nothing in the main checkout: a linked
+# worktree's git dir is not the common one.
+this_tree() {
+  local dirs
+  dirs="$(git -C "${repo}" rev-parse --path-format=absolute --git-dir --git-common-dir 2>/dev/null)" || return 0
+  local git_dir="${dirs%%$'\n'*}" common_dir="${dirs#*$'\n'}"
+  if [[ "${git_dir}" != "${common_dir}" ]]; then
+    basename "${repo}"
+  fi
+}
+
+tree="$(this_tree)"
+if [[ -n "${tree}" ]]; then
+  state="${DOJO_BUILDER_STATE:-$(tree_state "${tree}")}"
+  port="${DOJO_BUILDER_PORT:-$(tree_port "${tree}")}"
+else
+  state="${DOJO_BUILDER_STATE:-${state_root}/dojo-builder}"
+  port="${DOJO_BUILDER_PORT:-31022}"
+fi
 
 vm_ssh() {
   ssh -F "${state}/ssh_config" dojo-builder "$@"
@@ -124,7 +163,7 @@ CONFIG
 
 stop() {
   if ! running; then
-    echo "builder: not running" >&2
+    echo "builder: not running (${state}, port ${port})" >&2
     return 0
   fi
   local pid
@@ -144,7 +183,7 @@ stop() {
 
 require_running() {
   if ! running; then
-    echo "builder: not running; start it with support/vm/builder start" >&2
+    echo "builder: not running (${state}, port ${port}); start it with support/vm/builder start" >&2
     exit 1
   fi
 }
@@ -191,7 +230,37 @@ fetch_lock() {
   rm -f "${lock}"
 }
 
+# Deletes a tree's VM state, the disk with it. A running VM may be another
+# session's build, so it stays unless the caller says to stop it.
+discard() {
+  local name=$1 stop_it=$2
+  [[ -n "${name}" && "${name}" != */* && "${name}" != .* ]] || {
+    echo "builder: not a tree name: ${name}" >&2
+    exit 2
+  }
+  state="$(tree_state "${name}")"
+  if [[ ! -d "${state}" ]]; then
+    return 0
+  fi
+  if running; then
+    if [[ -z "${stop_it}" ]]; then
+      echo "builder: the VM for ${name} is running (pid $(cat "${state}/pid")); stop it first, or pass --stop" >&2
+      exit 1
+    fi
+    stop
+  fi
+  rm -rf -- "${state}"
+  echo "builder: discarded ${state}" >&2
+}
+
 case "${1-}" in
+discard)
+  case "$#:${3-}" in
+  2:) discard "$2" "" ;;
+  3:--stop) discard "$2" yes ;;
+  *) usage ;;
+  esac
+  ;;
 start)
   [[ $# -eq 1 ]] || usage
   start
