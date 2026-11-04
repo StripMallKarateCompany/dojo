@@ -75,6 +75,11 @@ against `support/vm/expected-failures`, the payload and both boot checks), and
 `support/vm/builder stop` stops it. `support/vm/builder` with no arguments lists
 the rest.
 
+Each tree made with `trees add` gets a builder VM of its own, in
+`~/.local/state/dojo-builder-<tree>` on a port derived from the tree's name, and
+`trees remove` deletes it with the tree, refusing while it runs unless given
+`--force`. `DOJO_BUILDER_STATE` and `DOJO_BUILDER_PORT` override both.
+
 ### x86_64 from karate packages
 
 `support/vm/x86_64/boot <pkgs>` boots the same init on x86_64 with nothing from

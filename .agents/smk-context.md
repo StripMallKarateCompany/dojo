@@ -11,9 +11,11 @@ Project facts the smk skills read, by the skill that needs them. AGENTS.md owns 
   `builder fmt <package>...`, `builder run <command>...`, `builder verify`, and `builder stop` when
   done. `support/vm/boot --payload support/vm/out/payload.cpio.gz` boots them with `doj-launch` as
   PID 1.
-- One builder VM runs per state directory (`DOJO_BUILDER_STATE`) and ssh port (`DOJO_BUILDER_PORT`);
-  parallel trees need a builder each. Set both on every `builder` command: without them it finds the
-  default VM, which may be another session's.
+- One builder VM runs per state directory (`DOJO_BUILDER_STATE`) and ssh port (`DOJO_BUILDER_PORT`).
+  Run from a tree, `builder` defaults both to that tree's own (`~/.local/state/dojo-builder-<tree>`, a
+  port from its name), so leave them unset there; `trees remove` discards the tree's VM state and
+  refuses while that VM runs. The main checkout's VM is the default one, which may be another
+  session's.
 - Every `builder` command but `ssh` copies the tree over the `dojo` directory in the VM's home, so a
   file the VM generated is gone at the next command unless one copied it back. `builder run` returns a changed
   `Cargo.lock`, and `builder fmt` returns the files rustfmt rewrote. `.rustfmt.toml` needs a
