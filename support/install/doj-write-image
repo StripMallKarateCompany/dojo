@@ -1,0 +1,135 @@
+#!/bin/sh
+# Writes a live Dojo system onto a disk as a bootable live image: a GPT disk with a
+# BIOS boot partition and an EFI system partition holding the karate kernel, the
+# given initramfs and grub for both BIOS and UEFI. Written to a USB stick, it boots
+# the same live system that `support/vm/x86_64/boot` boots in QEMU, doj-install and
+# the packages it installs included.
+#
+# <initramfs> is a file or a disk holding the live system's initramfs and <bytes>
+# its length. The kernel and grub come from this system's /doj/pkgs. It erases the
+# whole disk, so it does nothing unless the disk is named and --erase confirms it.
+set -eu
+
+usage() {
+  echo "usage: doj-write-image --erase [--kernel-args <args>] <initramfs> <bytes> <disk>" >&2
+  exit 2
+}
+
+die() {
+  echo "doj-write-image: $*" >&2
+  exit 1
+}
+
+step() {
+  echo "doj-write-image: $*"
+}
+
+erase=false
+kernel_args=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+  --erase)
+    erase=true
+    shift
+    ;;
+  --kernel-args)
+    [ $# -ge 2 ] || usage
+    kernel_args="$2"
+    shift 2
+    ;;
+  -*) usage ;;
+  *) break ;;
+  esac
+done
+[ $# -eq 3 ] || usage
+initramfs="$1" bytes="$2" disk="$3"
+case "${bytes}" in
+"" | *[!0-9]*) die "<bytes> is a length in bytes, not ${bytes}" ;;
+esac
+[ -r "${initramfs}" ] || die "cannot read ${initramfs}"
+"${erase}" || die "refusing to touch ${disk}: --erase confirms that everything on it is lost"
+
+# The disk must be a whole disk, in use by nothing.
+[ -b "${disk}" ] || die "${disk} is not a block device"
+name="${disk##*/}"
+[ -d "/sys/class/block/${name}" ] || die "${disk} is not a disk the kernel knows"
+[ ! -e "/sys/class/block/${name}/partition" ] || die "${disk} is a partition; name the whole disk"
+if grep -q "^${disk}" /proc/mounts; then
+  die "${disk} or one of its partitions is mounted"
+fi
+
+# The newest release of a karate package in this system's /doj/pkgs.
+pkg() {
+  release=$(printf '%s\n' /doj/pkgs/karate/"$1"/*/* | busybox sort | busybox tail -n 1)
+  [ -d "${release}" ] || die "karate/$1 is not installed on this live system"
+  echo "${release}"
+}
+PATH="$(pkg util-linux)/sbin:$(pkg util-linux)/bin:$(pkg dosfstools)/sbin:$(pkg grub)/sbin:$(pkg grub)/bin:$(pkg busybox-static)/bin:${PATH}"
+export PATH
+kernel=$(pkg linux)
+
+step "partitioning ${disk}"
+# 1: grub's BIOS boot partition, 2: the EFI system partition, holding everything else.
+sfdisk --quiet --wipe always "${disk}" <<'TABLE'
+label: gpt
+size=1MiB, type=21686148-6449-6E6F-744E-656564454649, name=bios
+type=U, name=dojo-live
+TABLE
+
+# The partition's device name, from the kernel rather than a naming convention.
+part() {
+  for p in /sys/class/block/"${name}"/"${name}"*; do
+    if [ "$(cat "${p}/partition")" = "$1" ]; then
+      echo "/dev/${p##*/}"
+      return 0
+    fi
+  done
+  return 1
+}
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  part 2 >/dev/null && [ -b "$(part 2)" ] && break
+  sleep 1
+done
+esp=$(part 2) || die "no partition 2 on ${disk}"
+sfdisk --dump "${disk}"
+
+step "making ${esp} vfat"
+mkfs.vfat -F 32 -n DOJO-LIVE "${esp}" >/dev/null
+
+target=/mnt/dojo-live
+mkdir -p "${target}"
+mount -t vfat "${esp}" "${target}"
+cleanup() {
+  umount "${target}" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+step "copying the kernel ${kernel##/doj/pkgs/} and the ${bytes} byte initramfs"
+mkdir -p "${target}/boot"
+cp "${kernel}/boot/bzImage" "${target}/boot/vmlinuz"
+head -c "${bytes}" "${initramfs}" >"${target}/boot/initrd.gz"
+[ "$(wc -c <"${target}/boot/initrd.gz")" -eq "${bytes}" ] || die "${initramfs} holds fewer than ${bytes} bytes"
+head -c "${bytes}" "${initramfs}" | cmp -s - "${target}/boot/initrd.gz" ||
+  die "the initramfs on ${esp} differs from ${initramfs}"
+
+step "installing grub for BIOS and UEFI"
+grub-install --target=i386-pc --boot-directory="${target}/boot" "${disk}"
+grub-install --target=x86_64-efi --efi-directory="${target}" \
+  --boot-directory="${target}/boot" --removable --no-nvram
+uuid=$(grub-probe --target=fs_uuid "${target}/boot")
+cat >"${target}/boot/grub/grub.cfg" <<CFG
+serial --unit=0 --speed=115200
+terminal_input serial console
+terminal_output serial console
+set timeout=1
+menuentry "Dojo live" {
+  search --no-floppy --fs-uuid --set=root ${uuid}
+  linux /boot/vmlinuz console=tty0 console=ttyS0,115200 panic=-1 ${kernel_args}
+  initrd /boot/initrd.gz
+}
+CFG
+
+sync
+cleanup
+trap - EXIT
+step "wrote a live image on ${disk} (EFI system partition ${uuid})"

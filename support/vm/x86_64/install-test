@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Tests doj-install end to end in emulated x86_64 VMs, on disk images only:
+# Tests doj-install and the live image end to end in emulated x86_64 VMs, on disk
+# images only:
 #   refuse     the installer touches nothing without --erase
 #   appliance  installs with no login, boots from the disk through BIOS and through
 #              UEFI and passes the VM check both times, with no getty and nothing on
@@ -8,19 +9,24 @@
 #              over SSH; a password is not accepted
 #   console    installs with a root password, boots from the disk, refuses a wrong
 #              password on the serial console and logs in with the right one
+#   live       writes a live image, boots it as a USB stick through BIOS and through
+#              UEFI and passes the VM check both times
+#   live-install
+#              writes a live image that installs onto the machine's disk, boots it
+#              as a USB stick, then boots the disk it installed and passes the check
 # <out> gets the disk images, a throwaway SSH key and every boot's log. Each boot has
 # boot's deadline; the script stops at the first failure and exits 1.
 set -euo pipefail
 
 usage() {
-  echo "usage: support/vm/x86_64/install-test <pkgs> <out> [refuse|appliance|ssh|console]..." >&2
+  echo "usage: support/vm/x86_64/install-test <pkgs> <out> [refuse|appliance|ssh|console|live|live-install]..." >&2
   exit 2
 }
 [[ $# -ge 2 ]] || usage
 pkgs="$1" out="$2"
 shift 2
 tests=("$@")
-[[ ${#tests[@]} -gt 0 ]] || tests=(refuse appliance ssh console)
+[[ ${#tests[@]} -gt 0 ]] || tests=(refuse appliance ssh console live live-install)
 mkdir -p "${out}"
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 boot="${here}/boot"
@@ -34,8 +40,8 @@ fail() {
 
 new_disk() {
   rm -f "$1"
-  # A sparse 2 GiB raw image.
-  dd if=/dev/zero of="$1" bs=1 count=0 seek=2g 2>/dev/null
+  # A sparse 2 GiB raw image, in a form BSD and GNU dd both take.
+  dd if=/dev/zero of="$1" bs=1048576 count=0 seek=2048 2>/dev/null
 }
 
 run_refuse() {
@@ -127,9 +133,36 @@ run_console() {
   echo "install-test: console: ok"
 }
 
+run_live() {
+  "${boot}" "${pkgs}" --write-image "${out}/live.img" --check --log "${out}/live-write.log" ||
+    fail "live: writing the image failed"
+  "${boot}" "${pkgs}" --usb "${out}/live.img" --from-disk --check --log "${out}/live-bios-boot.log" ||
+    fail "live: the USB boot through BIOS failed its check"
+  grep -F "Booting from Hard Disk" "${out}/live-bios-boot.log" || fail "live: SeaBIOS did not boot the stick"
+  "${boot}" "${pkgs}" --usb "${out}/live.img" --from-disk --uefi --check --log "${out}/live-uefi-boot.log" ||
+    fail "live: the USB boot through UEFI failed its check"
+  grep -F "USB HARDDRIVE" "${out}/live-uefi-boot.log" || fail "live: the firmware did not boot the stick"
+  grep -F "efi: EFI v" "${out}/live-uefi-boot.log" || fail "live: the kernel did not boot through UEFI"
+  echo "install-test: live: ok"
+}
+
+run_live_install() {
+  "${boot}" "${pkgs}" --write-image "${out}/live-install.img" \
+    --install "--erase --kernel-args dojo.check /dev/vda" --log "${out}/live-install-write.log" ||
+    fail "live-install: writing the image failed"
+  new_disk "${out}/live-install-disk.img"
+  "${boot}" "${pkgs}" --usb "${out}/live-install.img" --disk "${out}/live-install-disk.img" --from-disk \
+    --log "${out}/live-install-install.log" || fail "live-install: the USB boot did not end cleanly"
+  grep -F "dojo: install ok" "${out}/live-install-install.log" || fail "live-install: the install failed"
+  "${boot}" "${pkgs}" --disk "${out}/live-install-disk.img" --from-disk --check \
+    --log "${out}/live-install-boot.log" || fail "live-install: the disk boot failed its check"
+  echo "install-test: live-install: ok"
+}
+
 for t in "${tests[@]}"; do
   case "${t}" in
-  refuse | appliance | ssh | console) "run_${t}" ;;
+  refuse | appliance | ssh | console | live) "run_${t}" ;;
+  live-install) run_live_install ;;
   *) usage ;;
   esac
 done
