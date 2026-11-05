@@ -37,13 +37,8 @@ record() {
       >&2 echo "Usage: record <SESSION> [CMD [ARG ..]]"
       return 1
     fi
-    for plan_dir in "$1" "$1/dojo"; do
-      if [ -f "$plan_dir/plan.sh" ]; then
-        # shellcheck disable=1090,1091,2154
-        name=$(. "$plan_dir/plan.sh" 2>/dev/null && echo "$pkg_name")
-        break
-      fi
-    done
+    # A session that is not a plan's directory logs as `unknown`.
+    name=$(doj-plan-build show "$1" --field name 2>/dev/null)
     : "${name:=unknown}"
     shift
     cmd="${1:-${SHELL:-sh} -l}"
