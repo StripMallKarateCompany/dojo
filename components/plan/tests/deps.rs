@@ -47,7 +47,9 @@ impl FakeDoj {
         FakeDoj { dir }
     }
 
-    fn resolver(&self) -> DojPkgPath { DojPkgPath::new(self.dir.join("doj")) }
+    fn resolver(&self) -> DojPkgPath { DojPkgPath::new(self.dir.join("doj"), false) }
+
+    fn offline_resolver(&self) -> DojPkgPath { DojPkgPath::new(self.dir.join("doj"), true) }
 
     fn set(&self, file: &str, path: &str) {
         fs::write(self.dir.join(file), format!("{path}\n")).expect("write the fake's state");
@@ -79,6 +81,18 @@ fn a_missing_package_is_installed_then_resolved() {
     assert_eq!(doj.calls(),
                ["pkg path karate/zlib",
                 "pkg install karate/zlib",
+                "pkg path karate/zlib"]);
+}
+
+#[test]
+fn an_offline_resolver_installs_offline() {
+    let doj = FakeDoj::new("offline");
+    doj.set("installable", "/doj/pkgs/karate/zlib/1.3.2/20261028181816");
+    assert_eq!(doj.offline_resolver().resolve("karate/zlib"),
+               Ok(PathBuf::from("/doj/pkgs/karate/zlib/1.3.2/20261028181816")));
+    assert_eq!(doj.calls(),
+               ["pkg path karate/zlib",
+                "pkg install --offline karate/zlib",
                 "pkg path karate/zlib"]);
 }
 

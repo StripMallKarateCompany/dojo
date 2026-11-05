@@ -40,18 +40,25 @@ pub trait Resolve {
 /// `$DOJ_BIN`, or `doj` from `PATH`.
 pub struct DojPkgPath {
     program: OsString,
+    offline: bool,
 }
 
 impl DojPkgPath {
+    /// Installs offline when `DOJ_FEAT_OFFLINE_INSTALL` is set, as doj
+    /// enables a feature: to any value but the empty one.
     #[must_use]
     pub fn from_env() -> DojPkgPath {
-        DojPkgPath::new(env::var_os("DOJ_BIN").unwrap_or_else(|| "doj".into()))
+        DojPkgPath::new(env::var_os("DOJ_BIN").unwrap_or_else(|| "doj".into()),
+                        env::var_os("DOJ_FEAT_OFFLINE_INSTALL").is_some_and(|v| !v.is_empty()))
     }
 
-    /// Resolves with `program` as `doj`.
+    /// Resolves with `program` as `doj`. With `offline`, an install asks no
+    /// Builder: it takes the newest package installed or in the artifact
+    /// cache.
     #[must_use]
-    pub fn new(program: impl Into<OsString>) -> DojPkgPath {
-        DojPkgPath { program: program.into(), }
+    pub fn new(program: impl Into<OsString>, offline: bool) -> DojPkgPath {
+        DojPkgPath { program: program.into(),
+                     offline }
     }
 
     /// The install directory `doj pkg path` prints, or `None` when it finds
@@ -78,7 +85,14 @@ impl Resolve for DojPkgPath {
         }
         // A studio starts with only the backline installed. doj's own output
         // goes to stderr: stdout ends with the built package's ident.
-        let status = Command::new(&self.program).args(["pkg", "install", ident])
+        let offline = if self.offline {
+            &["--offline"][..]
+        } else {
+            &[]
+        };
+        let status = Command::new(&self.program).args(["pkg", "install"])
+                                                .args(offline)
+                                                .arg(ident)
                                                 .stdin(Stdio::null())
                                                 .stdout(io::stderr())
                                                 .status()
