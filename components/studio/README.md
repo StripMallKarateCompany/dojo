@@ -4,9 +4,9 @@ This is the code that creates a dojo studio for Linux.
 
 The key pieces here are:
 
-* The studio hosting script - `bin/doj-studio.sh`.
-* The studio environment "types" in `libexec`. These tweak the environment of a studio and target it for specific purposes. Most will only be interested in `doj-studio-type-default.sh`.
-* The dojo plans used to create the dojo studio package.
+- The studio hosting script - `bin/doj-studio.sh`.
+- The studio environment "types" in `libexec`. These tweak the environment of a studio and target it for specific purposes. Most will only be interested in `doj-studio-type-default.sh`.
+- The dojo plans used to create the dojo studio package.
 
 ## What determines the studio type and version used?
 
@@ -26,14 +26,14 @@ You will need to build the studio and doj client packages for the same version.
 
 Navigate to the root of the dojo repo and build the doj client
 
-```
+```sh
 cd /dojo
 doj pkg build components/doj
 ```
 
 Next build the studio
 
-```
+```sh
 doj pkg build components/studio
 ```
 
@@ -41,6 +41,6 @@ The most important thing here is that you emd up with `hart` files at the same v
 
 On a linux OS, you can `doj pkg install` the `hart`s and then run the doj binary you installed with the studio command. For example:
 
-```
+```sh
 /doj/pkgs/karate/doj/0.22.0-dev/20170407021836/bin/doj studio enter
 ```

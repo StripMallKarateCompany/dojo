@@ -247,10 +247,6 @@ pkg_upstream_url="{{ pkg_upstream_url }}"
 # implementation (Bash does not allow empty function bodies.) If callbacks do
 # nothing or do the same as the default implementation, they can be removed from
 # this template.
-#
-# The default implementations (the do_default_* functions) are defined in the
-# plan build script:
-# https://github.com/StripMallKarateCompany/dojo/tree/master/components/plan-build/bin/doj-plan-build.sh
 
 # There is no default implementation of this callback. You can use it to execute
 # any arbitrary commands before anything else happens.

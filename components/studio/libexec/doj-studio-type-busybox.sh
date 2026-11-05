@@ -1,7 +1,4 @@
-# TESTING CHANGES
-# Documentation on testing local changes to this lives here:
-# https://github.com/StripMallKarateCompany/dojo/blob/master/BUILDING.md#testing-changes
-
+# shellcheck shell=sh disable=SC3043 # local: dash, bash and busybox ash, the /bin/sh the studio runs under, all have it
 # shellcheck disable=2034
 studio_type="busybox"
 studio_path="/opt/busybox"

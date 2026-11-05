@@ -1,7 +1,4 @@
-# TESTING CHANGES
-# Documentation on testing local changes to this lives here:
-# https://github.com/StripMallKarateCompany/dojo/blob/master/BUILDING.md#testing-changes
-
+# shellcheck shell=sh disable=SC3043 # local: dash, bash and busybox ash, the /bin/sh the studio runs under, all have it
 # shellcheck disable=2034
 studio_type="baseimage"
 studio_path="$DOJ_ROOT_PATH/bin"
@@ -25,7 +22,7 @@ finish_setup() {
   for embed in $PKGS; do
     if [ -d "$DOJ_PKG_PATH/$embed" ]; then
       echo "> Using local package for $embed"
-      embed_path=$(_outside_pkgpath_for $embed)
+      embed_path=$(_outside_pkgpath_for "$embed")
       # shellcheck disable=2154
       $bb mkdir -p "$DOJ_STUDIO_ROOT"/"$embed_path"
       $bb cp -ra "$embed_path"/* "$DOJ_STUDIO_ROOT"/"$embed_path"
@@ -35,7 +32,7 @@ finish_setup() {
         $bb cp -ra "$DOJ_PKG_PATH"/"$tdep"/* "$DOJ_STUDIO_ROOT""$DOJ_PKG_PATH"/"$tdep"
       done
     else
-      _doj install $embed
+      _doj install "$embed"
     fi
   done
 
@@ -53,7 +50,7 @@ finish_setup() {
   local full_path=""
   for path_pkg in $PKGS karate/doj-launcher karate/doj-sup karate/busybox-static; do
     local path_file
-    path_file="$DOJ_STUDIO_ROOT/$(_pkgpath_for $path_pkg)/PATH"
+    path_file="$DOJ_STUDIO_ROOT/$(_pkgpath_for "$path_pkg")/PATH"
     if [ -f "$path_file" ]; then
       if [ -z "$full_path" ]; then
         full_path="$($bb cat "$path_file")"
@@ -63,7 +60,7 @@ finish_setup() {
     fi
 
     local tdeps_file
-    tdeps_file="$DOJ_STUDIO_ROOT/$(_pkgpath_for $path_pkg)/TDEPS"
+    tdeps_file="$DOJ_STUDIO_ROOT/$(_pkgpath_for "$path_pkg")/TDEPS"
     if [ -f "$tdeps_file" ]; then
       for tdep in $($bb cat "$tdeps_file"); do
         local tdep_path_file
@@ -92,7 +89,7 @@ finish_setup() {
   # Set the login shell for any relevant user to be `/bin/bash`
   $bb sed -e "s,/bin/sh,$busybox_path/bin/bash,g" -i "$DOJ_STUDIO_ROOT"/etc/passwd
 
-  $bb cat <<PROFILE > "$DOJ_STUDIO_ROOT"/etc/profile
+  $bb cat <<PROFILE >"$DOJ_STUDIO_ROOT"/etc/profile
 # Add doj to the default \$PATH at the front so any wrapping scripts will
 # be found and called first
 export PATH=$full_path:\$PATH
@@ -106,12 +103,12 @@ alias fgrep='fgrep --color=auto'
 source <(doj cli completers --shell bash)
 PROFILE
 
-  $bb cat <<EOT > "$DOJ_STUDIO_ROOT"/etc/resolv.conf
+  $bb cat <<EOT >"$DOJ_STUDIO_ROOT"/etc/resolv.conf
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOT
 
-  $bb cat <<EOT > "$DOJ_STUDIO_ROOT"/etc/nsswitch.conf
+  $bb cat <<EOT >"$DOJ_STUDIO_ROOT"/etc/nsswitch.conf
 passwd:     files
 group:      files
 shadow:     files
@@ -122,12 +119,12 @@ networks:   files
 rpc:        files
 services:   files
 EOT
-  echo "${run_user}:x:42:42:root:/:/bin/sh" >> "$DOJ_STUDIO_ROOT"/etc/passwd
-  echo "${run_group}:x:42:${run_user}" >> "$DOJ_STUDIO_ROOT"/etc/group
+  echo "${run_user}:x:42:42:root:/:/bin/sh" >>"$DOJ_STUDIO_ROOT"/etc/passwd
+  echo "${run_group}:x:42:${run_user}" >>"$DOJ_STUDIO_ROOT"/etc/group
 
   local sup="$DOJ_ROOT_PATH/bin/doj sup"
   $bb touch "$DOJ_STUDIO_ROOT"/.doj_pkg
-  $bb cat <<EOT > "$DOJ_STUDIO_ROOT"/init.sh
+  $bb cat <<EOT >"$DOJ_STUDIO_ROOT"/init.sh
 #!$busybox_path/bin/sh
 export PATH=$full_path
 case \$1 in
@@ -144,9 +141,9 @@ EOT
 # Intentionally using a subshell here so `unset` doesn't affect the
 # caller's environment.
 _doj() (
-    unset DOJ_CACHE_KEY_PATH
-    # shellcheck disable=2154
-    $bb env FS_ROOT="$DOJ_STUDIO_ROOT" "$doj" "$@"
+  unset DOJ_CACHE_KEY_PATH
+  # shellcheck disable=2154
+  $bb env FS_ROOT="$DOJ_STUDIO_ROOT" "$doj" "$@"
 )
 
 _pkgpath_for() {
