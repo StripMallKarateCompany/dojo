@@ -6,16 +6,20 @@
 #
 # <pkgs> is a copy of a builder's /doj/pkgs/karate. The live image is busybox-static,
 # doj-launch, doj-sup-static and doj in /bin, as the arm64 VM has them, the arm64 VM's
-# init, check and lease, doj-install, and every package in <pkgs> under /doj/pkgs for
-# doj-install to copy. The newest release of each package is used.
+# init, check and lease, doj-install, doj-write-image, and every package in <pkgs> under
+# /doj/pkgs for doj-install to copy. The newest release of each package is used.
 #
 #   --check                  boot with dojo.check; succeed only on "dojo: check ok"
 #   --install <args>         run doj-install <args> from the live image, then power off;
 #                            succeed only on "dojo: install ok"
 #   --refuse-install <args>  the same, succeeding only on "dojo: install failed"
 #   --file <host>:<guest>    put a file into the live image (an install's key file)
+#   --write-image <image>    write the live image to <image> as a disk image that boots
+#                            through BIOS and UEFI (a USB stick's contents) instead of
+#                            booting it; --check and --install apply to that image's boots
 #   --disk <image>           attach a raw disk image as /dev/vda
-#   --from-disk              boot the disk (grub through SeaBIOS) instead of the live image
+#   --usb <image>            attach a raw disk image as a USB stick
+#   --from-disk              boot the USB stick, or else the disk, instead of the live image
 #   --uefi                   boot through QEMU's EDK II UEFI firmware instead of SeaBIOS
 #   --console <port>         serial console on 127.0.0.1:<port> instead of the log
 #   --ssh-port <port>        forward 127.0.0.1:<port> to the guest's port 22
@@ -25,7 +29,7 @@ set -euo pipefail
 
 usage() {
   echo "usage: support/vm/x86_64/boot <pkgs> [--check | --install <args> | --refuse-install <args>]" \
-    "[--file <host>:<guest>]... [--disk <image>] [--from-disk] [--uefi] [--console <port>] [--ssh-port <port>]" \
+    "[--file <host>:<guest>]... [--write-image <image>] [--disk <image>] [--usb <image>] [--from-disk] [--uefi] [--console <port>] [--ssh-port <port>]" \
     "[--log <file>] [--timeout <seconds>]" >&2
   exit 2
 }
@@ -35,7 +39,9 @@ shift
 mode=interactive
 install_args=""
 files=()
+write_image=""
 disk=""
+usb=""
 from_disk=false
 uefi=false
 console=""
@@ -59,9 +65,19 @@ while [[ $# -gt 0 ]]; do
     files+=("$2")
     shift 2
     ;;
+  --write-image)
+    [[ $# -ge 2 ]] || usage
+    write_image="$2"
+    shift 2
+    ;;
   --disk)
     [[ $# -ge 2 ]] || usage
     disk="$2"
+    shift 2
+    ;;
+  --usb)
+    [[ $# -ge 2 ]] || usage
+    usb="$2"
     shift 2
     ;;
   --from-disk)
@@ -99,18 +115,28 @@ done
   echo "boot: no package directory at ${pkgs}" >&2
   exit 2
 }
-if "${from_disk}" && [[ -z "${disk}" ]]; then
-  echo "boot: --from-disk needs --disk" >&2
+if "${from_disk}" && [[ -z "${disk}" && -z "${usb}" ]]; then
+  echo "boot: --from-disk needs --disk or --usb" >&2
+  exit 2
+fi
+if [[ -n "${write_image}" ]] && { [[ -n "${disk}" || -n "${usb}" ]] || "${from_disk}" || "${uefi}"; }; then
+  echo "boot: --write-image boots the live image with nothing else attached" >&2
+  exit 2
+fi
+if [[ -n "${write_image}" && "${mode}" == refuse-install ]]; then
+  echo "boot: --write-image takes --install, not --refuse-install" >&2
   exit 2
 fi
 if "${from_disk}" && [[ "${mode}" == *install ]]; then
   echo "boot: an install runs from the live image, not --from-disk" >&2
   exit 2
 fi
-if [[ -n "${disk}" && ! -f "${disk}" ]]; then
-  echo "boot: no disk image at ${disk}" >&2
-  exit 2
-fi
+for attached in "${disk}" "${usb}"; do
+  if [[ -n "${attached}" && ! -f "${attached}" ]]; then
+    echo "boot: no disk image at ${attached}" >&2
+    exit 2
+  fi
+done
 
 vm="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 {
@@ -133,8 +159,22 @@ if [[ -n "${ssh_port}" ]]; then
 fi
 # shellcheck disable=SC2054
 args+=(-netdev "${netdev}" -device virtio-net-pci,netdev=net0)
+# --from-disk boots the device with bootindex=0: the USB stick when there is one.
+# A live boot leaves it to -kernel, whose loader takes bootindex 0 itself.
+disk_boot="" usb_boot=""
+if "${from_disk}" && [[ -n "${usb}" ]]; then
+  usb_boot=",bootindex=0"
+elif "${from_disk}"; then
+  disk_boot=",bootindex=0"
+fi
+# shellcheck disable=SC2054
 if [[ -n "${disk}" ]]; then
-  args+=(-drive "file=${disk},format=raw,if=virtio")
+  args+=(-drive "file=${disk},format=raw,if=none,id=disk0" -device "virtio-blk-pci,drive=disk0${disk_boot}")
+fi
+# shellcheck disable=SC2054
+if [[ -n "${usb}" ]]; then
+  args+=(-device qemu-xhci,id=xhci -drive "file=${usb},format=raw,if=none,id=stick"
+    -device "usb-storage,bus=xhci.0,drive=stick,removable=on${usb_boot}")
 fi
 if "${uefi}"; then
   # The firmware's variables are not kept: doj-install boots UEFI from the removable
@@ -165,8 +205,8 @@ if ! "${from_disk}"; then
   cp "${vm}/init" "${root}/init"
   cp "${vm}/check" "${root}/bin/check"
   cp "${vm}/lease" "${root}/bin/lease"
-  cp "${vm}/../install/doj-install" "${root}/bin/doj-install"
-  chmod 0755 "${root}/init" "${root}"/bin/{check,lease,busybox,doj-launch,doj-sup,doj,doj-install}
+  cp "${vm}/../install/doj-install" "${vm}/../install/doj-write-image" "${root}/bin/"
+  chmod 0755 "${root}/init" "${root}"/bin/{check,lease,busybox,doj-launch,doj-sup,doj,doj-install,doj-write-image}
   echo "root:x:0:0:root:/root:/bin/sh" >"${root}/etc/passwd"
   echo "root:x:0:" >"${root}/etc/group"
   cp -R "${pkgs}" "${root}/doj/pkgs/karate"
@@ -174,16 +214,41 @@ if ! "${from_disk}"; then
     mkdir -p "${root}/$(dirname "${f#*:}")"
     cp "${f%%:*}" "${root}/${f#*:}"
   done
-  append="console=ttyS0 panic=-1"
+  mode_args=""
   case "${mode}" in
-  check) append+=" dojo.check" ;;
+  check) mode_args="dojo.check" ;;
   install | refuse-install)
     echo "${install_args}" >"${root}/etc/doj-install.args"
-    append+=" dojo.install"
+    mode_args="dojo.install"
     ;;
   esac
+  if [[ -n "${write_image}" ]]; then
+    echo "${mode_args}" >"${root}/etc/doj-image.args"
+  fi
   initrd="${work}/initrd.cpio.gz"
   (cd "${root}" && find . | "${cpio}/bin/cpio" --quiet -o -H newc -R 0:0) | gzip -6 >"${initrd}"
+  append="console=ttyS0 panic=-1"
+  if [[ -n "${write_image}" ]]; then
+    # The guest reads the initramfs from a disk, in whole sectors: pad it with zeros,
+    # which the kernel skips after a compressed archive.
+    "${coreutils}/bin/truncate" -s %512 "${initrd}"
+    initrd_bytes="$(wc -c <"${initrd}" | tr -d ' ')"
+    kernel_bytes="$(wc -c <"${kernel}" | tr -d ' ')"
+    # The EFI system partition holds the kernel, the initramfs and grub's two
+    # platforms (about 15 MiB), with room for FAT32's tables; 1 MiB more for the
+    # BIOS boot partition and GPT's two copies.
+    image_mib=$(((initrd_bytes + kernel_bytes) / 1048576 + 64))
+    image="${work}/live.img"
+    "${coreutils}/bin/truncate" -s "${image_mib}M" "${image}"
+    # shellcheck disable=SC2054
+    args+=(-drive "file=${initrd},format=raw,if=none,id=initrd,readonly=on"
+      -device virtio-blk-pci,drive=initrd,serial=dojo-initrd
+      -drive "file=${image},format=raw,if=none,id=image"
+      -device virtio-blk-pci,drive=image,serial=dojo-image)
+    append+=" dojo.image=${initrd_bytes}"
+  else
+    append+=" ${mode_args}"
+  fi
   args+=(-kernel "${kernel}" -initrd "${initrd}" -append "${append}")
 fi
 
@@ -207,6 +272,9 @@ check) expect="dojo: check ok" ;;
 install) expect="dojo: install ok" ;;
 refuse-install) expect="dojo: install failed" ;;
 esac
+if [[ -n "${write_image}" ]]; then
+  expect="dojo: image ok"
+fi
 if [[ -n "${expect}" ]] && ! grep -q "${expect}" "${log}"; then
   echo "boot: the VM shut down without \"${expect}\"" >&2
   exit 1
@@ -220,4 +288,8 @@ if [[ -z "${console}" ]]; then
     echo "boot: the VM did not end cleanly (expected \"reboot: Power down\")" >&2
     exit 1
   fi
+fi
+if [[ -n "${write_image}" ]]; then
+  mv "${image}" "${write_image}"
+  echo "boot: wrote ${write_image}"
 fi

@@ -91,6 +91,23 @@ not proof that a machine boots. `--check` runs the checks above with a 600
 second deadline and `--log <file>` keeps the serial console. Every package in
 `<pkgs>` also goes into the image's `/doj/pkgs`, for `doj-install`.
 
+`<pkgs>` and the script's working directory (`TMPDIR`) must be on a
+case-sensitive filesystem: `karate/ncurses` holds terminfo names that differ only
+in case, which a Mac's default volume cannot keep apart.
+
+### A live USB image
+
+`support/vm/x86_64/boot <pkgs> --write-image dojo-live.img` writes that live
+system to a disk image a USB stick can hold: a GPT disk with a BIOS boot
+partition and an EFI system partition holding the karate kernel, the initramfs
+and `karate/grub` for BIOS and UEFI. It boots the live system once in QEMU to do
+it, so the image comes from karate packages alone (`doj-write-image`, run on the
+live system). Write it to a whole stick with `dd`. The stick boots into
+`doj-launch` as PID 1 with `doj-install` and the packages it installs, the same
+as the initramfs above. With `--check` or `--install <args>` the image's own boots
+run the check or the install. `--usb <image> --from-disk` boots an image as a USB
+stick in QEMU.
+
 ### Installing onto a disk
 
 `support/install/doj-install` installs a live Dojo system onto a disk: a GPT
@@ -110,7 +127,9 @@ images in `<out>`: the installer refuses without `--erase` and leaves the disk
 untouched, an appliance install boots from its disk through BIOS and UEFI and
 passes `--check` with no getty or sshd, a key install takes a command over SSH
 and refuses a password, and a password install refuses a wrong password on the
-serial console and logs in with the right one. `<pkgs>` must hold the packages
+serial console and logs in with the right one. `live` boots a live image as a
+USB stick through BIOS and UEFI and passes `--check`, and `live-install` installs
+from a live image on a USB stick and boots the disk it wrote. `<pkgs>` must hold the packages
 those installs copy and their dependencies (`grub`, `e2fsprogs`, `util-linux`,
 `dosfstools`, `doj-console`, `doj-sshd`, `openssh`).
 

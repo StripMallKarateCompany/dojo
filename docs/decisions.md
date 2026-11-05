@@ -119,3 +119,14 @@ wiki page "Dojo" tells the longer story.
   them off. Vendored ipc-channel stays a workspace member, so `builder verify` still tests the
   tree's patches to it, but `.rustfmt.toml` ignores `vendor` and its nightly-only bench needs the
   crate's `unstable` feature.
+
+## 2026-11-04
+
+- **The live image is written by the live system itself.** `boot --write-image` boots the live
+  initramfs once in QEMU and `doj-write-image` partitions the image and installs grub with
+  karate's own sfdisk, dosfstools and grub, as `doj-install` does for a disk. The image so
+  needs nothing from nixpkgs but QEMU and builds on a Mac, where no grub for `i386-pc` runs.
+  The stick is a GPT disk whose EFI system partition holds the kernel and initramfs, not an ISO
+  9660 hybrid: `grub-mkrescue` would need xorriso and mtools, which are not karate packages, and
+  the item's USB stick needs only the disk. The live system runs from RAM, so the stick is not
+  read after grub loads it.

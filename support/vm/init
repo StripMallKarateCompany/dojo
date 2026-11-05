@@ -15,14 +15,18 @@ echo "dojo: booted $(uname -srm)"
 # The kernel command line says where this machine stands in a ring:
 # dojo.ring=<addr/prefix> is its address on the link to the other machines,
 # dojo.peer=<addr> the Supervisor it joins through.
+# dojo.image=<bytes> writes this live system out as a live image instead of
+# starting it (below).
 ring=""
 peer=""
+image=""
 # The kernel command line is words separated by spaces.
 # shellcheck disable=SC2013
 for word in $(cat /proc/cmdline); do
   case "${word}" in
   dojo.ring=*) ring="${word#dojo.ring=}" ;;
   dojo.peer=*) peer="${word#dojo.peer=}" ;;
+  dojo.image=*) image="${word#dojo.image=}" ;;
   esac
 done
 
@@ -51,6 +55,34 @@ done
 if [ -n "${ring}" ]; then
   ip addr add "${ring}" dev eth1
   ip link set eth1 up
+fi
+
+# dojo.image=<bytes> runs doj-write-image, which writes the disk with serial
+# dojo-image as a live image from the <bytes> long initramfs on the disk with
+# serial dojo-initrd (support/vm/x86_64/boot --write-image attaches both), with
+# the kernel arguments in /etc/doj-image.args. It powers off without starting the
+# Launcher.
+if [ -n "${image}" ]; then
+  disk_with_serial() {
+    for serial in /sys/class/block/*/serial; do
+      if [ "$(cat "${serial}")" = "$1" ]; then
+        dev="${serial%/serial}"
+        echo "/dev/${dev##*/}"
+        return 0
+      fi
+    done
+    echo "dojo: no disk with serial $1" >&2
+    return 1
+  }
+  if initramfs=$(disk_with_serial dojo-initrd) && disk=$(disk_with_serial dojo-image) &&
+    /bin/doj-write-image --erase --kernel-args "$(cat /etc/doj-image.args)" \
+      "${initramfs}" "${image}" "${disk}"; then
+    echo "dojo: image ok"
+  else
+    echo "dojo: image failed"
+  fi
+  sync
+  poweroff -f
 fi
 
 # dojo.install runs doj-install with the arguments in /etc/doj-install.args, a live
