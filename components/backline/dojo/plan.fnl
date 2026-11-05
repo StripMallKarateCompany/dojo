@@ -10,6 +10,7 @@
  :description "The tools a Dojo studio puts on PATH."
  :upstream_url "https://github.com/StripMallKarateCompany/dojo"
  :deps ["karate/backline"
+        "karate/doj"
         "karate/doj-plan-build"
         "karate/less"
         "karate/mg"
