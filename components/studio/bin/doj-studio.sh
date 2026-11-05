@@ -103,6 +103,8 @@ SUBCOMMANDS:
 
 ENVIRONMENT VARIABLES:
     ARTIFACT_PATH          Sets the source artifact cache path (\`-a' option overrides)
+    DOJ_FEAT_OFFLINE_INSTALL
+                           Installs a build's dependencies from the artifact cache, not Builder
     DOJ_NOCOLORING         Disables text coloring mode despite TERM capabilities
     DOJ_NONINTERACTIVE     Disables interactive progress bars despite tty
     DOJ_ORIGIN             Propagates this variable into any studios
@@ -888,6 +890,11 @@ chroot_env() {
   # environment.
   if [ -n "${DOJ_NONINTERACTIVE:-}" ]; then
     env="$env DOJ_NONINTERACTIVE=$DOJ_NONINTERACTIVE"
+  fi
+  # If offline installs are enabled, then propagate that into the Studio's
+  # environment, where doj-plan-build installs a build's dependencies.
+  if [ -n "${DOJ_FEAT_OFFLINE_INSTALL:-}" ]; then
+    env="$env DOJ_FEAT_OFFLINE_INSTALL=$DOJ_FEAT_OFFLINE_INSTALL"
   fi
   # If a Dojo origin name is set, then propagate it into the Studio's
   # environment.

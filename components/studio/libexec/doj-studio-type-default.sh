@@ -10,7 +10,7 @@ studio_build_command="_record_build $DOJ_ROOT_PATH/bin/build"
 studio_run_environment=
 studio_run_command="$DOJ_ROOT_PATH/bin/doj pkg exec karate/doj-backline bash --login"
 
-pkgs="${DOJ_STUDIO_BACKLINE_PKG:-core/doj-backline/$(
+pkgs="${DOJ_STUDIO_BACKLINE_PKG:-karate/doj-backline/$(
   echo "$version" | $bb cut -d / -f 1
 )}"
 
@@ -114,10 +114,11 @@ finish_setup() {
   # `$PATH` and not whatever augmented version is currently in use. This should
   # mean that running `build` from inside a `studio enter` and running `studio
   # build` leads to the exact same experience, at least as far as initial
-  # `$PATH` is concerned.
+  # `$PATH` is concerned. That `$PATH` is the backline's: doj-plan-build's own
+  # holds neither `doj`, which signs the package, nor the tools plans run.
   $bb cat <<EOF >"$DOJ_STUDIO_ROOT""$DOJ_ROOT_PATH"/bin/build
 #!$bash_path/bin/sh
-exec $DOJ_ROOT_PATH/bin/doj pkg exec karate/doj-plan-build doj-plan-build "\$@"
+exec $DOJ_ROOT_PATH/bin/doj pkg exec karate/doj-backline doj-plan-build build "\$@"
 EOF
   # shellcheck disable=2086
   $bb chmod $v 755 "$DOJ_STUDIO_ROOT""$DOJ_ROOT_PATH"/bin/build
