@@ -1,6 +1,12 @@
 [profile.release]
 debug = true
 
+# jemalloc's configure fails on Linux at -O0: Nix's gcc wrapper defines _FORTIFY_SOURCE, glibc then
+# warns that it needs optimization, and configure's strerror_r probe compiles with -Werror, so it
+# stops with "cannot determine return type of strerror_r". Building its C at -O1 keeps the probe clean.
+[profile.dev.package.tikv-jemalloc-sys]
+opt-level = 1
+
 [workspace]
 resolver = "3"
 members = [
