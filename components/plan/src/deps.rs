@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Finds the installed packages a build depends on, in the order the shell
+//! Finds, installing when missing, the packages a build depends on, in the order the shell
 //! builder used for `PATH` and the compiler flags.
 
 use std::{env,
           ffi::OsString,
           fs,
+          io,
           path::{Path,
                  PathBuf},
           process::{Command,
@@ -34,8 +35,9 @@ pub trait Resolve {
     fn resolve(&self, ident: &str) -> Result<PathBuf, String>;
 }
 
-/// Resolves idents with `doj pkg path`, as the shell builder does. The
-/// program is `$DOJ_BIN`, or `doj` from `PATH`.
+/// Resolves idents with `doj pkg path`, installing with `doj pkg install`
+/// what is not installed, as the shell builder does. The program is
+/// `$DOJ_BIN`, or `doj` from `PATH`.
 pub struct DojPkgPath {
     program: OsString,
 }
@@ -43,12 +45,18 @@ pub struct DojPkgPath {
 impl DojPkgPath {
     #[must_use]
     pub fn from_env() -> DojPkgPath {
-        DojPkgPath { program: env::var_os("DOJ_BIN").unwrap_or_else(|| "doj".into()), }
+        DojPkgPath::new(env::var_os("DOJ_BIN").unwrap_or_else(|| "doj".into()))
     }
-}
 
-impl Resolve for DojPkgPath {
-    fn resolve(&self, ident: &str) -> Result<PathBuf, String> {
+    /// Resolves with `program` as `doj`.
+    #[must_use]
+    pub fn new(program: impl Into<OsString>) -> DojPkgPath {
+        DojPkgPath { program: program.into(), }
+    }
+
+    /// The install directory `doj pkg path` prints, or `None` when it finds
+    /// no package.
+    fn installed(&self, ident: &str) -> Result<Option<PathBuf>, String> {
         let output = Command::new(&self.program).args(["pkg", "path", ident])
                                                 .stdin(Stdio::null())
                                                 .stderr(Stdio::null())
@@ -59,11 +67,31 @@ impl Resolve for DojPkgPath {
                                                 })?;
         let path = String::from_utf8(output.stdout).unwrap_or_default();
         let path = path.trim();
-        if output.status.success() && !path.is_empty() {
-            Ok(PathBuf::from(path))
-        } else {
-            Err(format!("no installed package matches `{ident}`; should it be built first?"))
+        Ok((output.status.success() && !path.is_empty()).then(|| PathBuf::from(path)))
+    }
+}
+
+impl Resolve for DojPkgPath {
+    fn resolve(&self, ident: &str) -> Result<PathBuf, String> {
+        if let Some(path) = self.installed(ident)? {
+            return Ok(path);
         }
+        // A studio starts with only the backline installed. doj's own output
+        // goes to stderr: stdout ends with the built package's ident.
+        let status = Command::new(&self.program).args(["pkg", "install", ident])
+                                                .stdin(Stdio::null())
+                                                .stdout(io::stderr())
+                                                .status()
+                                                .map_err(|e| {
+                                                    format!("cannot run `{} pkg install`: {e}",
+                                                            self.program.display())
+                                                })?;
+        if !status.success() {
+            return Err(format!("no installed package matches `{ident}`, and `doj pkg install` \
+                                could not install one; should it be built first?"));
+        }
+        self.installed(ident)?
+            .ok_or_else(|| format!("`doj pkg install {ident}` succeeded, but `doj pkg path` finds no package"))
     }
 }
 
