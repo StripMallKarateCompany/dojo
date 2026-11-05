@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! `doj-plan-build`: loads a Fennel plan. `show` prints its metadata as JSON;
-//! `build` builds it for this host, installs it under Dojo's root and writes
-//! its signed `.hart` to `results`.
+//! `doj-plan-build`: loads a Fennel plan. `show` prints its metadata as JSON,
+//! or one top-level field of it with `--field`; `build` builds it for this host, installs it under
+//! Dojo's root and writes its signed `.hart` to `results`.
 
 use std::{env,
           path,
@@ -28,7 +28,7 @@ use dojo_plan::{DojPkgPath,
                 host_target,
                 locate};
 
-const USAGE: &str = "usage: doj-plan-build show <plan-dir> [--target <target>]
+const USAGE: &str = "usage: doj-plan-build show <plan-dir> [--target <target>] [--field <key>]
        doj-plan-build build <plan-dir> [--target <target>] [--check] [--refuse-host-paths] [--isolate]
                             [--backline <ident>]";
 
@@ -36,6 +36,7 @@ struct Args {
     command:           String,
     dir:               String,
     target:            Option<String>,
+    field:             Option<String>,
     check:             bool,
     refuse_host_paths: bool,
     isolate:           bool,
@@ -50,6 +51,7 @@ fn parse(args: &[String]) -> Option<Args> {
     let mut parsed = Args { command:           command.clone(),
                             dir:               String::new(),
                             target:            None,
+                            field:             None,
                             check:             false,
                             refuse_host_paths: false,
                             isolate:           false,
@@ -58,6 +60,9 @@ fn parse(args: &[String]) -> Option<Args> {
     while let Some(arg) = rest.next() {
         match arg.as_str() {
             "--target" if parsed.target.is_none() => parsed.target = Some(rest.next()?.clone()),
+            "--field" if command == "show" && parsed.field.is_none() => {
+                parsed.field = Some(rest.next()?.clone());
+            }
             "--check" if command == "build" && !parsed.check => parsed.check = true,
             "--refuse-host-paths" if command == "build" && !parsed.refuse_host_paths => {
                 parsed.refuse_host_paths = true;
@@ -97,13 +102,15 @@ fn main() -> ExitCode {
         }
     };
     if args.command == "show" {
-        show(&plan, args.target.as_deref())
+        show(&plan, args.target.as_deref(), args.field.as_deref())
     } else {
         build(&plan, &located, args.target.as_deref(), &args)
     }
 }
 
-fn show(plan: &Plan, target: Option<&str>) -> ExitCode {
+/// Prints the plan's metadata, or with `field` that one top-level value: a
+/// string bare, so a shell can use it as it is, and anything else as JSON.
+fn show(plan: &Plan, target: Option<&str>, field: Option<&str>) -> ExitCode {
     if let Some(target) = target
        && !plan.metadata().targets().iter().any(|t| t == target)
     {
@@ -111,8 +118,19 @@ fn show(plan: &Plan, target: Option<&str>) -> ExitCode {
         return ExitCode::FAILURE;
     }
     let json = plan.metadata().to_json(target);
-    println!("{}",
-             serde_json::to_string_pretty(&json).expect("metadata is plain JSON values"));
+    let Some(field) = field else {
+        println!("{}",
+                 serde_json::to_string_pretty(&json).expect("metadata is plain JSON values"));
+        return ExitCode::SUCCESS;
+    };
+    match json.get(field) {
+        Some(serde_json::Value::String(value)) => println!("{value}"),
+        Some(value) => println!("{value}"),
+        None => {
+            eprintln!("doj-plan-build: the plan's metadata has no `{field}`");
+            return ExitCode::FAILURE;
+        }
+    }
     ExitCode::SUCCESS
 }
 
