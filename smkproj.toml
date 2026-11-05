@@ -32,17 +32,13 @@ Exclude = [
   # Languages smk has no formatter for.
   "**/*.fnl", "**/*.proto", "**/*.bats",
   # Test fixtures and package metadata: data, much of it exact bytes a test compares.
-  "components/*/tests/**", "components/plan-build/test/**", "test/fixtures/**",
-  "components/doj/mac/**", "components/doj/static/**", "components/rootless_studio/default/**",
+  "components/*/tests/**", "test/fixtures/**", "components/doj/static/**",
   "components/pkg-export-docker/defaults/**", "components/butterfly/bin/**", "components/sup/doc/**",
-  # Code on its way out, which smk checks would only churn: plan-build is the bash builder components/plan
-  # replaces; the component plans' bash is being ported to Fennel; the old studios, and the support/ci, linux
-  # and mac setup scripts and the docs and Docker tests for that build, belong to the build this tree no longer
-  # uses. Each goes, or joins the checks, under SMK-421.
-  "components/plan-build/**", "components/*/dojo/**", "components/studio/**", "components/rootless_studio/**",
-  "support/ci/**", "support/linux/**", "support/mac/**", "BUILDING.md", "VERIFICATION_TESTING.md", "test/integration/**",
+  # Code on its way out, which smk checks would only churn: the component plans' bash is being ported to Fennel.
+  # The studio joins the checks in the next commit.
+  "components/*/dojo/**", "components/studio/**",
   # Single files no formatter owns.
-  "rust-toolchain", "VERSION", "Vagrantfile",
+  "rust-toolchain", "VERSION",
   "support/vm/expected-failures", "support/vm/applets", "tools/bldr_toml_create/**",
 ]
 # smk format and typecheck take the Rust, but smk lint does not yet: clippy finds some 2,760 problems in the

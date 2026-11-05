@@ -95,7 +95,7 @@ impl PackageArchive {
         }
     }
 
-    // doj-plan-build.sh only generates SVC_USER and SVC_GROUP files if it thinks a package is
+    // doj-plan-build only generates SVC_USER and SVC_GROUP files if it thinks a package is
     // a service. It determines that by checking for the presence of a run hook file or a
     // pkg_svc_run value. Therefore, if we can detect the presence of a SVC_USER file, we can
     // consider this archive a service.

@@ -17,17 +17,11 @@
 //!
 //! Dojo contains two main components:
 //!
-//! * `doj-plan-build`, takes a plan ('plan.sh'), a description of how to build a piece of software,
-//! written in [bash](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html), which produces an atomic
-//! package.
+//! * `doj-plan-build`, takes a plan (`plan.fnl`), a description of how to build a piece of
+//! software, written in Fennel, which produces an atomic package. Its source is
+//! `components/plan`.
 //! * `doj-sup`, a run-time executable that knows how to download, install, serve, and
 //! manage services defined in packages.
-//!
-//! # doj-plan-build
-//!
-//! The documentation for doj-plan-build is generated automatically from the script itself, [and
-//! can be found here](doj-plan-build/doj-plan-build.html). You can find it in the source tree at
-//! `components/plan-build`.
 //!
 //! # The Supervisor
 //!

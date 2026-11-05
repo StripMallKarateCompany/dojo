@@ -22,7 +22,6 @@ another.
 | `components/sup`                                 | `doj-sup`, the Supervisor                                                                                 |
 | `components/butterfly`                           | The gossip protocol between Supervisors                                                                   |
 | `components/core`                                | Packages, keys, identities and paths shared by everything                                                 |
-| `components/plan-build`                          | The bash builder `components/plan` replaces; its package plan is gone                                     |
 | `components/plan`                                | `doj-plan-build`, which builds packages from plans written in Fennel, packaged as `karate/doj-plan-build` |
 | `components/backline`                            | `karate/doj-backline`, what a studio puts on PATH                                                         |
 | `components/studio`                              | The clean-room build environment                                                                          |
@@ -31,8 +30,6 @@ another.
 | `vendor/ipc-channel`                             | Servo's ipc-channel, vendored as a snapshot                                                               |
 
 ## Building
-
-See [BUILDING.md](BUILDING.md).
 
 In the dev shell (`direnv allow`), `doj` is `bin/doj`: it builds the tree's own
 `doj` with cargo when its sources changed, showing cargo's output only when the
