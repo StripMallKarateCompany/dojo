@@ -32,14 +32,17 @@ Project facts the smk skills read, by the skill that needs them. AGENTS.md owns 
   binaries that ran against the ones cargo built, so a loader error (exit 127) is a binary that never
   ran, not a failed test; `docs/decisions.md` (2026-11-01) records why.
 - Expected failures that are not regressions: the Supervisor fixtures carry `TARGET x86_64-linux` and
-  cannot load on arm64; `compile_hook_table` and the Supervisor integration tests install
-  `karate/busybox-static` from Builder, which does not exist yet; `dojo_common`'s templating tests
+  cannot load on arm64; the hook tests look for busybox as `karate/busybox-static` from Builder,
+  which does not exist yet, or on `PATH`; the Supervisor integration tests also want
+  `target/debug/doj-launch`, which `cargo test` does not build; `dojo_common`'s templating tests
   want a real, writable `/doj` with packages installed. `support/vm/expected-failures` names them; a
-  change that makes one pass removes it.
+  change that makes one pass in the builder VM removes it.
 - The Dojo VM proves arm64. x86_64 builds and tests run on smk-1, the Linux machine on the local
-  network, with the same `support/vm/guest` scripts. smk-1 is shared: work in a throwaway checkout
-  with a throwaway `GIT_CONFIG_GLOBAL`, run builds and tests under `nice -n 15`, delete what you
-  created, and confirm none of your processes remain.
+  network, with the same `support/vm/guest` scripts: `verify.sh <tree> <logs>` from a `git archive`
+  of the commit, with `HOME` set to a throwaway directory (its `env.sh` keeps rustup, cargo and git
+  config under `$HOME/dojo-build`). There the fixture and hook tests pass, since smk-1's Ubuntu has
+  `/usr/bin/busybox`, and the report notes them without failing. smk-1 is shared: run under
+  `nice -n 15`, delete what you created, and confirm none of your processes remain.
 
 ## Qa
 

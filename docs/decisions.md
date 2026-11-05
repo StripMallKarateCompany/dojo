@@ -130,3 +130,15 @@ wiki page "Dojo" tells the longer story.
   9660 hybrid: `grub-mkrescue` would need xorriso and mtools, which are not karate packages, and
   the item's USB stick needs only the disk. The live system runs from RAM, so the stick is not
   read after grub loads it.
+
+## 2026-11-05
+
+- **The modernized tree is proved on x86_64.** `support/vm/guest/verify.sh` on smk-1 (Ubuntu
+  26.04, x86_64) at main 4cefd83b6 built 32 test binaries and ran all 32 to a result, with 17
+  doc-test runs, no loader errors and 11 failures, every one listed in
+  `support/vm/expected-failures`; `builder verify` on the same commit in the arm64 VM ran 32 of
+  32 with its 21 expected failures. The ten that pass only on smk-1 are the six whose
+  `TARGET x86_64-linux` fixtures load there and the four hook tests that find smk-1's
+  `/usr/bin/busybox` on `PATH`, so the list stays the builder VM's, and on smk-1 the report notes
+  them without failing. The nine Supervisor integration tests fail on x86_64 for a reason the list
+  had not named: they want `target/debug/doj-launch`, which `cargo test` does not build.

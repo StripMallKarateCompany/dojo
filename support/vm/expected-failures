@@ -1,12 +1,15 @@
 # Tests that fail on main in the builder VM, and why they are not regressions:
-# see .agents/smk-context.md, "Test-engineer". The Supervisor fixtures carry TARGET x86_64-linux;
-# compile_hook_table and the Supervisor integration tests install
-# karate/busybox-static from Builder, which does not exist yet; dojo_common's
+# see .agents/smk-context.md, "Test-engineer". The Supervisor fixtures carry
+# TARGET x86_64-linux, which an arm64 machine cannot load; the hook tests look for
+# the busybox interpreter as karate/busybox-static from Builder, which does not
+# exist yet, or on PATH; the Supervisor integration tests also want
+# target/debug/doj-launch, which cargo test does not build; dojo_common's
 # templating tests want a real, writable /doj with packages installed.
 #
 # support/vm/builder verify fails on a failure not listed here and reports a
 # listed test that passed, so remove a test from this list when it starts to
-# pass.
+# pass in the builder VM. On x86_64 with busybox on PATH (smk-1) the fixture and
+# hook tests pass, and the report notes them without failing.
 applying_identical_configuration_results_in_no_changes_and_no_restart
 config_files_change_but_hooks_do_not_still_restarts
 config_only_packages_restart_on_config_application
