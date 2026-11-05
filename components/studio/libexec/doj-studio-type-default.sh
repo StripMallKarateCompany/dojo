@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# TESTING CHANGES
-# Documentation on testing local changes to this lives here:
-# https://github.com/StripMallKarateCompany/dojo/blob/master/BUILDING.md#testing-changes
-
 # shellcheck disable=2034
 studio_type="default"
 studio_path="$DOJ_ROOT_PATH/bin"
@@ -15,7 +11,8 @@ studio_run_environment=
 studio_run_command="$DOJ_ROOT_PATH/bin/doj pkg exec karate/doj-backline bash --login"
 
 pkgs="${DOJ_STUDIO_BACKLINE_PKG:-core/doj-backline/$(
-  echo "$version" | $bb cut -d / -f 1)}"
+  echo "$version" | $bb cut -d / -f 1
+)}"
 
 run_user="doj"
 run_group="$run_user"
@@ -56,7 +53,7 @@ finish_setup() {
       fi
       # Attempt to import the public origin key, which can be used for local
       # package installations where the key may not yet be uploaded.
-      if key_text=$($doj origin key export --type public "$key" 2> /dev/null); then
+      if key_text=$($doj origin key export --type public "$key" 2>/dev/null); then
         info "Importing '$key' public origin key"
         printf -- "%s" "${key_text}" | _doj origin key import
       else
@@ -118,7 +115,7 @@ finish_setup() {
   # mean that running `build` from inside a `studio enter` and running `studio
   # build` leads to the exact same experience, at least as far as initial
   # `$PATH` is concerned.
-  $bb cat <<EOF > "$DOJ_STUDIO_ROOT""$DOJ_ROOT_PATH"/bin/build
+  $bb cat <<EOF >"$DOJ_STUDIO_ROOT""$DOJ_ROOT_PATH"/bin/build
 #!$bash_path/bin/sh
 exec $DOJ_ROOT_PATH/bin/doj pkg exec karate/doj-plan-build doj-plan-build "\$@"
 EOF
@@ -128,7 +125,7 @@ EOF
   # Set the login shell for any relevant user to be `/bin/bash`
   $bb sed -e "s,/bin/sh,$bash_path/bin/bash,g" -i "$DOJ_STUDIO_ROOT"/etc/passwd
 
-  $bb cat >> "$DOJ_STUDIO_ROOT"/etc/profile <<PROFILE
+  $bb cat >>"$DOJ_STUDIO_ROOT"/etc/profile <<PROFILE
 # Add doj to the default PATH at the front so any wrapping scripts will
 # be found and called first
 export PATH=$DOJ_ROOT_PATH/bin:\$PATH
@@ -202,7 +199,7 @@ fi
 source <(doj cli completers --shell bash)
 PROFILE
 
-  $bb cat > "$DOJ_STUDIO_ROOT"/etc/profile.enter <<PROFILE_ENTER
+  $bb cat >"$DOJ_STUDIO_ROOT"/etc/profile.enter <<PROFILE_ENTER
 # Source /src/.studiorc so we can apply user-specific configuration
 if [[ -f /src/.studiorc && -z "\${DOJ_STUDIO_NOSTUDIORC:-}" ]]; then
   echo "--> Detected and loading /src/.studiorc"
@@ -226,8 +223,8 @@ case "\${DOJ_STUDIO_SUP:-}" in
 esac
 PROFILE_ENTER
 
-  echo "${run_user}:x:42:42:root:/:/bin/sh" >> "$DOJ_STUDIO_ROOT"/etc/passwd
-  echo "${run_group}:x:42:${run_user}" >> "$DOJ_STUDIO_ROOT"/etc/group
+  echo "${run_user}:x:42:42:root:/:/bin/sh" >>"$DOJ_STUDIO_ROOT"/etc/passwd
+  echo "${run_group}:x:42:${run_user}" >>"$DOJ_STUDIO_ROOT"/etc/group
 
   studio_env_command="$coreutils_path/bin/env"
 }
@@ -235,10 +232,10 @@ PROFILE_ENTER
 # Intentionally using a subshell here so `unset` doesn't affect the
 # caller's environment.
 _doj() (
-    # We remove a couple of env vars we do not want for this instance of the studio
-    unset DOJ_CACHE_KEY_PATH
-    unset DOJ_BLDR_CHANNEL
-    $bb env FS_ROOT="$DOJ_STUDIO_ROOT" "$doj" "$@"
+  # We remove a couple of env vars we do not want for this instance of the studio
+  unset DOJ_CACHE_KEY_PATH
+  unset DOJ_BLDR_CHANNEL
+  $bb env FS_ROOT="$DOJ_STUDIO_ROOT" "$doj" "$@"
 )
 
 _pkgpath_for() {

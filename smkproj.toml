@@ -35,8 +35,7 @@ Exclude = [
   "components/*/tests/**", "test/fixtures/**", "components/doj/static/**",
   "components/pkg-export-docker/defaults/**", "components/butterfly/bin/**", "components/sup/doc/**",
   # Code on its way out, which smk checks would only churn: the component plans' bash is being ported to Fennel.
-  # The studio joins the checks in the next commit.
-  "components/*/dojo/**", "components/studio/**",
+  "components/*/dojo/**",
   # Single files no formatter owns.
   "rust-toolchain", "VERSION",
   "support/vm/expected-failures", "support/vm/applets", "tools/bldr_toml_create/**",

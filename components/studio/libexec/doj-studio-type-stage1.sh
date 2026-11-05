@@ -1,7 +1,4 @@
-# TESTING CHANGES
-# Documentation on testing local changes to this lives here:
-# https://github.com/StripMallKarateCompany/dojo/blob/master/BUILDING.md#testing-changes
-
+# shellcheck shell=sh disable=SC3043 # local: dash, bash and busybox ash, the /bin/sh the studio runs under, all have it
 # shellcheck disable=2034
 studio_type="stage1"
 studio_path="/bin:/tools/bin"
@@ -49,7 +46,7 @@ finish_setup() {
       fi
       # Attempt to import the public origin key, which can be used for local
       # package installations where the key may not yet be uploaded.
-      if key_text=$($doj origin key export --type public "$key" 2> /dev/null); then
+      if key_text=$($doj origin key export --type public "$key" 2>/dev/null); then
         info "Importing '$key' public origin key"
         printf -- "%s" "${key_text}" | _doj origin key import
       else
@@ -62,12 +59,12 @@ finish_setup() {
     return 0
   fi
 
-  tar_file="$TAR_DIR/$($bb basename $STAGE1_TOOLS_URL)"
+  tar_file="$TAR_DIR/$($bb basename "$STAGE1_TOOLS_URL")"
 
   if [ ! -f "$tar_file" ]; then
     trap '$bb rm -f $tar_file; exit $?' INT TERM EXIT
     info "Downloading $STAGE1_TOOLS_URL"
-    $bb wget $STAGE1_TOOLS_URL -O "$tar_file"
+    $bb wget "$STAGE1_TOOLS_URL" -O "$tar_file"
     trap - INT TERM EXIT
   fi
 
@@ -80,25 +77,25 @@ finish_setup() {
 
   # shellcheck disable=2086
   {
-  # shellcheck disable=2154
-  $bb ln -sf $v /tools/bin/bash "$DOJ_STUDIO_ROOT"/bin
-  $bb ln -sf $v /tools/bin/cat "$DOJ_STUDIO_ROOT"/bin
-  $bb ln -sf $v /tools/bin/echo "$DOJ_STUDIO_ROOT"/bin
-  $bb ln -sf $v /tools/bin/pwd "$DOJ_STUDIO_ROOT"/bin
-  $bb ln -sf $v /tools/bin/stty "$DOJ_STUDIO_ROOT"/bin
+    # shellcheck disable=2154
+    $bb ln -sf $v /tools/bin/bash "$DOJ_STUDIO_ROOT"/bin
+    $bb ln -sf $v /tools/bin/cat "$DOJ_STUDIO_ROOT"/bin
+    $bb ln -sf $v /tools/bin/echo "$DOJ_STUDIO_ROOT"/bin
+    $bb ln -sf $v /tools/bin/pwd "$DOJ_STUDIO_ROOT"/bin
+    $bb ln -sf $v /tools/bin/stty "$DOJ_STUDIO_ROOT"/bin
 
-  $bb ln -sf $v /tools/bin/perl "$DOJ_STUDIO_ROOT"/usr/bin
-  $bb ln -sf $v /tools/lib/libgcc_s.so "$DOJ_STUDIO_ROOT"/usr/lib
-  $bb ln -sf $v /tools/lib/libgcc_s.so.1 "$DOJ_STUDIO_ROOT"/usr/lib
-  $bb ln -sf $v /tools/lib/libstdc++.so "$DOJ_STUDIO_ROOT"/usr/lib
-  $bb ln -sf $v /tools/lib/libstdc++.so.6 "$DOJ_STUDIO_ROOT"/usr/lib    
+    $bb ln -sf $v /tools/bin/perl "$DOJ_STUDIO_ROOT"/usr/bin
+    $bb ln -sf $v /tools/lib/libgcc_s.so "$DOJ_STUDIO_ROOT"/usr/lib
+    $bb ln -sf $v /tools/lib/libgcc_s.so.1 "$DOJ_STUDIO_ROOT"/usr/lib
+    $bb ln -sf $v /tools/lib/libstdc++.so "$DOJ_STUDIO_ROOT"/usr/lib
+    $bb ln -sf $v /tools/lib/libstdc++.so.6 "$DOJ_STUDIO_ROOT"/usr/lib
   } # end shellcheck disable
   # TODO fn: Used for older versions of the stage1 tarball, so this check can
   # eventually be removed as newer tarballs will most likely always skip this
   # step.
   if [ -f "$DOJ_STUDIO_ROOT/tools/lib/libstdc++.la" ]; then
     $bb sed 's/tools/usr/' "$DOJ_STUDIO_ROOT"/tools/lib/libstdc++.la \
-      > "$DOJ_STUDIO_ROOT"/usr/lib/libstdc++.la
+      >"$DOJ_STUDIO_ROOT"/usr/lib/libstdc++.la
   fi
   # shellcheck disable=2086
   $bb ln -sf $v bash "$DOJ_STUDIO_ROOT"/bin/sh
@@ -106,7 +103,7 @@ finish_setup() {
   # Set the login shell for any relevant user to be `/bin/bash`
   $bb sed -e 's,/bin/sh,/bin/bash,g' -i "$DOJ_STUDIO_ROOT"/etc/passwd
 
-  $bb cat >> "$DOJ_STUDIO_ROOT"/etc/profile <<'PROFILE'
+  $bb cat >>"$DOJ_STUDIO_ROOT"/etc/profile <<'PROFILE'
 # Colorize grep/egrep/fgrep by default
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
@@ -118,6 +115,6 @@ PROFILE
 # Intentionally using a subshell here so `unset` doesn't affect the
 # caller's environment.
 _doj() (
-    unset DOJ_CACHE_KEY_PATH
-    $bb env FS_ROOT="$DOJ_STUDIO_ROOT" "$doj" "$@"
+  unset DOJ_CACHE_KEY_PATH
+  $bb env FS_ROOT="$DOJ_STUDIO_ROOT" "$doj" "$@"
 )

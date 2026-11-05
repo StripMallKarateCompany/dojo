@@ -33,11 +33,6 @@
 #
 #
 
-# TESTING CHANGES
-# Documentation on testing local changes to this file and its friends in
-# ../libexec lives here:
-# https://github.com/StripMallKarateCompany/dojo/blob/master/BUILDING.md#testing-changes
-
 # # Internals
 
 # Fail if there are any unset variables and whenever a command returns a
@@ -235,7 +230,6 @@ EXAMPLES:
 "
 }
 
-
 # ## Subcommand functions
 #
 # These are the implementations for each subcommand in the program.
@@ -246,14 +240,14 @@ subcommand_new() {
   # Parse command line flags and options
   while getopts ":h" opt; do
     case $opt in
-      h)
-        print_new_help
-        exit 0
-        ;;
-      \?)
-        print_new_help
-        exit_with "Invalid option:  -$OPTARG" 1
-        ;;
+    h)
+      print_new_help
+      exit 0
+      ;;
+    \?)
+      print_new_help
+      exit_with "Invalid option:  -$OPTARG" 1
+      ;;
     esac
   done
   # Shift off all parsed token in `$*` so that the subcommand is now `$1`.
@@ -270,14 +264,14 @@ subcommand_rm() {
   # Parse command line flags and options
   while getopts ":h" opt; do
     case $opt in
-      h)
-        print_rm_help
-        exit 0
-        ;;
-      \?)
-        print_rm_help
-        exit_with "Invalid option:  -$OPTARG" 1
-        ;;
+    h)
+      print_rm_help
+      exit 0
+      ;;
+    \?)
+      print_rm_help
+      exit_with "Invalid option:  -$OPTARG" 1
+      ;;
     esac
   done
   # Shift off all parsed token in `$*` so that the subcommand is now `$1`.
@@ -292,14 +286,14 @@ subcommand_enter() {
   # Parse command line flags and options
   while getopts ":h" opt; do
     case $opt in
-      h)
-        print_enter_help
-        exit 0
-        ;;
-      \?)
-        print_enter_help
-        exit_with "Invalid option:  -$OPTARG" 1
-        ;;
+    h)
+      print_enter_help
+      exit 0
+      ;;
+    \?)
+      print_enter_help
+      exit_with "Invalid option:  -$OPTARG" 1
+      ;;
     esac
   done
   # Shift off all parsed token in `$*` so that the subcommand is now `$1`.
@@ -317,17 +311,17 @@ subcommand_build() {
   # Parse command line flags and options
   while getopts ":hR" opt; do
     case $opt in
-      h)
-        print_build_help
-        exit 0
-        ;;
-      R)
-        reuse=true
-        ;;
-      \?)
-        print_build_help
-        exit_with "Invalid option:  -$OPTARG" 1
-        ;;
+    h)
+      print_build_help
+      exit 0
+      ;;
+    R)
+      reuse=true
+      ;;
+    \?)
+      print_build_help
+      exit_with "Invalid option:  -$OPTARG" 1
+      ;;
     esac
   done
   # Shift off all parsed token in `$*` so that the subcommand is now `$1`.
@@ -351,14 +345,14 @@ subcommand_run() {
   # Parse command line flags and options
   while getopts ":h" opt; do
     case $opt in
-      h)
-        print_run_help
-        exit 0
-        ;;
-      \?)
-        print_run_help
-        exit_with "Invalid option:  -$OPTARG" 1
-        ;;
+    h)
+      print_run_help
+      exit 0
+      ;;
+    \?)
+      print_run_help
+      exit_with "Invalid option:  -$OPTARG" 1
+      ;;
     esac
   done
   # Shift off all parsed token in `$*` so that the subcommand is now `$1`.
@@ -369,7 +363,6 @@ subcommand_run() {
   new_studio
   run_studio "$@"
 }
-
 
 # **Internal**  If a non-zero sized Studio configuration is not found, exit the program.
 exit_if_no_studio_config() {
@@ -394,17 +387,17 @@ new_studio() {
 
   # Validate the type specified is valid and set a default if unset
   case "${STUDIO_TYPE:-unset}" in
-    unset|default)
-      # Set the default/unset type
-      STUDIO_TYPE=default
-      ;;
-    busybox|stage1|baseimage|bare)
-      # Confirmed valid types
-      ;;
-    *)
-      # Everything else is invalid
-      exit_with "Invalid Studio type: $STUDIO_TYPE" 2
-      ;;
+  unset | default)
+    # Set the default/unset type
+    STUDIO_TYPE=default
+    ;;
+  busybox | stage1 | baseimage | bare)
+    # Confirmed valid types
+    ;;
+  *)
+    # Everything else is invalid
+    exit_with "Invalid Studio type: $STUDIO_TYPE" 2
+    ;;
   esac
 
   # Properly canonicalize the root path of the Studio by following all symlinks.
@@ -527,7 +520,7 @@ new_studio() {
     if [ -n "$VERBOSE" ]; then
       echo "> Creating minimal /etc/passwd"
     fi
-    $bb cat > "$DOJ_STUDIO_ROOT/etc/passwd" << "EOF"
+    $bb cat >"$DOJ_STUDIO_ROOT/etc/passwd" <<"EOF"
 root:x:0:0:root:/root:/bin/sh
 bin:x:1:1:bin:/dev/null:/bin/false
 daemon:x:6:6:Daemon User:/dev/null:/bin/false
@@ -542,7 +535,7 @@ EOF
     if [ -n "$VERBOSE" ]; then
       echo "> Creating minimal /etc/group"
     fi
-    $bb cat > "$DOJ_STUDIO_ROOT/etc/group" << "EOF"
+    $bb cat >"$DOJ_STUDIO_ROOT/etc/group" <<"EOF"
 root:x:0:
 bin:x:1:daemon
 sys:x:2:
@@ -575,7 +568,7 @@ EOF
     if [ -n "$VERBOSE" ]; then
       echo "> Creating minimal /etc/inputrc"
     fi
-    $bb cat > "$DOJ_STUDIO_ROOT/etc/inputrc" << "EOF"
+    $bb cat >"$DOJ_STUDIO_ROOT/etc/inputrc" <<"EOF"
 # allow the use of the Home/End keys
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
@@ -594,9 +587,9 @@ EOF
   # Studio filesystem so that commands such as `wget(1)` will work
   for f in /etc/hosts /etc/resolv.conf /etc/nsswitch.conf; do
     $bb mkdir -p $v "$($bb dirname $f)"
-    if [ $f = "/etc/nsswitch.conf" ] ; then
+    if [ $f = "/etc/nsswitch.conf" ]; then
       $bb touch "$DOJ_STUDIO_ROOT$f"
-      $bb cat <<EOF > "$DOJ_STUDIO_ROOT$f"
+      $bb cat <<EOF >"$DOJ_STUDIO_ROOT$f"
 passwd:     files
 group:      files
 shadow:     files
@@ -616,7 +609,7 @@ EOF
   finish_setup
 
   # Add a Studio configuration file at the root of the filesystem
-  $bb cat <<EOF > "$studio_config"
+  $bb cat <<EOF >"$studio_config"
 studio_type="$studio_type"
 studio_path="$studio_path"
 studio_env_command="${studio_env_command:?}"
@@ -641,7 +634,7 @@ EOF
       else
         studio_profile_dir="$libexec_path"
       fi
-      $bb cat "$studio_profile_dir/doj-studio-profile.sh" >> "$pfile"
+      $bb cat "$studio_profile_dir/doj-studio-profile.sh" >>"$pfile"
 
     fi
 
@@ -741,9 +734,9 @@ rm_studio() {
     # and retry.
     >&2 echo "After unmounting all known filesystems, there are still \
 remaining mounted filesystems under ${DOJ_STUDIO_ROOT}:"
-    $bb mount \
-      | $bb grep "on ${DOJ_STUDIO_ROOT}.* type" \
-      | $bb sed 's#^#    * #'
+    $bb mount |
+      $bb grep "on ${DOJ_STUDIO_ROOT}.* type" |
+      $bb sed 's#^#    * #'
     >&2 echo "Unmount these remaining filesystem using \`umount(8)'and retry \
 the last command."
     exit_with "Remaining mounted filesystems found under $DOJ_STUDIO_ROOT" \
@@ -753,7 +746,6 @@ the last command."
     $bb rm -rf $v "$DOJ_STUDIO_ROOT"
   fi
 }
-
 
 # ## Private/Internal helper functions
 #
@@ -778,12 +770,12 @@ info() {
     echo "   ${program:-unknown}: $1"
   else
     case "${TERM:-}" in
-      *term | xterm-* | rxvt | screen | screen-*)
-        printf -- "   \033[1;36m%s: \033[1;37m%s\033[0m\n" "${program:-unknown}" "$1"
-        ;;
-      *)
-        echo "   ${program:-unknown}: $1"
-        ;;
+    *term | xterm-* | rxvt | screen | screen-*)
+      printf -- "   \033[1;36m%s: \033[1;37m%s\033[0m\n" "${program:-unknown}" "$1"
+      ;;
+    *)
+      echo "   ${program:-unknown}: $1"
+      ;;
     esac
   fi
   return 0
@@ -805,12 +797,12 @@ Please retry this command as a super user or use a privilege-granting facility s
     printf -- "∅ %s\n\n✗✗✗\n✗✗✗ %s\n✗✗✗\n" "$warn_msg" "$fatal_msg"
   else
     case "${TERM:-}" in
-      *term | xterm-* | rxvt | screen | screen-*)
-        printf -- "\033[0;33m∅ %s\033[0m\n\n\033[0;31m✗✗✗\n✗✗✗ %s\n✗✗✗\033[0m\n" "$warn_msg" "$fatal_msg"
-        ;;
-      *)
-        printf -- "∅ %s\n\n✗✗✗\n✗✗✗ %s\n✗✗✗\n" "$warn_msg" "$fatal_msg"
-        ;;
+    *term | xterm-* | rxvt | screen | screen-*)
+      printf -- "\033[0;33m∅ %s\033[0m\n\n\033[0;31m✗✗✗\n✗✗✗ %s\n✗✗✗\033[0m\n" "$warn_msg" "$fatal_msg"
+      ;;
+    *)
+      printf -- "∅ %s\n\n✗✗✗\n✗✗✗ %s\n✗✗✗\n" "$warn_msg" "$fatal_msg"
+      ;;
     esac
   fi
   exit 9
@@ -826,12 +818,12 @@ exit_with() {
     echo "ERROR: $1"
   else
     case "${TERM:-}" in
-      *term | xterm-* | rxvt | screen | screen-*)
-        printf -- "\033[1;31mERROR: \033[1;37m%s\033[0m\n" "$1"
-        ;;
-      *)
-        echo "ERROR: $1"
-        ;;
+    *term | xterm-* | rxvt | screen | screen-*)
+      printf -- "\033[1;31mERROR: \033[1;37m%s\033[0m\n" "$1"
+      ;;
+    *)
+      echo "ERROR: $1"
+      ;;
     esac
   fi
   exit "$2"
@@ -1031,9 +1023,9 @@ kill_launcher() {
 # uid and gid. This is done in an effort to leave files residing in a user
 # directory not to be owned by root.
 chown_artifacts() {
-  if [ -z "${NO_MOUNT}" ] \
-  && [ -z "${NO_ARTIFACT_PATH}" ] \
-  && [ -d "$ARTIFACT_PATH" ]; then
+  if [ -z "${NO_MOUNT}" ] &&
+    [ -z "${NO_ARTIFACT_PATH}" ] &&
+    [ -d "$ARTIFACT_PATH" ]; then
     artifact_path_owner="$(try "$bb" stat -c '%u:%g' "$ARTIFACT_PATH")"
     try "$bb" chown -R "$artifact_path_owner" "$ARTIFACT_PATH"
   fi
@@ -1125,33 +1117,42 @@ set_libexec_path() {
     bb="$BUSYBOX"
     unset BUSYBOX
   # Next, check to see if a `busybox` command is on `PATH`
-  elif command -v busybox > /dev/null; then
+  elif command -v busybox >/dev/null; then
     bb="$(command -v busybox)"
   # Finally, check for each command required to calculate the path to libexec,
   # after which we will have a `busybox` command we can use forever after
   else
-    if ! command -v basename > /dev/null; then
+    if ! command -v basename >/dev/null; then
       exit_with "Busybox not found, so 'basename' command must be on PATH" 99
     fi
-    if ! command -v dirname > /dev/null; then
+    if ! command -v dirname >/dev/null; then
       exit_with "Busybox not found, so 'dirname' command must be on PATH" 99
     fi
-    if ! command -v pwd > /dev/null; then
+    if ! command -v pwd >/dev/null; then
       exit_with "Busybox not found, so 'pwd' command must be on PATH" 99
     fi
-    if ! command -v readlink > /dev/null; then
+    if ! command -v readlink >/dev/null; then
       exit_with "Busybox not found, so 'readlink' command must be on PATH" 99
     fi
     bb=
   fi
 
   if [ -n "${DOJ_STUDIO_BINARY:-}" ]; then
-    version="$(unset DOJ_STUDIO_BINARY; doj studio version | $bb cut -d ' ' -f 2)"
-    libexec_path="$(unset DOJ_STUDIO_BINARY; doj pkg path karate/doj-studio)/libexec"
+    version="$(
+      unset DOJ_STUDIO_BINARY
+      doj studio version | $bb cut -d ' ' -f 2
+    )"
+    libexec_path="$(
+      unset DOJ_STUDIO_BINARY
+      doj pkg path karate/doj-studio
+    )/libexec"
     studio_binary_libexec_path="$($bb dirname "$DOJ_STUDIO_BINARY")/../libexec"
   else
     p=$($bb dirname "$0")
-    p=$(cd "$p"; $bb pwd)/$($bb basename "$0")
+    p=$(
+      cd "$p"
+      $bb pwd
+    )/$($bb basename "$0")
     p=$($bb readlink -f "$p")
     p=$($bb dirname "$p")
 
@@ -1169,7 +1170,6 @@ set_libexec_path
 # Finally, unset `PATH` so there is zero chance we're going to rely on the
 # operating system's commands.
 unset PATH
-
 
 # ## Default variables
 
@@ -1195,6 +1195,7 @@ ERR_REMAINING_MOUNTS=82
 #
 bb="$libexec_path/busybox"
 #
+# shellcheck disable=2034 # read by _doj in the libexec type scripts this one sources
 doj="$libexec_path/doj"
 # The current version of Dojo Studio
 : "${version:=@version@}"
@@ -1205,56 +1206,55 @@ program=$($bb basename "$0")
 
 ensure_root
 
-
 # ## CLI Argument Parsing
 
 # Parse command line flags and options.
 while getopts ":nNa:k:r:s:t:D:vqVh" opt; do
   case $opt in
-    a)
-      ARTIFACT_PATH=$OPTARG
-      ;;
-    n)
-      NO_SRC_PATH=true
-      ;;
-    N)
-      NO_ARTIFACT_PATH=true
-      ;;
-    k)
-      DOJ_ORIGIN_KEYS=$OPTARG
-      ;;
-    r)
-      DOJ_STUDIO_ROOT=$OPTARG
-      ;;
-    s)
-      SRC_PATH=$OPTARG
-      ;;
-    t)
-      STUDIO_TYPE=$OPTARG
-      ;;
-    D)
-      DOCKER=true
-      ;;
-    v)
-      VERBOSE=true
-      QUIET=
-      ;;
-    q)
-      QUIET=true
-      VERBOSE=
-      ;;
-    V)
-      echo "$program $version"
-      exit 0
-      ;;
-    h)
-      print_help
-      exit 0
-      ;;
-    \?)
-      print_help
-      exit_with "Invalid option: -$OPTARG" 1
-      ;;
+  a)
+    ARTIFACT_PATH=$OPTARG
+    ;;
+  n)
+    NO_SRC_PATH=true
+    ;;
+  N)
+    NO_ARTIFACT_PATH=true
+    ;;
+  k)
+    DOJ_ORIGIN_KEYS=$OPTARG
+    ;;
+  r)
+    DOJ_STUDIO_ROOT=$OPTARG
+    ;;
+  s)
+    SRC_PATH=$OPTARG
+    ;;
+  t)
+    STUDIO_TYPE=$OPTARG
+    ;;
+  D)
+    DOCKER=true
+    ;;
+  v)
+    VERBOSE=true
+    QUIET=
+    ;;
+  q)
+    QUIET=true
+    VERBOSE=
+    ;;
+  V)
+    echo "$program $version"
+    exit 0
+    ;;
+  h)
+    print_help
+    exit 0
+    ;;
+  \?)
+    print_help
+    exit_with "Invalid option: -$OPTARG" 1
+    ;;
   esac
 done
 # Shift off all parsed token in `$*` so that the subcommand is now `$1`.
@@ -1296,27 +1296,27 @@ studio_config="$DOJ_STUDIO_ROOT/.studio"
 # therefore will not mount `$ARTIFACT_PATH`). The choice of this variable name
 # is intended to show that it is not default behavior to skip the artifacts
 # cache path mounting and the user must explicitly opt-out.
-: ${NO_ARTIFACT_PATH:=}
+: "${NO_ARTIFACT_PATH:=}"
 # Whether or not to mount the `$SRC_PATH` into the Studio. An unset or empty
 # value mean it is set to false (and therefore will mount `$SRC_PATH`) and any
 # other value is considered set to true (and therefore will not mount
 # `$SRC_PATH`). The choice of this variable name is intended to show that it is
 # not default behavior to skip the source path mounting and the user must
 # explicitly opt-out.
-: ${NO_SRC_PATH:=}
+: "${NO_SRC_PATH:=}"
 # Whether to use a docker container as the environment to build the studio in
-: ${DOCKER:=}
+: "${DOCKER:=}"
 # Whether or not to mount filesystem in the Studio. An unset or empty value
 # means it is set to false (and therefore will mount filesystems) and any other
 # value is considered set to true (and therefore will not mount filesystems).
 : "${NO_MOUNT:=}"
 # Whether or not more verbose output has been requested. An unset or empty
 # value means it is set to false and any other value is considered set or true.
-: ${VERBOSE:=}
+: "${VERBOSE:=}"
 set_v_flag
 # Whether or not less output has been requested. An unset or empty value means
 # it is set to false and any other value is considered set or true.
-: ${QUIET:=}
+: "${QUIET:=}"
 
 export VERBOSE QUIET
 
@@ -1325,36 +1325,36 @@ export VERBOSE QUIET
 # "fuzzy matching" behavior, meaning that `studio e` is equivalent to `studio
 # enter`.
 case ${1:-} in
-  n|ne|new)
-    shift
-    subcommand_new "$@"
-    ;;
-  rm)
-    shift
-    subcommand_rm "$@"
-    ;;
-  e|en|ent|ente|enter)
-    shift
-    subcommand_enter "$@"
-    ;;
-  b|bu|bui|buil|build)
-    shift
-    subcommand_build "$@"
-    ;;
-  r|ru|run)
-    shift
-    subcommand_run "$@"
-    ;;
-  v|ve|ver|vers|versi|versio|version)
-    echo "$program $version"
-    exit 0
-    ;;
-  h|he|hel|help)
-    print_help
-    exit 0
-    ;;
-  *)
-    print_help
-    exit_with "Invalid argument: ${1:-}" 1
-    ;;
+n | ne | new)
+  shift
+  subcommand_new "$@"
+  ;;
+rm)
+  shift
+  subcommand_rm "$@"
+  ;;
+e | en | ent | ente | enter)
+  shift
+  subcommand_enter "$@"
+  ;;
+b | bu | bui | buil | build)
+  shift
+  subcommand_build "$@"
+  ;;
+r | ru | run)
+  shift
+  subcommand_run "$@"
+  ;;
+v | ve | ver | vers | versi | versio | version)
+  echo "$program $version"
+  exit 0
+  ;;
+h | he | hel | help)
+  print_help
+  exit 0
+  ;;
+*)
+  print_help
+  exit_with "Invalid argument: ${1:-}" 1
+  ;;
 esac

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# TESTING CHANGES
-# Documentation on testing local changes to this lives here:
-# https://github.com/StripMallKarateCompany/dojo/blob/master/BUILDING.md#testing-changes
-
 # Setting the user file-creation mask (umask) to 022 ensures that newly created
 # files and directories are only writable by their owner, but are readable and
 # executable by anyone (assuming default modes are used by the open(2) system
@@ -12,7 +8,7 @@
 umask 022
 
 # Colorize ls by default
-if command -v dircolors > /dev/null; then
+if command -v dircolors >/dev/null; then
   eval "$(dircolors -b)"
 fi
 alias ls="ls --color=auto"
@@ -34,25 +30,28 @@ else
 fi
 
 record() {
-  (if [ -n "${DEBUG:-}" ]; then set -x; fi; unset DEBUG
+  (
+    if [ -n "${DEBUG:-}" ]; then set -x; fi
+    unset DEBUG
     if [ -z "${1:-}" ]; then
       >&2 echo "Usage: record <SESSION> [CMD [ARG ..]]"
       return 1
     fi
     for plan_dir in "$1" "$1/dojo"; do
       if [ -f "$plan_dir/plan.sh" ]; then
-        # shellcheck disable=1090,2154
+        # shellcheck disable=1090,1091,2154
         name=$(. "$plan_dir/plan.sh" 2>/dev/null && echo "$pkg_name")
         break
       fi
     done
     : "${name:=unknown}"
     shift
-    cmd="${1:-${SHELL:-sh} -l}"; shift
+    cmd="${1:-${SHELL:-sh} -l}"
+    shift
     bb=${BUSYBOX:-}
-    env="$($bb env \
-      | $bb sed -e "s,^,'," -e "s,$,'," -e 's,0;32m,0;31m,g' \
-      | $bb tr '\n' ' ')"
+    env="$($bb env |
+      $bb sed -e "s,^,'," -e "s,$,'," -e 's,0;32m,0;31m,g' |
+      $bb tr '\n' ' ')"
     log="${LOGDIR:-/src/results/logs}/${name}.$($bb date -u +%Y-%m-%d-%H%M%S).log"
     $bb mkdir -p "$($bb dirname "$log")"
     $bb touch "$log"
@@ -63,7 +62,8 @@ record() {
     unset BUSYBOX LOGDIR name ownership
 
     $bb script -c "$bb env -i $env $cmd $*" -e "$log"
-  ); return $?
+  )
+  return $?
 }
 
 _record_build() {
@@ -73,4 +73,7 @@ _record_build() {
   record "$session" "$build_command_name" "$plan_context"
 }
 
-cd /src || { echo "Setup failed; exiting studio!"; exit 1; }
+cd /src || {
+  echo "Setup failed; exiting studio!"
+  exit 1
+}
