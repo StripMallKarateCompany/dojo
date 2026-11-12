@@ -9,10 +9,10 @@
 # git automatically ignores the git directory, but ripgrep needs this hint
 .git
 
-# Default output dirs
+# Default output dirs. pkg/ is the root's alone: macOS matches it to any Pkg/, such as smk-cli's Commands/Pkg/.
 tmp/
 out/
-pkg/
+/pkg/
 
 # Environment config
 **/env/.env
@@ -25,8 +25,8 @@ pkg/
 .pid
 *.pid
 
-# Logs
-logs
+# Logs. The root's logs/ alone: macOS matches a bare logs to any Logs/, such as buildq's Fixtures/Logs/.
+/logs
 *.log
 
 # What smk proj writes beside a file the repository owns

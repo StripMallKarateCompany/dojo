@@ -9,14 +9,13 @@ Owner = "smk"
 TfStateStorageAccount = ""
 SsmPrefix = ""
 BaseDomain = ""
-# The dev shell only: the tree keeps its own Makefile (which includes smk's checks), build scripts and VM
+# The dev shell and the daily sweep (.buildq/sweep.yml) only: the tree keeps its own Makefile (which includes smk's checks), build scripts and VM
 # tooling under support/.
-Features = ["nixshell"]
-BootstrapComplete = true
-BootstrapOnly = ["/Cargo\\.toml$", "/src/main\\.rs$"]
+Features = ["nixshell", "sweeps"]
 # Patch-note labels are for games' release notes; Dojo has none.
 Exclusions = ["/patch-labels\\.json$"]
 Languages = ["Rust"]
+Seeded = ["Rust", "nixshell", "sweeps"]
 [Ci]
 Provider = ""
 [Ci.Settings]
@@ -26,6 +25,9 @@ Provider = "workq"
 Project = "DOJ"
 Label = "dojo"
 Workspace = "smk"
+[Issue.Triage]
+# A sweep's triage rates an unrated item itself instead of leaving a paste line (WORK-154).
+Apply = ["difficulty"]
 [Format]
 Exclude = [
   "vendor/**", "components/plan/vendor/**",

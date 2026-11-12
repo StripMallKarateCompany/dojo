@@ -16,3 +16,4 @@ SMK_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
 -include $(SMK_ROOT)/.smk/lang/Rust.mk
 -include $(SMK_ROOT)/.smk/features/nixshell.mk
+-include $(SMK_ROOT)/.smk/features/sweeps.mk

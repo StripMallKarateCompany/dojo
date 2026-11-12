@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# smk { overwrite: true }
+#
+# Names the agent session that makes a commit, as a trailer: "Agent-Session: claude-code <session>; machine
+# <hash>; item <KEY-n>" (harness and session id, the hashed machine id a lease carries, the items the session
+# leases). A person's own commit gets nothing. smk decides what an agent session is and writes the trailer
+# (`smk agents provenance --commit-msg`); this only launches it. Git (2.54+) runs it once
+# `git config hook.smk-provenance.event prepare-commit-msg` and
+# `git config hook.smk-provenance.command .githooks/prepare-commit-msg` register it, which `make hooks` does.
+# `git commit --no-verify` does not skip it. It never stops a commit: when smk cannot add the trailer it says
+# so and the commit goes ahead without one, since an smk too old for the verb is on every machine until its pin
+# moves.
+#
+# A HOOK, NOT THE HARNESS. The trailer has to reach every commit an agent makes, in every repository smk renders,
+# whatever harness runs it; Git has no setting that adds a trailer to every commit, and a hook is what each
+# rendered repository already registers. The variables tested below only spare a person's commit the dev shell's
+# start-up; smk makes the decision.
+
+set -euo pipefail
+
+if [[ -z "${CLAUDECODE:-}${CLAUDE_CODE_SESSION_ID:-}${CODEX_THREAD_ID:-}" ]]; then
+  exit 0
+fi
+
+# The repository's own dev shell, as pre-commit runs it: an smk elsewhere on PATH may predate the verb.
+top="$(git rev-parse --show-toplevel)"
+if command -v direnv >/dev/null 2>&1 && [[ -f "$top/.envrc" ]]; then
+  smk=(direnv exec "$top" smk)
+elif command -v smk >/dev/null 2>&1; then
+  smk=(smk)
+else
+  echo >&2 "prepare-commit-msg: neither direnv (with this repository's .envrc) nor smk is here, so this commit carries no Agent-Session trailer."
+  exit 0
+fi
+if ! "${smk[@]}" agents provenance --commit-msg "$1"; then
+  echo >&2 "prepare-commit-msg: smk could not name the agent session, so this commit carries no Agent-Session trailer."
+fi

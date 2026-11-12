@@ -1,14 +1,16 @@
 # smk { overwrite: true }
-# buildq runs this pipeline in place of make ci. Every branch runs make ci on
-# the default queue, whose agents hold no credential. A bump-* branch, which
+# buildq runs this pipeline in place of make ci. Every branch runs make
+# ci-pushed on the default queue, whose agents hold no credential: make ci, or
+# make checks alone when the push moves only the dev tooling pins in
+# .nix/flake.lock (smk ci goal). A bump-* branch, which
 # smk pkg bump pushes, runs it at priority -1, so a fan-out of pin bumps across
 # repositories waits behind every other job.
 steps:
-  - label: "make ci"
+  - label: "make ci-pushed"
     key: ci
-    command: make ci
+    command: make ci-pushed
     branches: "!bump-*"
-  - label: "make ci, pin bump"
-    command: make ci
+  - label: "make ci-pushed, pin bump"
+    command: make ci-pushed
     branches: "bump-*"
     priority: -1
