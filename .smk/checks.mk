@@ -13,10 +13,16 @@
 # the including Makefile sets .ONESHELL.
 SMK_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
-.PHONY: checks ci format check-format lint check-types hooks
+.PHONY: checks ci ci-pushed format check-format lint check-types hooks
 # Every check smk runs before a change merges, as smkproj.toml's Checks names them.
 checks: check-format lint check-types
 ci: checks
+
+# What buildq runs: ci, or checks alone when the pushed range moves nothing but the dev tooling pins in .nix/flake.lock
+# (smkproj.toml's Ci.ToolingInputs, smk and trees unless it names others). `smk ci goal` says which and why. Variables
+# given on the command line, such as PROFILE, reach the goal it runs.
+ci-pushed:
+	cd "$(SMK_ROOT)" && goal="$$(smk ci goal)" && $(MAKE) -C "$(SMK_ROOT)" "$$goal"
 
 # Layout is whatever `smk format` produces: run `make format` before staging. check-format and lint
 # change nothing. `smk format --list` shows how every tracked file is classified, and a file no
@@ -39,8 +45,9 @@ check-types:
 	cd "$(SMK_ROOT)" && smk typecheck
 
 # Registers .githooks/pre-commit, which checks the staged files' formatting as the index holds them.
-# It stops a commit to review and restage, and never rewrites or stages anything itself. A configured
+# It stops a commit to review and restage, and never rewrites or stages anything itself. Registers
+# .githooks/prepare-commit-msg, which adds an agent session's Agent-Session trailer. A configured
 # hook runs beside .git/hooks, where core.hooksPath would replace it and drop Git LFS's hooks; a clone
 # an earlier version pointed at .githooks goes back to .git/hooks, or it runs twice.
 hooks:
-	git -C "$(SMK_ROOT)" config hook.smk-format.event pre-commit && git -C "$(SMK_ROOT)" config hook.smk-format.command .githooks/pre-commit && if [ "$$(git -C "$(SMK_ROOT)" config core.hooksPath)" = .githooks ]; then git -C "$(SMK_ROOT)" config --unset core.hooksPath; fi
+	git -C "$(SMK_ROOT)" config hook.smk-format.event pre-commit && git -C "$(SMK_ROOT)" config hook.smk-format.command .githooks/pre-commit && git -C "$(SMK_ROOT)" config hook.smk-provenance.event prepare-commit-msg && git -C "$(SMK_ROOT)" config hook.smk-provenance.command .githooks/prepare-commit-msg && if [ "$$(git -C "$(SMK_ROOT)" config core.hooksPath)" = .githooks ]; then git -C "$(SMK_ROOT)" config --unset core.hooksPath; fi

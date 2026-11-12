@@ -1,0 +1,14 @@
+# smk { overwrite: true }
+# workq starts this pipeline as a sweep build of main (smk issue
+# sweep), and nothing else runs it. Its one step runs smk issue
+# sweep-job on the sweeper queue, whose agent holds the Claude Code
+# token and workq's sweeps caller token and runs main alone: the job
+# runs the sweep's triage and groom skills over the repository's workq
+# project and sends workq their reports. This file is in the tree, so
+# what a sweep runs changes only through a reviewed merge.
+steps:
+  - label: "sweep"
+    command: smk issue sweep-job
+    branches: main
+    agents:
+      queue: sweeper
