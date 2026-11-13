@@ -48,7 +48,10 @@ Project facts the smk skills read, by the skill that needs them. AGENTS.md owns 
 
 - Acceptance: `support/vm/boot --check --payload support/vm/out/payload.cpio.gz` and
   `--check-reboot`. `boot --check` without a payload checks the base image.
-- Builder is `https://bldr.karate.company`, not running yet; `DOJ_BLDR_URL` overrides it.
+- The code's package host default is still `https://bldr.karate.company` (`DOJ_BLDR_URL` overrides it), which
+  serves nothing. The name is withdrawn (`docs/decisions.md`, 2026-11-13): bldr inspired buildq and nothing of it
+  is reused, so add no `bldr` name, hostname or Builder-shaped API. DOJ-17 moves the clients to
+  `https://pkgs.karate.company/dojo/karate` and removes the name.
 
 ## Review
 

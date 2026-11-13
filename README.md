@@ -9,9 +9,10 @@ Dojo is a Strip Mall Karate Company project, created by Jamie Stormbreaker.
 ## Status
 
 Early. This tree builds with the stable Rust pinned in `rust-toolchain` and is
-moving from its 2019 dependencies to current ones, a crate at a time. Packages live in the `karate` origin. The default Builder is
-`https://bldr.karate.company`, which is not running yet; set `DOJ_BLDR_URL` to use
-another.
+moving from its 2019 dependencies to current ones, a crate at a time. Packages live in the `karate` origin. The code's
+default package host is still `https://bldr.karate.company`, which serves nothing; set `DOJ_BLDR_URL` to use
+another. That name is withdrawn (`docs/decisions.md`, 2026-11-13): packages will be served from
+`https://pkgs.karate.company/dojo/karate`, and DOJ-17 moves the clients there.
 
 ## Layout
 
