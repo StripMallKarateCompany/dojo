@@ -142,3 +142,13 @@ wiki page "Dojo" tells the longer story.
   `/usr/bin/busybox` on `PATH`, so the list stays the builder VM's, and on smk-1 the report notes
   them without failing. The nine Supervisor integration tests fail on x86_64 for a reason the list
   had not named: they want `target/debug/doj-launch`, which `cargo test` does not build.
+
+## 2026-11-13
+
+- **No `bldr`.** The 2026-10-25 entry's "Builder `bldr.karate.company`" is withdrawn. bldr is the
+  old software that inspired buildq: it inspires what comes next, and nothing of it is reused, its
+  names, hostnames, URL shapes and API included. No `bldr` hostname is served, and the name leaves
+  the tree as the source project's own name did: the compiled-in default, `DOJ_BLDR_URL`, the
+  `doj bldr` subcommand, `bldr.toml` and the depot API client (DOJ-17). buildq hosts packages in
+  its own shape (BLD-119). Until DOJ-17 lands, `README.md` and `.agents/smk-context.md` still
+  describe the default the code has.
