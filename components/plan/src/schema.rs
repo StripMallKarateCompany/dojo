@@ -51,6 +51,9 @@ enum Kind {
     Scaffolding,
     Paths,
     Source,
+    VersionSource,
+    AdvisoryIds,
+    Fixes,
     Type,
     Svc,
     Exports,
@@ -68,6 +71,9 @@ const KEYS: &[(&str, Kind)] = &[("name", Kind::Name),
                                 ("description", Kind::Text),
                                 ("upstream_url", Kind::Text),
                                 ("source", Kind::Source),
+                                ("version_source", Kind::VersionSource),
+                                ("advisory_ids", Kind::AdvisoryIds),
+                                ("fixes", Kind::Fixes),
                                 ("deps", Kind::Idents),
                                 ("build_deps", Kind::Idents),
                                 ("scaffolding", Kind::Scaffolding),
@@ -86,8 +92,16 @@ const KEYS: &[(&str, Kind)] = &[("name", Kind::Name),
 
 const REQUIRED: &[&str] = &["name", "origin", "version", "targets"];
 
-/// Keys a target's `on` entry may not override.
-const BASE_ONLY: &[&str] = &["name", "origin", "targets", "on"];
+/// Keys a target's `on` entry may not override. Where new versions come
+/// from, what advisories call the software and what its patches fix are the
+/// plan's, whatever it builds for.
+const BASE_ONLY: &[&str] = &["name",
+                             "origin",
+                             "targets",
+                             "version_source",
+                             "advisory_ids",
+                             "fixes",
+                             "on"];
 
 #[derive(Clone, Debug)]
 enum Field {
@@ -334,6 +348,9 @@ fn parse_field(kind: Option<Kind>, value: &Value, what: &str) -> Result<Field, E
             }
             Json::Object(fields)
         }
+        Kind::VersionSource => version_source_of(value, &what)?,
+        Kind::AdvisoryIds => advisory_ids_of(value, &what)?,
+        Kind::Fixes => fixes_of(value, &what)?,
         Kind::Scaffolding => scaffolding_of(value, &what)?,
         Kind::Type => {
             let kind = string_of(value, &what)?;
@@ -508,6 +525,412 @@ fn data_of(value: &Value, what: &str) -> Result<Json, Error> {
                            other))
         }
     }
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum Opt {
+    Text,
+    Flag,
+}
+
+/// Whether a source returns a list of versions, which `include_regex` and
+/// `exclude_regex` filter. nvchecker applies them only to a source that
+/// returns a list, so a pin on any other would hold nothing.
+#[derive(Clone, Copy)]
+enum Lists {
+    Always,
+    Never,
+    /// With any of these flags set.
+    With(&'static [&'static str]),
+    /// Unless this flag is set.
+    Without(&'static str),
+}
+
+struct VersionSource {
+    name:     &'static str,
+    /// What the source's own key holds.
+    holds:    Holds,
+    options:  &'static [(&'static str, Opt)],
+    required: &'static [&'static str],
+    lists:    Lists,
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum Holds {
+    Repo,
+    Text,
+}
+
+/// The sources `version_source` may name, with nvchecker's names and options
+/// (its "Usage" page), so its configuration is the table as written plus
+/// `source`. Options that reach a service with a credential (`token`,
+/// `httptoken`) are the poller's, never a plan's.
+const VERSION_SOURCES: &[VersionSource] =
+    &[VersionSource { name:     "github",
+                      holds:    Holds::Repo,
+                      options:  &[("branch", Opt::Text),
+                                  ("path", Opt::Text),
+                                  ("host", Opt::Text),
+                                  ("query", Opt::Text),
+                                  ("use_latest_release", Opt::Flag),
+                                  ("use_max_release", Opt::Flag),
+                                  ("use_release_name", Opt::Flag),
+                                  ("include_prereleases", Opt::Flag),
+                                  ("use_latest_tag", Opt::Flag),
+                                  ("use_max_tag", Opt::Flag)],
+                      required: &[],
+                      lists:    Lists::With(&["use_max_tag", "use_max_release"]), },
+      VersionSource { name:     "gitlab",
+                      holds:    Holds::Repo,
+                      options:  &[("branch", Opt::Text),
+                                  ("host", Opt::Text),
+                                  ("use_max_tag", Opt::Flag)],
+                      required: &[],
+                      lists:    Lists::With(&["use_max_tag"]), },
+      VersionSource { name:     "gitea",
+                      holds:    Holds::Repo,
+                      options:  &[("branch", Opt::Text),
+                                  ("host", Opt::Text),
+                                  ("use_max_tag", Opt::Flag),
+                                  ("use_latest_release", Opt::Flag)],
+                      required: &[],
+                      lists:    Lists::With(&["use_max_tag"]), },
+      VersionSource { name:     "git",
+                      holds:    Holds::Text,
+                      options:  &[("branch", Opt::Text), ("use_commit", Opt::Flag)],
+                      required: &[],
+                      lists:    Lists::Without("use_commit"), },
+      VersionSource { name:     "regex",
+                      holds:    Holds::Text,
+                      options:  &[("url", Opt::Text),
+                                  ("encoding", Opt::Text),
+                                  ("post_data", Opt::Text),
+                                  ("post_data_type", Opt::Text)],
+                      required: &["url"],
+                      lists:    Lists::Always, },
+      VersionSource { name:     "pypi",
+                      holds:    Holds::Text,
+                      options:  &[("use_pre_release", Opt::Flag)],
+                      required: &[],
+                      lists:    Lists::Always, },
+      VersionSource { name:     "cratesio",
+                      holds:    Holds::Text,
+                      options:  &[("use_pre_release", Opt::Flag)],
+                      required: &[],
+                      lists:    Lists::Always, },
+      VersionSource { name:     "gems",
+                      holds:    Holds::Text,
+                      options:  &[],
+                      required: &[],
+                      lists:    Lists::Always, },
+      VersionSource { name:     "npm",
+                      holds:    Holds::Text,
+                      options:  &[],
+                      required: &[],
+                      lists:    Lists::Never, },
+      VersionSource { name:     "cran",
+                      holds:    Holds::Text,
+                      options:  &[],
+                      required: &[],
+                      lists:    Lists::Never, }];
+
+/// Options every source takes. `prefix` is stripped from each version, and
+/// `from_pattern` rewrites it to `to_pattern`; the two list options are
+/// Python regexes a whole version must match.
+const SOURCE_OPTIONS: &[&str] = &["prefix",
+                                  "from_pattern",
+                                  "to_pattern",
+                                  "include_regex",
+                                  "exclude_regex"];
+const LIST_OPTIONS: &[&str] = &["include_regex", "exclude_regex"];
+const CREDENTIALS: &[&str] = &["token", "httptoken"];
+
+/// A key inside the table `what` names, as `table.key`.
+fn nested(what: &str, key: &str) -> String { format!("`{}.{key}`", what.trim_matches('`')) }
+
+/// `{:none "<reason>"}`: the reason a plan has nothing to declare.
+fn none_of(entries: &[(String, Value)], what: &str) -> Result<Option<Json>, Error> {
+    let Some((_, reason)) = entries.iter().find(|(key, _)| key == "none") else {
+        return Ok(None);
+    };
+    if entries.len() > 1 {
+        return Err(Error::Invalid(format!("{what} sets `none` beside other keys; \
+                                           `none` stands alone with its reason")));
+    }
+    Ok(Some(json!({"none": nonempty(reason, &nested(what, "none"))?})))
+}
+
+/// Where new upstream versions are published, as one nvchecker source and its
+/// options, or `{:none "<reason>"}`. The JSON names the source as `source`
+/// first, as nvchecker's configuration does.
+fn version_source_of(value: &Value, what: &str) -> Result<Json, Error> {
+    let entries = entries(&table_of(value, what)?, what)?;
+    if let Some(none) = none_of(&entries, what)? {
+        return Ok(none);
+    }
+    let named: Vec<&VersionSource> =
+        VERSION_SOURCES.iter()
+                       .filter(|source| entries.iter().any(|(key, _)| key == source.name))
+                       .collect();
+    let source = match named.as_slice() {
+        [source] => *source,
+        [] => {
+            let names: Vec<&str> = VERSION_SOURCES.iter().map(|source| source.name).collect();
+            return Err(Error::Invalid(format!("{what} names no source; set one of {}, or \
+                                               `none` with the reason",
+                                              names.join(", "))));
+        }
+        _ => {
+            let names: Vec<String> = named.iter()
+                                          .map(|source| format!("`{}`", source.name))
+                                          .collect();
+            return Err(Error::Invalid(format!("{what} names more than one source: {}",
+                                              names.join(", "))));
+        }
+    };
+    let mut out = Map::new();
+    out.insert("source".into(), json!(source.name));
+    let mut flags = BTreeSet::new();
+    for (key, value) in &entries {
+        let item = nested(what, key);
+        let opt = if key == source.name {
+            None
+        } else if CREDENTIALS.contains(&key.as_str()) {
+            return Err(Error::Invalid(format!("{item}: a plan holds no credentials; the \
+                                               poller supplies them")));
+        } else if SOURCE_OPTIONS.contains(&key.as_str()) {
+            Some(Opt::Text)
+        } else if let Some((_, opt)) = source.options.iter().find(|(name, _)| name == key) {
+            Some(*opt)
+        } else {
+            let mut takes: Vec<&str> = source.options.iter().map(|(name, _)| *name).collect();
+            takes.extend(SOURCE_OPTIONS);
+            return Err(Error::Invalid(format!("{what} sets unknown key `{key}` for a `{}` \
+                                               source, which takes {}",
+                                              source.name,
+                                              takes.join(", "))));
+        };
+        let json = match opt {
+            None => {
+                let held = nonempty(value, &item)?;
+                if source.holds == Holds::Repo && !is_repo(&held) {
+                    return Err(Error::Invalid(format!("{item}: `{held}` is not `owner/repo`")));
+                }
+                json!(held)
+            }
+            Some(Opt::Text) => json!(nonempty(value, &item)?),
+            Some(Opt::Flag) => {
+                match value {
+                    Value::Boolean(flag) => {
+                        if *flag {
+                            flags.insert(key.as_str());
+                        }
+                        json!(flag)
+                    }
+                    other => return Err(wrong_type(&item, "a boolean", other)),
+                }
+            }
+        };
+        out.insert(key.clone(), json);
+    }
+    for key in source.required {
+        if !out.contains_key(*key) {
+            return Err(Error::Invalid(format!("{what} does not set `{key}`, which a `{}` \
+                                               source needs",
+                                              source.name)));
+        }
+    }
+    for (one, other) in [("from_pattern", "to_pattern"),
+                         ("to_pattern", "from_pattern")]
+    {
+        if out.contains_key(one) && !out.contains_key(other) {
+            return Err(Error::Invalid(format!("{what} sets `{one}` without `{other}`")));
+        }
+    }
+    let lists = match source.lists {
+        Lists::Always => true,
+        Lists::Never => false,
+        Lists::With(any) => any.iter().any(|flag| flags.contains(flag)),
+        Lists::Without(flag) => !flags.contains(flag),
+    };
+    if !lists && let Some(key) = LIST_OPTIONS.iter().find(|key| out.contains_key(**key)) {
+        let how = match source.lists {
+            Lists::With(any) => {
+                let any: Vec<String> = any.iter().map(|flag| format!("`{flag}`")).collect();
+                format!("; set {}", any.join(" or "))
+            }
+            Lists::Without(flag) => format!("; leave out `{flag}`"),
+            Lists::Always | Lists::Never => String::new(),
+        };
+        return Err(Error::Invalid(format!("{} filters a list of versions, and this `{}` \
+                                           source returns one version{how}",
+                                          nested(what, key),
+                                          source.name)));
+    }
+    Ok(Json::Object(out))
+}
+
+/// `owner/repo`, or a group path on hosts that nest them.
+fn is_repo(text: &str) -> bool {
+    let parts: Vec<&str> = text.split('/').collect();
+    parts.len() >= 2
+    && parts.iter()
+            .all(|part| !part.is_empty() && !part.contains(char::is_whitespace))
+}
+
+/// The identifiers advisory databases know the software by, or
+/// `{:none "<reason>"}`. `tag_prefix` spells a version as the upstream
+/// repository's tag (`v` for `v1.3.1`, empty when the tag is the version),
+/// which matching against `osv_git`'s records needs.
+fn advisory_ids_of(value: &Value, what: &str) -> Result<Json, Error> {
+    let entries = entries(&table_of(value, what)?, what)?;
+    if let Some(none) = none_of(&entries, what)? {
+        return Ok(none);
+    }
+    let mut out = Map::new();
+    for (key, value) in &entries {
+        let item = nested(what, key);
+        let text = match key.as_str() {
+            "cpe" => {
+                let cpe = nonempty(value, &item)?;
+                if !is_cpe_prefix(&cpe) {
+                    return Err(Error::Invalid(format!("{item}: `{cpe}` is not a CPE 2.3 \
+                                                       prefix like \
+                                                       `cpe:2.3:a:vendor:product`")));
+                }
+                cpe
+            }
+            "osv_git" => {
+                let url = nonempty(value, &item)?;
+                if !is_repository_url(&url) {
+                    return Err(Error::Invalid(format!("{item}: `{url}` is not a repository \
+                                                       URL like \
+                                                       `https://github.com/owner/repo`")));
+                }
+                url
+            }
+            "purl" => {
+                let purl = nonempty(value, &item)?;
+                if !is_purl(&purl) {
+                    return Err(Error::Invalid(format!("{item}: `{purl}` is not a purl \
+                                                       without a version, like \
+                                                       `pkg:generic/zlib`")));
+                }
+                purl
+            }
+            "tag_prefix" => {
+                let prefix = string_of(value, &item)?;
+                if prefix.contains(char::is_whitespace) {
+                    return Err(Error::Invalid(format!("{item}: `{prefix}` holds whitespace")));
+                }
+                prefix
+            }
+            _ => return Err(unknown_key(key, what)),
+        };
+        out.insert(key.clone(), json!(text));
+    }
+    if !["cpe", "osv_git", "purl"].iter()
+                                  .any(|key| out.contains_key(*key))
+    {
+        return Err(Error::Invalid(format!("{what} names no identifier; set `cpe`, \
+                                           `osv_git` or `purl`, or `none` with the reason")));
+    }
+    match (out.contains_key("osv_git"), out.contains_key("tag_prefix")) {
+        (true, false) => {
+            Err(Error::Invalid(format!("{what} sets `osv_git` without `tag_prefix`, which \
+                                        spells a version as that repository's tag (`\"\"` \
+                                        when the tag is the version)")))
+        }
+        (false, true) => {
+            Err(Error::Invalid(format!("{what} sets `tag_prefix` without `osv_git`, the \
+                                        repository whose tags it spells")))
+        }
+        _ => Ok(Json::Object(out)),
+    }
+}
+
+/// `cpe:2.3:<part>:<vendor>:<product>`: the plan's `version` completes it.
+fn is_cpe_prefix(text: &str) -> bool {
+    let parts: Vec<&str> = text.split(':').collect();
+    let named = |part: &str| {
+        !part.is_empty() && part != "*" && part != "-" && !part.contains(char::is_whitespace)
+    };
+    matches!(parts.as_slice(),
+             ["cpe", "2.3", "a" | "o" | "h", vendor, product] if named(vendor) && named(product))
+}
+
+fn is_repository_url(text: &str) -> bool {
+    let rest = ["https://", "http://", "git://"].iter()
+                                                .find_map(|scheme| text.strip_prefix(scheme));
+    rest.is_some_and(|rest| {
+            let host = rest.split('/').next().unwrap_or_default();
+            !host.is_empty() && rest.len() > host.len() + 1
+        })
+    && !text.contains(char::is_whitespace)
+}
+
+/// `pkg:<type>/<name>`, with an optional namespace, and no `@version`.
+fn is_purl(text: &str) -> bool {
+    let Some(rest) = text.strip_prefix("pkg:") else {
+        return false;
+    };
+    let mut parts = rest.split('/');
+    let kind = parts.next().unwrap_or_default();
+    let names: Vec<&str> = parts.collect();
+    !kind.is_empty()
+    && kind.bytes()
+           .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b"+.-".contains(&b))
+    && !names.is_empty()
+    && names.iter().all(|name| !name.is_empty())
+    && !text.contains(['@', '?', '#'])
+    && !text.contains(char::is_whitespace)
+}
+
+/// The CVE or OSV ids the plan's own patches fix, so an advisory against its
+/// upstream version is not reported for it.
+fn fixes_of(value: &Value, what: &str) -> Result<Json, Error> {
+    let ids = strings_of(value, what)?;
+    if ids.is_empty() {
+        return Err(Error::Invalid(format!("{what} is empty; leave it out")));
+    }
+    let mut seen = BTreeSet::new();
+    for (i, id) in ids.iter().enumerate() {
+        if !is_advisory_id(id) {
+            return Err(Error::Invalid(format!("`{}[{}]`: `{id}` is not a CVE or OSV id \
+                                               like `CVE-2024-1234` or \
+                                               `GHSA-jfh8-c2jp-5v3q`",
+                                              what.trim_matches('`'),
+                                              i + 1)));
+        }
+        if !seen.insert(id) {
+            return Err(Error::Invalid(format!("{what} lists `{id}` twice")));
+        }
+    }
+    Ok(json!(ids))
+}
+
+/// `CVE-<year>-<four or more digits>`, or an OSV database's id: an upper-case
+/// prefix (`GHSA`, `OSV`, `RUSTSEC`, `PYSEC`, `GO`) and its own suffix.
+fn is_advisory_id(id: &str) -> bool {
+    let Some((prefix, rest)) = id.split_once('-') else {
+        return false;
+    };
+    if prefix == "CVE" {
+        return rest.split_once('-').is_some_and(|(year, number)| {
+                                       year.len() == 4
+                                       && number.len() >= 4
+                                       && year.bytes().all(|b| b.is_ascii_digit())
+                                       && number.bytes().all(|b| b.is_ascii_digit())
+                                   });
+    }
+    prefix.bytes()
+          .next()
+          .is_some_and(|b| b.is_ascii_uppercase())
+    && prefix.bytes()
+             .all(|b| b.is_ascii_uppercase() || b.is_ascii_digit())
+    && !rest.is_empty()
+    && rest.bytes()
+           .all(|b| b.is_ascii_alphanumeric() || b"._:-".contains(&b))
 }
 
 /// A package ident, or `{:package <ident> :settings <data>}`: the settings
