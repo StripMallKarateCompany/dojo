@@ -65,6 +65,20 @@ fn any_other_field_prints_as_json() {
 }
 
 #[test]
+fn upstream_keys_print_as_json() {
+    let dir = fixture("upstream-regex");
+    let source = run("show", &dir, &["--field", "version_source"]);
+    assert_eq!(stdout(&source),
+               "{\"source\":\"regex\",\"exclude_regex\":\"1[.]2[.].*\",\
+                \"regex\":\"zlib-([0-9.]+)[.]tar[.]xz\",\"url\":\"https://zlib.net/\"}\n");
+    let ids = run("show", &dir, &["--field", "advisory_ids"]);
+    assert_eq!(stdout(&ids), "{\"purl\":\"pkg:generic/zlib\"}\n");
+    let fixes = run("show", &fixture("upstream"), &["--field", "fixes"]);
+    assert_eq!(stdout(&fixes),
+               "[\"CVE-2024-1234\",\"GHSA-jfh8-c2jp-5v3q\"]\n");
+}
+
+#[test]
 fn a_missing_field_fails() {
     let output = run("show", &fixture("minimal"), &["--field", "nmae"]);
     assert!(!output.status.success());
